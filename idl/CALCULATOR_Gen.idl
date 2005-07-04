@@ -1,0 +1,83 @@
+#ifndef __CALCULATOR_GEN__
+#define __CALCULATOR_GEN__
+/*!
+ \defgroup EXAMPLES SALOME EXAMPLES components
+ */
+
+#include "SALOME_Component.idl"
+#include "SALOME_Exception.idl"
+#include "MED.idl"
+
+
+/*!  \ingroup EXAMPLES
+
+This package contains the interface CALCULATOR_ORB used 
+for  %CALCULATOR component as an example in %SALOME application.
+*/
+module CALCULATOR_ORB
+{
+  /*! \brief Interface of the %CALCULATOR component
+   */
+  interface CALCULATOR_Gen : Engines::Component
+  {
+     /*!
+         Calculate the maximum relative difference of field with the previous one.
+         At first call, store passed field and return 1.
+      */
+     double convergenceCriteria(in SALOME_MED::FIELDDOUBLE field);
+     /*!
+         Apply to each (scalar) field component the linear function x -> ax+b.
+         Release field1 after use.
+      */
+     SALOME_MED::FIELDDOUBLE applyLin(in SALOME_MED::FIELDDOUBLE field1, in double a1, in double a2);
+
+     /*!
+         Addition of fields. 
+	 Return exception if fields are not compatible.
+         Release field1 and field2 after use.
+     */
+     SALOME_MED::FIELDDOUBLE add(in SALOME_MED::FIELDDOUBLE field1, in SALOME_MED::FIELDDOUBLE field2)
+	 raises (SALOME::SALOME_Exception);
+
+     /*!
+     	 return euclidian norm of field
+         Release field after use.
+      */
+     double norm2(in SALOME_MED::FIELDDOUBLE field);
+
+     /*!
+     	 return L2 norm of field
+         Release field after use.
+      */
+     double normL2(in SALOME_MED::FIELDDOUBLE field);
+
+     /*!
+     	 return L1 norm of field
+         Release field after use.
+      */
+     double normL1(in SALOME_MED::FIELDDOUBLE field);
+
+     /*!
+     	 return max norm of field
+         Release field after use.
+      */
+     double normMax(in SALOME_MED::FIELDDOUBLE field);
+
+     /*!
+         This utility method print in standard output the coordinates & field values
+         Release field after use.
+      */
+     void printField(in SALOME_MED::FIELDDOUBLE field);
+
+     /*!
+         This method clones field in four examples.
+         Release field after use.
+      */
+     void cloneField(in SALOME_MED::FIELDDOUBLE field, out SALOME_MED::FIELDDOUBLE clone1, 
+                     out SALOME_MED::FIELDDOUBLE clone2, out SALOME_MED::FIELDDOUBLE clone3,
+		     out SALOME_MED::FIELDDOUBLE clone4 );
+  };
+};
+
+#endif
+

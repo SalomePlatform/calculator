@@ -1,0 +1,289 @@
+#include "CALCULATOR.hxx"
+#include "FIELDClient.hxx"
+#include "MESHClient.hxx"
+#include <string>
+#include <strstream>
+using namespace std;
+#include "MEDMEM_Mesh_i.hxx"
+#include "MEDMEM_Support_i.hxx"
+#include "MEDMEM_FieldDouble_i.hxx"
+#include <iomanip>
+#include <cmath>
+using namespace MEDMEM;
+
+CALCULATOR::CALCULATOR(CORBA::ORB_ptr orb,
+	PortableServer::POA_ptr poa,
+	PortableServer::ObjectId * contId, 
+	const char *instanceName, 
+	const char *interfaceName) :
+  Engines_Component_i(orb, poa, contId, instanceName, interfaceName,true)
+{
+  MESSAGE("activate object");
+  _thisObj = this ;
+  _id = _poa->activate_object(_thisObj);
+}
+
+CALCULATOR::~CALCULATOR()
+{
+}
+
+CORBA::Double CALCULATOR::norm2(SALOME_MED::FIELDDOUBLE_ptr field1)
+{
+    beginService( "CALCULATOR::norm2");
+    BEGIN_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    // Create a local field from corba field, apply method normMax on it.
+    // When exiting the function, f1 is deleted, and with it the remote corba field.
+    FIELDClient<double> f1(field1);
+    CORBA::Double norme = f1.norm2();
+    END_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    endService( "CALCULATOR::norm2");
+    return norme;
+}
+
+CORBA::Double CALCULATOR::normL2(SALOME_MED::FIELDDOUBLE_ptr field1)
+{
+    beginService( "CALCULATOR::normL2");
+    BEGIN_OF("CALCULATOR::NormL2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+
+    // Create a local field (on the stack) from corba field, apply method normMax on it.
+    // When exiting the function, FIELDClient f1 is deleted, and with it the remote corba field.
+    FIELDClient<double>f1(field1);
+    CORBA::Double norme = f1.normL2();
+    // Send a notification message to supervision
+    ostringstream message("CALCULATOR::normL2 : ");
+    message << norme;
+    sendMessage("warning",message.str().c_str());
+    END_OF("CALCULATOR::NormL2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    endService( "CALCULATOR::normL2");
+    return norme;
+}
+
+CORBA::Double CALCULATOR::normMax(SALOME_MED::FIELDDOUBLE_ptr field1)
+{
+    beginService( "CALCULATOR::normMax");
+    BEGIN_OF("CALCULATOR::NormMax(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    // An other way to do it : create an local field on the heap, inside an auto_ptr.
+    // When exiting the function, auto_ptr is deleted, and with it the local field and 
+    // the remote field if ownership was transferred.
+    auto_ptr<FIELD<double> > f1 (new FIELDClient<double> (field1) );
+    CORBA::Double norme = f1->normMax();
+    END_OF("CALCULATOR::NormMax(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    endService( "CALCULATOR::normMax");
+    return norme;
+}
+
+CORBA::Double CALCULATOR::normL1(SALOME_MED::FIELDDOUBLE_ptr field1)
+{
+    beginService( "CALCULATOR::normL1");
+    BEGIN_OF("CALCULATOR::NormL1(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    auto_ptr<FIELD<double> > f1 (new FIELDClient<double> (field1) );
+    CORBA::Double norme = f1->normL1();
+    END_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    endService( "CALCULATOR::normL1");
+    return norme;
+}
+
+
+SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b)
+{
+    beginService( "CALCULATOR::applyLin");
+    BEGIN_OF("applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b)");
+    // create a local field on the heap, because it has to remain after exiting the function
+    FIELD<double> * f1 = new FIELDClient<double>(field1);
+    f1->applyLin(a,b);
+    
+    // create servant from f1, give it the property of c++ field (parameter true).
+    // This imply that when the client will release it's field, it will delete NewField,
+    // and f1.
+    FIELDDOUBLE_i * NewField = new FIELDDOUBLE_i(f1,true) ;
+    // activate object
+    SALOME_MED::FIELDDOUBLE_ptr myFieldIOR = NewField->_this() ;
+
+    END_OF("applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b)");
+    endService( "CALCULATOR::applyLin");
+    return myFieldIOR;
+}
+
+SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2) 
+    throw ( SALOME::SALOME_Exception )
+{
+    beginService( "CALCULATOR::add");
+    BEGIN_OF("CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2)");
+    // Create local fields from corba field
+    FIELDClient<double> f1(field1);
+    FIELDClient<double> f2(field2);
+
+    // Create new c++ field on the heap by copying f1, add f2 to it.
+    FIELD<double>* fres = new FIELD<double>(f1);
+    // catch exception for non compatible fields
+    try
+    {
+        *fres+=f2;
+    }
+    catch(MEDEXCEPTION)
+    {
+	throw(SALOME_Exception(LOCALIZED("Fields are not compatible")));
+    }
+    // create CORBA field from c++ toField. give property to servant (true)
+    FIELDDOUBLE_i * myFieldDoubleI = new FIELDDOUBLE_i(fres,true);
+    SALOME_MED::FIELDDOUBLE_ptr myFieldIOR = myFieldDoubleI->_this() ;
+
+    END_OF("CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2)");
+    endService( "CALCULATOR::add");
+    return myFieldIOR;
+}
+
+void CALCULATOR::cloneField(SALOME_MED::FIELDDOUBLE_ptr field,
+	        SALOME_MED::FIELDDOUBLE_out clone1, SALOME_MED::FIELDDOUBLE_out clone2,
+                SALOME_MED::FIELDDOUBLE_out clone3, SALOME_MED::FIELDDOUBLE_out clone4)
+{
+    beginService( "CALCULATOR::cloneField");
+    BEGIN_OF("CALCULATOR::cloneField");
+
+    // load local field, using MED ressource file pointe.med
+    FIELDClient<double> f(field);
+
+    // create three c++ field on the heap by copying myField_
+    // All this fields share with f the same SUPPORT and MESH client.
+    // Both SUPPORT and MESH client are connected to a reference count, and will 
+    // be deleted after release of all the fields.
+    FIELD<double>* fc1 = new FIELD<double>(f);
+    FIELD<double>* fc2 = new FIELD<double>(f);
+    FIELD<double>* fc3 = new FIELD<double>(f);
+    FIELD<double>* fc4 = new FIELD<double>(f);
+    
+    // Initialize out references : 
+    // Create three CORBA clones with cloned c++ fields - give property of c++ fields to servant (true)
+    FIELDDOUBLE_i * myClone1 = new FIELDDOUBLE_i(fc1, true);
+    FIELDDOUBLE_i * myClone2 = new FIELDDOUBLE_i(fc2, true);
+    FIELDDOUBLE_i * myClone3 = new FIELDDOUBLE_i(fc3, true);
+    FIELDDOUBLE_i * myClone4 = new FIELDDOUBLE_i(fc4, true);
+    clone1 = myClone1->_this();
+    clone2 = myClone2->_this();
+    clone3 = myClone3->_this();
+    clone4 = myClone4->_this();
+    END_OF("CALCULATOR::cloneField");
+    endService( "CALCULATOR::cloneField");
+    return;
+}
+
+void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
+{
+    beginService( "CALCULATOR::printField");
+    
+    // Create a local field from corba field.
+    // Use auto_ptr to perform automatic deletion after usage.
+    // The deletion of the FIELDClient will delete the remote Corba object.
+    auto_ptr<FIELD<double> > myField (new FIELDClient<double> (field) );
+
+    const SUPPORT * mySupport = myField->getSupport();
+    cout << "\n------------------ Field "<< myField->getName() << " : " <<myField->getDescription() << "------------------" <<  endl ;
+    int NumberOfComponents = myField->getNumberOfComponents() ;
+    cout << "- Type : " << mySupport->getEntity() << endl;
+    cout << "- Nombre de composantes : "<< NumberOfComponents << endl ;
+    cout << "- Nombre de valeurs     : "<< myField->getNumberOfValues() << endl ;
+    for (int i=1; i<NumberOfComponents+1; i++) {
+	cout << "  - composante "<<i<<" :"<<endl ;
+	cout << "      - nom         : "<<myField->getComponentName(i)<< endl;
+	cout << "      - description : "<<myField->getComponentDescription(i) << endl;
+	cout << "      - units       : "<<myField->getMEDComponentUnit(i) << endl;
+    }
+    cout << "- iteration :" << endl ;
+    cout << "    - numero : " << myField->getIterationNumber()<< endl  ;
+    cout << "    - ordre  : " << myField->getOrderNumber()<< endl  ;
+    cout << "    - temps  : " << myField->getTime()<< endl  ;
+    cout << "- Type : " << myField->getValueType()<< endl;
+    
+    cout << "- Valeurs :"<<endl;
+    int NumberOf = mySupport->getNumberOfElements(MED_ALL_ELEMENTS);
+
+    bool displayNode = mySupport->isOnAllElements() && mySupport->getEntity()==MED_NODE;
+    bool displayBary = mySupport->isOnAllElements() && mySupport->getEntity()==MED_CELL;
+    int dim_space = mySupport->getMesh()->getSpaceDimension();
+    const double * coord = mySupport->getMesh()->getCoordinates(MED_FULL_INTERLACE);
+
+    auto_ptr<FIELD<double> > barycenter(0);
+    if(displayBary)
+	barycenter=auto_ptr<FIELD<double> > (mySupport->getMesh()->getBarycenter(mySupport)) ;
+
+    const int width=10;
+    for (int i=1; i<NumberOf+1; i++) {
+	const double * value = myField->getValueI(MED_FULL_INTERLACE,i) ;
+	if(displayNode)
+	{
+	    int N=(i-1)*dim_space;
+	    cout << setw(width) << i << setw(width) << coord[N] << " " << setw(width) << coord[N+1]<<  " " << setw(width) << coord[N+2] << "  : " ;
+	}
+	if(displayBary)
+	    cout << setw(width) << i << setw(width) << barycenter->getValueIJ(i,1) << " " << setw(width) << barycenter->getValueIJ(i,2) 
+		 <<  " " << setw(width) << barycenter->getValueIJ(i,3) << "  : " ;
+	for (int j=0; j<NumberOfComponents; j++)
+	    cout << value[j]<< " ";
+	cout<<endl;
+    }
+    cout << endl;
+    cout << "Norme euclidienne : " << myField->norm2() << endl;
+    cout << "Norme max         : " << myField->normMax() << endl;
+    cout << "------------------------------------------------------------------------" << endl << endl;
+    endService( "CALCULATOR::printField");
+    return;
+
+}
+
+CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)
+{
+    beginService( "CALCULATOR::convergenceCriteria");
+    BEGIN_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)");
+
+    double criteria=1;
+    static auto_ptr<FIELD<double> > fold(0);
+    auto_ptr<FIELD<double> > fnew (new FIELDClient<double> (field) );
+    if (fold.get() == NULL) // if old field is not set, set it and return 1
+	fold=fnew;
+    else
+    {
+	// if size of fields are not equal, return 1
+	const int size=fold->getNumberOfValues()*fold->getNumberOfComponents();
+	if ( size == fnew->getNumberOfValues()*fnew->getNumberOfComponents() )
+	{
+	    MED_EN::medModeSwitch mode=fold->getvalue()->getMode(); // storage mode
+	    const double* oldVal= fold->getValue(mode); // retrieve values
+	    const double* newVal= fnew->getValue(mode);
+	    criteria=0.0;
+	    double ecart_rel=0.0;
+	    for (unsigned i=0; i!=size; ++i) // compute criteria
+	    {
+		if ( oldVal[i] != 0.0)
+		{
+		    ecart_rel = std::abs( (oldVal[i]-newVal[i])/oldVal[i] );
+		    if ( ecart_rel>criteria )
+			criteria=ecart_rel;
+		}
+	    }
+
+	}
+    }
+
+    endService( "CALCULATOR::convergenceCriteria");
+    END_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    return criteria;
+}
+
+
+
+extern "C"
+{
+  PortableServer::ObjectId * CALCULATOREngine_factory(
+			       CORBA::ORB_ptr orb,
+			       PortableServer::POA_ptr poa, 
+			       PortableServer::ObjectId * contId,
+			       const char *instanceName, 
+		       	       const char *interfaceName)
+  {
+    MESSAGE("PortableServer::ObjectId * CALCULATOREngine_factory()");
+    SCRUTE(interfaceName);
+    CALCULATOR * myCALCULATOR 
+      = new CALCULATOR(orb, poa, contId, instanceName, interfaceName);
+    return myCALCULATOR->getId() ;
+  }
+}

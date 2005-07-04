@@ -1,0 +1,8 @@
+#!/bin/sh
+
+export KERNEL_ROOT_DIR=@KERNEL_ROOT_DIR@
+export PYCALCULATOR_ROOT_DIR=@prefix@
+
+python -i $CALCULATOR_ROOT_DIR/bin/salome/runSalome.py --modules=CALCULATOR --xterm --containers=cpp,python --killall
+
+

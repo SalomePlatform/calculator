@@ -1,0 +1,195 @@
+<!DOCTYPE SuperGraph>
+<supergraph>
+<dataflow>
+<info-list>
+<node>
+<component-name>?</component-name>
+    <interface-name>?</interface-name>
+    <node-name>aNewDataFlow</node-name>
+    <kind>1</kind>
+    <coupled-node>?</coupled-node>
+    <service>
+<service-name>aNewDataFlow</service-name>
+     <inParameter-list>
+<inParameter>
+<inParameter-type>long</inParameter-type>
+       <inParameter-name>readFieldInFile__ordre</inParameter-name>      </inParameter>
+      <inParameter>
+<inParameter-type>long</inParameter-type>
+       <inParameter-name>readFieldInFile__iter</inParameter-name>      </inParameter>     </inParameter-list>
+     <outParameter-list>
+<outParameter>
+<outParameter-type>double</outParameter-type>
+       <outParameter-name>normL2__return</outParameter-name>      </outParameter>     </outParameter-list>    </service>
+    <DataStream-list/>
+    <PyFunction-list/>
+    <creation-date>25/5/2005 - 11:50:2</creation-date>
+    <lastmodification-date>25/5/2005 - 13:49:58</lastmodification-date>
+    <editor-release>2.0</editor-release>
+    <author>?</author>
+    <container>?</container>
+    <comment>?</comment>
+    <x-position>0</x-position>
+    <y-position>0</y-position>   </node>  </info-list>
+  <node-list>
+<node>
+<component-name>CALCULATOR</component-name>
+    <interface-name>CALCULATOR_Gen</interface-name>
+    <node-name>normL2</node-name>
+    <kind>0</kind>
+    <coupled-node>?</coupled-node>
+    <service>
+<service-name>normL2</service-name>
+     <inParameter-list>
+<inParameter>
+<inParameter-type>FIELDDOUBLE</inParameter-type>
+       <inParameter-name>field</inParameter-name>      </inParameter>     </inParameter-list>
+     <outParameter-list>
+<outParameter>
+<outParameter-type>double</outParameter-type>
+       <outParameter-name>return</outParameter-name>      </outParameter>     </outParameter-list>    </service>
+    <DataStream-list/>
+    <PyFunction-list/>
+    <creation-date>25/5/2005 - 11:51:15</creation-date>
+    <lastmodification-date>25/5/2005 - 11:51:15</lastmodification-date>
+    <editor-release>2.0</editor-release>
+    <author>?</author>
+    <container>localhost/FactoryServer</container>
+    <comment>normL2 from CALCULATOR</comment>
+    <x-position>496</x-position>
+    <y-position>144</y-position>   </node>
+   <node>
+<component-name>?</component-name>
+    <interface-name>?</interface-name>
+    <node-name>init_parameter</node-name>
+    <kind>3</kind>
+    <coupled-node>?</coupled-node>
+    <service>
+<service-name>init_parameter_1</service-name>
+     <inParameter-list/>
+     <outParameter-list>
+<outParameter>
+<outParameter-type>string</outParameter-type>
+       <outParameter-name>fromMedFile</outParameter-name>      </outParameter>
+      <outParameter>
+<outParameter-type>string</outParameter-type>
+       <outParameter-name>fromfieldname</outParameter-name>      </outParameter>
+      <outParameter>
+<outParameter-type>string</outParameter-type>
+       <outParameter-name>studyId</outParameter-name>      </outParameter>     </outParameter-list>    </service>
+    <DataStream-list/>
+    <PyFunction-list>
+<PyFunction>
+<FuncName>init_parameter</FuncName>
+      <PyFunc><![CDATA[#                 ]]></PyFunc>
+      <PyFunc><![CDATA[# init_parameter()                 ]]></PyFunc>
+      <PyFunc><![CDATA[#                 ]]></PyFunc>
+      <PyFunc><![CDATA[#   this function initialize med files paths, field names                 ]]></PyFunc>
+      <PyFunc><![CDATA[#                 ]]></PyFunc>
+      <PyFunc><![CDATA[#   returned arguments :                 ]]></PyFunc>
+      <PyFunc><![CDATA[#                 ]]></PyFunc>
+      <PyFunc><![CDATA[#    - fromMedFile (string)   : path of file containing fromfieldname                 ]]></PyFunc>
+      <PyFunc><![CDATA[#    - fromfieldname (string) : name of field                 ]]></PyFunc>
+      <PyFunc><![CDATA[#    - myStudyId (string)     : name of study                 ]]></PyFunc>
+      <PyFunc><![CDATA[#                 ]]></PyFunc>
+      <PyFunc><![CDATA[def init_parameter(): ]]></PyFunc>
+      <PyFunc><![CDATA[    import batchmode_salome                 ]]></PyFunc>
+      <PyFunc><![CDATA[    StudyName = batchmode_salome.myStudyName               ]]></PyFunc>
+      <PyFunc><![CDATA[    print "init_parameter : myStudyName = ", StudyName              ]]></PyFunc>
+      <PyFunc><![CDATA[    from os import environ                 ]]></PyFunc>
+      <PyFunc><![CDATA[    filePath=environ["MED_ROOT_DIR"]                 ]]></PyFunc>
+      <PyFunc><![CDATA[    filePath=filePath+"/share/salome/resources/"                 ]]></PyFunc>
+      <PyFunc><![CDATA[    fromMedFile=filePath+"pointe.med"                            ]]></PyFunc>
+      <PyFunc><![CDATA[    print "init_parameter : fromMedFile = ", fromMedFile                             ]]></PyFunc>
+      <PyFunc><![CDATA[    fromfieldname="fieldcelldouble"                     ]]></PyFunc>
+      <PyFunc><![CDATA[    return fromMedFile,fromfieldname,StudyName             ]]></PyFunc>     </PyFunction>    </PyFunction-list>
+    <creation-date>25/5/2005 - 11:57:16</creation-date>
+    <lastmodification-date>25/5/2005 - 11:57:16</lastmodification-date>
+    <editor-release>2.0</editor-release>
+    <author>?</author>
+    <container>?</container>
+    <comment>Compute Node</comment>
+    <x-position>6</x-position>
+    <y-position>147</y-position>   </node>
+   <node>
+<component-name>MED</component-name>
+    <interface-name>MED</interface-name>
+    <node-name>readFieldInFile</node-name>
+    <kind>0</kind>
+    <coupled-node>?</coupled-node>
+    <service>
+<service-name>readFieldInFile</service-name>
+     <inParameter-list>
+<inParameter>
+<inParameter-type>string</inParameter-type>
+       <inParameter-name>fileName</inParameter-name>      </inParameter>
+      <inParameter>
+<inParameter-type>string</inParameter-type>
+       <inParameter-name>studyName</inParameter-name>      </inParameter>
+      <inParameter>
+<inParameter-type>string</inParameter-type>
+       <inParameter-name>fieldName</inParameter-name>      </inParameter>
+      <inParameter>
+<inParameter-type>long</inParameter-type>
+       <inParameter-name>ordre</inParameter-name>      </inParameter>
+      <inParameter>
+<inParameter-type>long</inParameter-type>
+       <inParameter-name>iter</inParameter-name>      </inParameter>     </inParameter-list>
+     <outParameter-list>
+<outParameter>
+<outParameter-type>FIELD</outParameter-type>
+       <outParameter-name>return</outParameter-name>      </outParameter>     </outParameter-list>    </service>
+    <DataStream-list/>
+    <PyFunction-list/>
+    <creation-date>25/5/2005 - 11:57:28</creation-date>
+    <lastmodification-date>25/5/2005 - 11:57:28</lastmodification-date>
+    <editor-release>2.0</editor-release>
+    <author>?</author>
+    <container>localhost/FactoryServer</container>
+    <comment>readFieldInFile from MED</comment>
+    <x-position>271</x-position>
+    <y-position>144</y-position>   </node>  </node-list>
+  <link-list>
+<link>
+<fromnode-name>init_parameter</fromnode-name>
+    <fromserviceparameter-name>fromMedFile</fromserviceparameter-name>
+    <tonode-name>readFieldInFile</tonode-name>
+    <toserviceparameter-name>fileName</toserviceparameter-name>
+    <coord-list/>   </link>
+   <link>
+<fromnode-name>init_parameter</fromnode-name>
+    <fromserviceparameter-name>fromfieldname</fromserviceparameter-name>
+    <tonode-name>readFieldInFile</tonode-name>
+    <toserviceparameter-name>fieldName</toserviceparameter-name>
+    <coord-list/>   </link>
+   <link>
+<fromnode-name>init_parameter</fromnode-name>
+    <fromserviceparameter-name>studyId</fromserviceparameter-name>
+    <tonode-name>readFieldInFile</tonode-name>
+    <toserviceparameter-name>studyName</toserviceparameter-name>
+    <coord-list/>   </link>
+   <link>
+<fromnode-name>readFieldInFile</fromnode-name>
+    <fromserviceparameter-name>return</fromserviceparameter-name>
+    <tonode-name>normL2</tonode-name>
+    <toserviceparameter-name>field</toserviceparameter-name>
+    <coord-list/>   </link>  </link-list>
+  <data-list>
+<data>
+<fromnode-name>aNewDataFlow</fromnode-name>
+    <fromserviceparameter-name>readFieldInFile__ordre</fromserviceparameter-name>
+    <tonode-name>readFieldInFile</tonode-name>
+    <toserviceparameter-name>ordre</toserviceparameter-name>
+    <data-value>
+<value-type>3</value-type>
+     <value>-1</value>    </data-value>
+    <coord-list/>   </data>
+   <data>
+<fromnode-name>aNewDataFlow</fromnode-name>
+    <fromserviceparameter-name>readFieldInFile__iter</fromserviceparameter-name>
+    <tonode-name>readFieldInFile</tonode-name>
+    <toserviceparameter-name>iter</toserviceparameter-name>
+    <data-value>
+<value-type>3</value-type>
+     <value>-1</value>    </data-value>
+    <coord-list/>   </data>  </data-list> </dataflow></supergraph>
