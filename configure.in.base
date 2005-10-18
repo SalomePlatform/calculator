@@ -135,6 +135,8 @@ echo
 
 CHECK_MED2
 
+dnl For the sake of $MACHINE needed for MED Wrapper
+AC_DEPEND_FLAG
 
 CHECK_OMNIORB
 

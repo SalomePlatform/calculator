@@ -11,7 +11,7 @@ VPATH=.:@srcdir@:@top_srcdir@/idl:${MED_ROOT_DIR}/idl/salome
 LIB = libCALCULATOREngine.la
 LIB_SRC = CALCULATOR.cxx
 LIB_SERVER_IDL = CALCULATOR_Gen.idl 
-LIB_CLIENT_IDL = SALOME_Component.idl SALOME_Comm.idl SALOME_Exception.idl SALOMEDS.idl Logger.idl MED.idl SALOMEDS_Attributes.idl
+LIB_CLIENT_IDL = SALOME_Component.idl SALOME_Comm.idl SALOME_Exception.idl SALOMEDS.idl Logger.idl MED.idl SALOMEDS_Attributes.idl SALOME_GenericObj.idl
 
 
 EXPORT_PYSCRIPTS = CALCULATOR_TEST.py

@@ -10,7 +10,7 @@ from os import environ
 filePath=environ["MED_ROOT_DIR"]
 filePath=filePath+"/share/salome/resources/"
 medFile=filePath+"pointe.med"
-fieldname = "fieldcelldouble"
+fieldname = "fieldcelldoublescalar"
 
 # Launch the Med Component and use it to load into memory the test field 
 print "Launch the Med Component: "
