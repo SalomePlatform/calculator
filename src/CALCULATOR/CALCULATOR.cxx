@@ -33,7 +33,7 @@ CORBA::Double CALCULATOR::norm2(SALOME_MED::FIELDDOUBLE_ptr field1)
     BEGIN_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
     // Create a local field from corba field, apply method normMax on it.
     // When exiting the function, f1 is deleted, and with it the remote corba field.
-    FIELDClient<double> f1(field1);
+    FIELDClient<double,MEDMEM::FullInterlace> f1(field1);
     CORBA::Double norme = f1.norm2();
     END_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
     endService( "CALCULATOR::norm2");
@@ -47,7 +47,7 @@ CORBA::Double CALCULATOR::normL2(SALOME_MED::FIELDDOUBLE_ptr field1)
 
     // Create a local field (on the stack) from corba field, apply method normMax on it.
     // When exiting the function, FIELDClient f1 is deleted, and with it the remote corba field.
-    FIELDClient<double>f1(field1);
+    FIELDClient<double,MEDMEM::FullInterlace>f1(field1);
     CORBA::Double norme = f1.normL2();
     // Send a notification message to supervision
     ostringstream message("CALCULATOR::normL2 : ");
@@ -65,7 +65,7 @@ CORBA::Double CALCULATOR::normMax(SALOME_MED::FIELDDOUBLE_ptr field1)
     // An other way to do it : create an local field on the heap, inside an auto_ptr.
     // When exiting the function, auto_ptr is deleted, and with it the local field and 
     // the remote field if ownership was transferred.
-    auto_ptr<FIELD<double> > f1 (new FIELDClient<double> (field1) );
+    auto_ptr<FIELD<double,MEDMEM::FullInterlace> > f1 (new FIELDClient<double,MEDMEM::FullInterlace> (field1) );
     CORBA::Double norme = f1->normMax();
     END_OF("CALCULATOR::NormMax(SALOME_MED::FIELDDOUBLE_ptr field1)");
     endService( "CALCULATOR::normMax");
@@ -76,7 +76,7 @@ CORBA::Double CALCULATOR::normL1(SALOME_MED::FIELDDOUBLE_ptr field1)
 {
     beginService( "CALCULATOR::normL1");
     BEGIN_OF("CALCULATOR::NormL1(SALOME_MED::FIELDDOUBLE_ptr field1)");
-    auto_ptr<FIELD<double> > f1 (new FIELDClient<double> (field1) );
+    auto_ptr<FIELD<double,MEDMEM::FullInterlace> > f1 (new FIELDClient<double,MEDMEM::FullInterlace> (field1) );
     CORBA::Double norme = f1->normL1();
     END_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
     endService( "CALCULATOR::normL1");
@@ -89,7 +89,7 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::applyLin(SALOME_MED::FIELDDOUBLE_ptr fie
     beginService( "CALCULATOR::applyLin");
     BEGIN_OF("applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b)");
     // create a local field on the heap, because it has to remain after exiting the function
-    FIELD<double> * f1 = new FIELDClient<double>(field1);
+    FIELD<double,MEDMEM::FullInterlace> * f1 = new FIELDClient<double,MEDMEM::FullInterlace>(field1);
     f1->applyLin(a,b);
     
     // create servant from f1, give it the property of c++ field (parameter true).
@@ -110,11 +110,11 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, 
     beginService( "CALCULATOR::add");
     BEGIN_OF("CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2)");
     // Create local fields from corba field
-    FIELDClient<double> f1(field1);
-    FIELDClient<double> f2(field2);
+    FIELDClient<double,MEDMEM::FullInterlace> f1(field1);
+    FIELDClient<double,MEDMEM::FullInterlace> f2(field2);
 
     // Create new c++ field on the heap by copying f1, add f2 to it.
-    FIELD<double>* fres = new FIELD<double>(f1);
+    FIELD<double,MEDMEM::FullInterlace>* fres = new FIELD<double,MEDMEM::FullInterlace>(f1);
     // catch exception for non compatible fields
     try
     {
@@ -141,16 +141,16 @@ void CALCULATOR::cloneField(SALOME_MED::FIELDDOUBLE_ptr field,
     BEGIN_OF("CALCULATOR::cloneField");
 
     // load local field, using MED ressource file pointe.med
-    FIELDClient<double> f(field);
+    FIELDClient<double,MEDMEM::FullInterlace> f(field);
 
     // create three c++ field on the heap by copying myField_
     // All this fields share with f the same SUPPORT and MESH client.
     // Both SUPPORT and MESH client are connected to a reference count, and will 
     // be deleted after release of all the fields.
-    FIELD<double>* fc1 = new FIELD<double>(f);
-    FIELD<double>* fc2 = new FIELD<double>(f);
-    FIELD<double>* fc3 = new FIELD<double>(f);
-    FIELD<double>* fc4 = new FIELD<double>(f);
+    FIELD<double,MEDMEM::FullInterlace>* fc1 = new FIELD<double,MEDMEM::FullInterlace>(f);
+    FIELD<double,MEDMEM::FullInterlace>* fc2 = new FIELD<double,MEDMEM::FullInterlace>(f);
+    FIELD<double,MEDMEM::FullInterlace>* fc3 = new FIELD<double,MEDMEM::FullInterlace>(f);
+    FIELD<double,MEDMEM::FullInterlace>* fc4 = new FIELD<double,MEDMEM::FullInterlace>(f);
     
     // Initialize out references : 
     // Create three CORBA clones with cloned c++ fields - give property of c++ fields to servant (true)
@@ -174,7 +174,7 @@ void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
     // Create a local field from corba field.
     // Use auto_ptr to perform automatic deletion after usage.
     // The deletion of the FIELDClient will delete the remote Corba object.
-    auto_ptr<FIELD<double> > myField (new FIELDClient<double> (field) );
+    auto_ptr<FIELD<double,MEDMEM::FullInterlace> > myField (new FIELDClient<double,MEDMEM::FullInterlace> (field) );
 
     const SUPPORT * mySupport = myField->getSupport();
     cout << "\n------------------ Field "<< myField->getName() << " : " <<myField->getDescription() << "------------------" <<  endl ;
@@ -208,7 +208,7 @@ void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
 
     const int width=10;
     for (int i=1; i<NumberOf+1; i++) {
-	const double * value = myField->getValueI(MED_FULL_INTERLACE,i) ;
+	const double * value = myField->getRow(i) ;
 	if(displayNode)
 	{
 	    int N=(i-1)*dim_space;
@@ -236,8 +236,8 @@ CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)
     BEGIN_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)");
 
     double criteria=1;
-    static auto_ptr<FIELD<double> > fold(0);
-    auto_ptr<FIELD<double> > fnew (new FIELDClient<double> (field) );
+    static auto_ptr<FIELD<double,MEDMEM::FullInterlace> > fold(0);
+    auto_ptr<FIELD<double,MEDMEM::FullInterlace> > fnew (new FIELDClient<double,MEDMEM::FullInterlace> (field) );
     if (fold.get() == NULL) // if old field is not set, set it and return 1
 	fold=fnew;
     else
@@ -246,9 +246,9 @@ CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)
 	const int size=fold->getNumberOfValues()*fold->getNumberOfComponents();
 	if ( size == fnew->getNumberOfValues()*fnew->getNumberOfComponents() )
 	{
-	    MED_EN::medModeSwitch mode=fold->getvalue()->getMode(); // storage mode
-	    const double* oldVal= fold->getValue(mode); // retrieve values
-	    const double* newVal= fnew->getValue(mode);
+	    MED_EN::medModeSwitch mode=fold->getInterlacingType(); // storage mode
+	    const double* oldVal= fold->getValue(); // retrieve values
+	    const double* newVal= fnew->getValue();
 	    criteria=0.0;
 	    double ecart_rel=0.0;
 	    for (unsigned i=0; i!=size; ++i) // compute criteria
