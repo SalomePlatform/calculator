@@ -44,6 +44,12 @@ echo Build  root directory : $ROOT_BUILDDIR
 echo
 echo
 
+dnl Modification B. Secher portage sur osf CCRT
+AC_CHECK_PROG(SHELL,sh,,)
+AC_SUBST(SHELL)
+
+AUX_CONFIG_DIR=${KERNEL_ROOT_DIR}/salome_adm/unix/config_files
+
 if test -z "$AR"; then
    AC_CHECK_PROGS(AR,ar xar,:,$PATH)
 fi
@@ -82,9 +88,22 @@ dnl Fix up the INSTALL macro if it s a relative path. We want the
 dnl full-path to the binary instead.
 case "$INSTALL" in
    *install-sh*)
-      INSTALL='\${KERNEL_ROOT_DIR}'/salome_adm/unix/config_files/install-sh
-      ;;
+     case $host_os in
+       osf*)
+         INSTALL="${AUX_CONFIG_DIR}/install-sh -c"
+         ;;
+       *)
+         INSTALL='\${AUX_CONFIG_DIR}'/install-sh
+         ;;
+     esac
 esac
+
+AC_CXX_USE_STD_IOSTREAM
+
+dnl 
+dnl Well we use sstream which is not in gcc pre-2.95.3
+dnl We must test if it exists. If not, add it in include !
+dnl
 
 AC_CXX_HAVE_SSTREAM
 

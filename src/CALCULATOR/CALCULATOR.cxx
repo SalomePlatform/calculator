@@ -3,12 +3,12 @@
 #include "MESHClient.hxx"
 #include <string>
 #include <strstream>
-using namespace std;
 #include "MEDMEM_Mesh_i.hxx"
 #include "MEDMEM_Support_i.hxx"
 #include "MEDMEM_FieldTemplate_i.hxx"
 #include <iomanip>
 #include <cmath>
+using namespace std;
 using namespace MEDMEM;
 
 typedef FIELD<double,MEDMEM::FullInterlace> TFieldDouble;

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #
 # Tool for updating list of .in file for the SALOME project 
@@ -52,8 +52,8 @@ fi
 
 find_in()
 {
-  local i
-  local f=$2
+  i=0
+  f=$2
 
 # if the first argument is not a directory, returns
 
@@ -104,8 +104,11 @@ ABS_CONF_DIR=`pwd`
 # Common part of the configure.in file
 #
 chmod u+w configure.in.base
-if ! \cp -f configure.in.base configure.in_tmp1 
+if \cp -f configure.in.base configure.in_tmp1 
 then
+	echo
+        chmod u+w configure.in_tmp1
+else
 	echo
 	echo "error : can't create files in" ${CONF_DIR}
 	echo "aborting ..."
@@ -176,9 +179,11 @@ then
 	fi
 else
 	echo -n "Updating 'configure.in' file ... "
-	if ! \cp configure.in configure.in_old >& /dev/null
+	if \cp configure.in configure.in_old >& /dev/null
 	then
 		echo
+        else
+                echo
 		echo
 		echo "Can't backup previous configure.in"
 		echo -n "Continue (you will not be able to revert) - (Y/N) ? "

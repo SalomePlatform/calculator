@@ -2,7 +2,7 @@
 inc_builddir=$(top_builddir)/include/salome
 
 @SET_MAKE@
-SHELL=/bin/sh
+SHELL=@SHELL@
 
 # header missing
 
@@ -10,9 +10,13 @@ HAVE_SSTREAM=@HAVE_SSTREAM@
 
 
 LIBS=@LIBS@ 
-LDFLAGS=@LDFLAGS@ -L$(top_builddir)/lib/salome -Xlinker -rpath-link -Xlinker -L$(top_builddir)/lib/salome
+LDFLAGS=@LDFLAGS@ -L$(top_builddir)/lib/salome
 # add libstdc++ to link c++ library with libtool !
-LDFLAGS+= -lstdc++
+LDFLAGS+= @STDLIB@
+
+LIBSFORBIN=@LIBS@
+LDFLAGSFORBIN=@LDFLAGS@ -L$(top_builddir)/lib/salome
+LDFLAGSFORBIN+= @STDLIB@
 
 CP=@CP@
 
@@ -101,12 +105,12 @@ MED2_MT_LIBS=@MED2_MT_LIBS@
 OCC_INCLUDES=@CAS_CPPFLAGS@
 OCC_CXXFLAGS=@CAS_CXXFLAGS@
 
-OCC_KERNEL_LIBS=@CAS_KERNEL@
-OCC_OCAF_LIBS=@CAS_OCAF@
-OCC_VIEWER_LIBS=@CAS_VIEWER@
-OCC_MODELER_LIBS=@CAS_MODELER@
-OCC_DATAEXCHANGE_LIBS=@CAS_DATAEXCHANGE@
-OCC_LIBS=@CAS_LDFLAGS@
+CAS_KERNEL=@CAS_KERNEL@
+CAS_OCAF=@CAS_OCAF@
+CAS_VIEWER=@CAS_VIEWER@
+CAS_MODELER=@CAS_MODELER@
+CAS_DATAEXCHANGE=@CAS_DATAEXCHANGE@
+CAS=@CAS_LDFLAGS@
 
 # MPICH
 

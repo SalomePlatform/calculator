@@ -1,6 +1,20 @@
+from omniORB import CORBA
+
 import salome
 import SALOME
 import SALOME_MED
+
+#CCRT :
+import os
+import Engines
+import LifeCycleCORBA
+
+host = os.getenv( 'HOST' )
+
+orb = CORBA.ORB_init([''], CORBA.ORB_ID)
+
+lcc = LifeCycleCORBA.LifeCycleCORBA(orb)
+#endCCRT
 
 ################   GET A MED FIELD FROM FILE pointe.med   ###################
 #
@@ -14,7 +28,8 @@ fieldname = "fieldcelldoublescalar"
 
 # Launch the Med Component and use it to load into memory the test field 
 print "Launch the Med Component: "
-med_comp = salome.lcc.FindOrLoadComponent("FactoryServer", "MED")
+#CCRTmed_comp = salome.lcc.FindOrLoadComponent("FactoryServer", "MED")
+med_comp = lcc.FindOrLoadComponent("FactoryServer", "MED")
 
 # Get a Corba field proxy on the distant field (located in the med_comp server).
 try:

@@ -23,7 +23,7 @@ OMNIORB_IDLCXXFLAGS+=-I${MED_ROOT_DIR}/idl/salome
 CPPFLAGS += -I${KERNEL_ROOT_DIR}/include/salome -I${MED_ROOT_DIR}/include/salome $(MED2_INCLUDES) $(HDF5_INCLUDES)
 # CXXFLAGS += -I${KERNEL_ROOT_DIR}/include/salome
 
-LDFLAGS+= -lSalomeContainer -lOpUtil -L${KERNEL_ROOT_DIR}/lib/salome $(MED2_LIBS) $(HDF5_LIBS) -L${MED_ROOT_DIR}/lib/salome -lMEDClientcmodule
+LDFLAGS+= -L${KERNEL_ROOT_DIR}/lib/salome -lSalomeContainer -lOpUtil $(MED2_LIBS) $(HDF5_LIBS) -L${MED_ROOT_DIR}/lib/salome -lMEDClientcmodule
 # -lmedmem -lMEDWrapper_V2_1 -lMEDWrapperBase
 
 MED.hh MEDSK.cc: MED.idl

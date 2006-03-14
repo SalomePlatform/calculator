@@ -39,7 +39,7 @@ install: install-pyidl install-idl
 # create directory $(idldir) and copy idl files into it
 install-idl: $(IDL_FILES)
 	$(INSTALL) -d  $(idldir)
-	cp -p $^ $(idldir)
+	cp -fp $^ $(idldir)
 
 OMNIORB_IDLCXXFLAGS+=-I${MED_ROOT_DIR}/idl/salome
 OMNIORB_IDLPYFLAGS+=-I${MED_ROOT_DIR}/idl/salome
