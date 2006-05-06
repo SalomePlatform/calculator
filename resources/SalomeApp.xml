@@ -1,0 +1,11 @@
+<document>
+  <section name="CALCULATOR">
+    <!-- Major module parameters -->
+    <parameter name="name" value="Calculator"/>
+    <parameter name="icon" value="CALCULATOR.png"/>
+  </section>
+  <section name="resources">
+    <!-- Module resources -->
+    <parameter name="CALCULATOR" value="${CALCULATOR_ROOT_DIR}/share/salome/resources"/>
+  </section>
+</document>
