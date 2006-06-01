@@ -10,12 +10,12 @@ HAVE_SSTREAM=@HAVE_SSTREAM@
 
 
 LIBS=@LIBS@ 
-LDFLAGS=@LDFLAGS@ -L$(top_builddir)/lib/salome
+LDFLAGS=@LDFLAGS@ -L$(top_builddir)/lib@LIB_LOCATION_SUFFIX@/salome
 # add libstdc++ to link c++ library with libtool !
 LDFLAGS+= @STDLIB@
 
 LIBSFORBIN=@LIBS@
-LDFLAGSFORBIN=@LDFLAGS@ -L$(top_builddir)/lib/salome
+LDFLAGSFORBIN=@LDFLAGS@ -L$(top_builddir)/lib@LIB_LOCATION_SUFFIX@/salome
 LDFLAGSFORBIN+= @STDLIB@
 
 CP=@CP@
@@ -188,16 +188,26 @@ INSTALL_DATA=@INSTALL_DATA@
 # create a symbolic link (or a copie ?)
 LN_S=@LN_S@
 
+KERNEL_ROOT_DIR=@KERNEL_ROOT_DIR@
+KERNEL_SITE_DIR=@KERNEL_SITE_DIR@
+
+KERNEL_LDFLAGS=@KERNEL_LDFLAGS@
+KERNEL_CXXFLAGS=@KERNEL_CXXFLAGS@
+
+MED_ROOT_DIR=@MED_ROOT_DIR@
+MED_LDFLAGS=@MED_LDFLAGS@
+MED_CXXFLAGS=@MED_CXXFLAGS@
+
 ## Installation points
 prefix=@prefix@
 exec_prefix=@exec_prefix@
-bindir=@bindir@/salome
-libdir=@libdir@/salome
+bindir=@exec_prefix@/bin/salome
+libdir=@exec_prefix@/lib@LIB_LOCATION_SUFFIX@/salome
 # warning : if user give this path in configure we could have salome/salome :-(
 includedir=@includedir@/salome
 datadir=@datadir@/salome
 idldir=$(prefix)/idl/salome
-sharedpydir=@libdir@/python$(PYTHON_VERSION)/site-packages/salome/shared_modules
+sharedpydir=@exec_prefix@/lib@LIB_LOCATION_SUFFIX@/python$(PYTHON_VERSION)/site-packages/salome/shared_modules
 
 docdir=$(datadir)/doc
 
