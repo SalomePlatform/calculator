@@ -98,7 +98,7 @@
       <PyFunc><![CDATA[    print "init_parameter : myStudyName = ", StudyName              ]]></PyFunc>
       <PyFunc><![CDATA[    from os import environ                 ]]></PyFunc>
       <PyFunc><![CDATA[    filePath=environ["MED_ROOT_DIR"]                 ]]></PyFunc>
-      <PyFunc><![CDATA[    filePath=filePath+"/share/salome/resources/"                 ]]></PyFunc>
+      <PyFunc><![CDATA[    filePath=filePath+"/share/salome/resources/med/"                 ]]></PyFunc>
       <PyFunc><![CDATA[    fromMedFile=filePath+"pointe.med"                            ]]></PyFunc>
       <PyFunc><![CDATA[    print "init_parameter : fromMedFile = ", fromMedFile                             ]]></PyFunc>
       <PyFunc><![CDATA[    fromfieldname="fieldcelldouble"                     ]]></PyFunc>

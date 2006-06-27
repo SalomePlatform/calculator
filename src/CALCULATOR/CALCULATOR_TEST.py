@@ -40,7 +40,7 @@ lcc = LifeCycleCORBA.LifeCycleCORBA(orb)
 # med file $MED_ROOT_DIR/share/salome/resources/pointe.med
 from os import environ
 filePath=environ["MED_ROOT_DIR"]
-filePath=filePath+"/share/salome/resources/"
+filePath=filePath+"/share/salome/resources/med/"
 medFile=filePath+"pointe.med"
 fieldname = "fieldcelldoublescalar"
 
