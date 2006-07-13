@@ -210,6 +210,7 @@ includedir=@includedir@/salome
 datadir=@datadir@/salome
 idldir=$(prefix)/idl/salome
 sharedpydir=@exec_prefix@/lib@LIB_LOCATION_SUFFIX@/python$(PYTHON_VERSION)/site-packages/salome/shared_modules
+incmakedir=${prefix}/salome_adm/unix
 
 docdir=$(datadir)/doc
 
@@ -236,9 +237,10 @@ all:
 Makefile: $(top_builddir)/config.status $(srcdir)/Makefile.in
 	cd $(top_builddir) ; ./config.status
 
-LOCAL_MAKE = make_commence make_omniorb
+#LOCAL_MAKE = make_commence make_omniorb
+LOCAL_MAKE = make_commence make_conclude make_omniorb
 
-KERNEL_MAKE = make_module make_conclude depend SALOMEconfig.h F77config.h sstream envScript
+KERNEL_MAKE = make_module depend SALOMEconfig.h F77config.h sstream envScript
 
 $(top_builddir)/config.status: $(top_srcdir)/configure \
 			       $(LOCAL_MAKE:%=$(top_srcdir)/adm_local/unix/%.in) \
@@ -264,17 +266,29 @@ ac_cxx_mutable.m4                 check_mico.m4      libtool.m4		\
 ac_cxx_namespaces.m4              check_omniorb.m4   pyembed.m4		\
 ac_cxx_partial_specialization.m4  python.m4				\
 ac_cxx_typename.m4                check_pthreads.m4  check_cas.m4	\
-ac_cc_warnings.m4                 check_swig.m4 
+ac_cc_warnings.m4                 check_swig.m4     check_qt.m4
 
+ifeq ($(MED_WITH_GUI),yes)
 ACLOCAL_GUI = \
-check_vtk.m4	                  check_opengl.m4    check_qt.m4        \
+check_vtk.m4	                  check_opengl.m4 
+    \
 check_GUI.m4                      check_corba_in_GUI.m4
+endif
 
 ACLOCAL_MED =                     check_Med.m4       check_Med2.m4
 
+ifeq ($(MED_WITH_GUI),yes)
 $(top_srcdir)/aclocal.m4: $(ACLOCAL_KERNEL:%=@KERNEL_ROOT_DIR@/salome_adm/unix/config_files/%) \
                           $(ACLOCAL_GUI:%=@GUI_ROOT_DIR@/adm_local/unix/config_files/%) \
 			  $(ACLOCAL_MED:%=@MED_ROOT_DIR@/adm_local/unix/config_files/%)
 	cd $(top_srcdir) ; aclocal -I adm_local/unix/config_files -I @KERNEL_ROOT_DIR@/salome_adm/unix/config_files \
-	                                                               -I @GUI_ROOT_DIR@/adm_local/unix/config_files \
-								       -I @MED_ROOT_DIR@/adm_local/unix/config_files
+								  -I @GUI_ROOT_DIR@/adm_local/unix/config_files \
+								  -I @MED_ROOT_DIR@/adm_local/unix/config_files
+endif
+
+ifeq ($(MED_WITH_GUI),no)
+$(top_srcdir)/aclocal.m4: $(ACLOCAL_KERNEL:%=@KERNEL_ROOT_DIR@/salome_adm/unix/config_files/%) \
+			  $(ACLOCAL_MED:%=@MED_ROOT_DIR@/adm_local/unix/config_files/%)
+	cd $(top_srcdir) ; aclocal -I adm_local/unix/config_files -I @KERNEL_ROOT_DIR@/salome_adm/unix/config_files \
+								  -I @MED_ROOT_DIR@/adm_local/unix/config_files
+endif
