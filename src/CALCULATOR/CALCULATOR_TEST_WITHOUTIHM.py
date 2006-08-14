@@ -19,7 +19,7 @@ orb, lcc, naming_service, contmgr = salome.salome_kernel.salome_kernel_init()
 filePath=os.environ["MED_ROOT_DIR"]
 filePath=filePath+"/share/salome/resources/med/"
 medFile=filePath+"pointe.med"
-fieldname = "fieldcelldouble"
+fieldname = "fieldcelldoublevector"
 
 # Launch the Med Component and use it to load into memory the test field 
 print "Launch the Med Component: "
@@ -66,7 +66,7 @@ calculator = lcc.FindOrLoadComponent("FactoryServer", "CALCULATOR")
 ##############  Test Calculator Component ###################
 #
 #
-print "Appel cloneField : fieldcelldouble -> f1,f2,f3,f4"
+print "Appel cloneField : fieldcelldoublevector -> f1,f2,f3,f4"
 (f1,f2,f3,f4)=calculator.cloneField(fieldcelldouble)  # fieldcelldouble is consumed
 #
 ##f1.Register()

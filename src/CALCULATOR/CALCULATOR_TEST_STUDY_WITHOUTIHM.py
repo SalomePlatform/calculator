@@ -164,7 +164,7 @@ meshName = meshNames[0]
 
 meshObj = medObj.getMeshByName(meshName)
 
-fieldName = "fieldcelldouble"
+fieldName = "fieldcelldoublevector"
 dt = -1
 it = -1
 entitySupport = "MED_MAILLE"
@@ -384,8 +384,8 @@ myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/SupportOnAll_MED_MAILLE
 myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/SupportOnAll_MED_NOEUD')
 
 myStudy.GetObjectNames('/Med/MEDFIELD')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldouble')
-#myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldouble/(-1,-1)_ON_SupportOnAll_MED_MAILLE_OF_maa1')
+myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevector')
+#myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevector/(-1,-1)_ON_SupportOnAll_MED_MAILLE_OF_maa1')
 myStudy.GetObjectNames('/Med/MEDFIELD/fieldnodedouble')
 #myStudy.GetObjectNames('/Med/MEDFIELD/fieldnodedouble/(-1,-1)_ON_SupportOnAll_MED_NOEUD_OF_maa1')
 #myStudy.GetObjectNames('/Med/MEDFIELD/fieldnodedouble/1,-1)_ON_SupportOnAll_MED_NOEUD_OF_maa1')
@@ -411,8 +411,8 @@ print "Reading the .med file ",Outmed21File," and pushing corba objects in the S
 
 medComp.readStructFileWithFieldType(Outmed21File,studyname)
 
-Outf_add  = medComp.readFieldInFile(Outmed21File,studyname,'fieldcelldoubleadd',-1,-1)
-Outf_lin  = medComp.readFieldInFile(Outmed21File,studyname,'fieldcelldoublelin',-1,-1)
+Outf_add  = medComp.readFieldInFile(Outmed21File,studyname,'fieldcelldoublevectoradd',-1,-1)
+Outf_lin  = medComp.readFieldInFile(Outmed21File,studyname,'fieldcelldoublevectorlin',-1,-1)
 
 myStudy.GetObjectNames('/Med')
 
@@ -433,10 +433,10 @@ myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/SupportOnAll_MED_MAILLE
 myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/SupportOnAll_MED_NOEUD')
 
 myStudy.GetObjectNames('/Med/MEDFIELD')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoubleadd')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoubleadd/(-1,-1)_ON_SupportOnAll_MED_MAILLE_OF_maa1')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublelin')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublelin/(-1,-1)_ON_SupportOnAll_MED_MAILLE_OF_maa1')
+myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevectoradd')
+myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevectoradd/(-1,-1)_ON_SupportOnAll_MED_MAILLE_OF_maa1')
+myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevectorlin')
+myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevectorlin/(-1,-1)_ON_SupportOnAll_MED_MAILLE_OF_maa1')
 
 #myStudyManager.Save(myStudy,1)
 #myStudy.DumpStudy("/tmp","medClient_withoutIHM_add_lin",1)
