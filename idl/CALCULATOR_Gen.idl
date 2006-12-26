@@ -34,6 +34,16 @@ for  %CALCULATOR component as an example in %SALOME application.
 */
 module CALCULATOR_ORB
 {
+  /*!
+	Enumeration ErrorCode contains a code of the error
+   */
+   typedef long ErrorCode;
+   const ErrorCode NO_ERROR = 0;
+   const ErrorCode NOT_COMPATIBLE = 1;
+   const ErrorCode EXCEPTION_RAISED = 2;
+   const ErrorCode INVALID_FIELD = 3;
+
+	
   /*! \brief Interface of the %CALCULATOR component
    */
   interface CALCULATOR_Gen : Engines::Component
@@ -51,11 +61,9 @@ module CALCULATOR_ORB
 
      /*!
          Addition of fields. 
-	 Return exception if fields are not compatible.
          Release field1 and field2 after use.
      */
-     SALOME_MED::FIELDDOUBLE add(in SALOME_MED::FIELDDOUBLE field1, in SALOME_MED::FIELDDOUBLE field2)
-	 raises (SALOME::SALOME_Exception);
+     SALOME_MED::FIELDDOUBLE add(in SALOME_MED::FIELDDOUBLE field1, in SALOME_MED::FIELDDOUBLE field2);
 
      /*!
      	 return euclidian norm of field
@@ -94,6 +102,17 @@ module CALCULATOR_ORB
      void cloneField(in SALOME_MED::FIELDDOUBLE field, out SALOME_MED::FIELDDOUBLE clone1, 
                      out SALOME_MED::FIELDDOUBLE clone2, out SALOME_MED::FIELDDOUBLE clone3,
 		     out SALOME_MED::FIELDDOUBLE clone4 );
+
+     /*!
+         This method returns True if the operation succeded.
+         Otherwise returns False.
+      */
+	 boolean isDone();
+
+	 /*!
+         This method return an error code
+      */
+	 ErrorCode getErrorCode();
   };
 };
 
