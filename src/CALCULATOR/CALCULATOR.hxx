@@ -43,11 +43,15 @@ public:
     CORBA::Double norm2(SALOME_MED::FIELDDOUBLE_ptr field1);
     CORBA::Double normL1(SALOME_MED::FIELDDOUBLE_ptr field1);
     SALOME_MED::FIELDDOUBLE_ptr applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b);
-    SALOME_MED::FIELDDOUBLE_ptr add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2)
-	throw ( SALOME::SALOME_Exception );
+    SALOME_MED::FIELDDOUBLE_ptr add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2);
     void printField(SALOME_MED::FIELDDOUBLE_ptr field);
     void cloneField(SALOME_MED::FIELDDOUBLE_ptr field, SALOME_MED::FIELDDOUBLE_out clone1, SALOME_MED::FIELDDOUBLE_out clone2,
 	            SALOME_MED::FIELDDOUBLE_out clone3, SALOME_MED::FIELDDOUBLE_out clone4);
+	CORBA::Boolean isDone();
+	CALCULATOR_ORB::ErrorCode getErrorCode();
+
+protected:
+	CALCULATOR_ORB::ErrorCode _errorCode;
 };
 
 
