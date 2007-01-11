@@ -26,6 +26,7 @@
 #include "MEDMEM_FieldTemplate_i.hxx"
 #include <iomanip>
 #include <cmath>
+#include <float.h>
 using namespace std;
 using namespace MEDMEM;
 
@@ -365,52 +366,53 @@ void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
 
 CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)
 {
-    beginService( "CALCULATOR::convergenceCriteria");
-	_errorCode = CALCULATOR_ORB::NO_ERROR;
-    BEGIN_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)");
+  beginService( "CALCULATOR::convergenceCriteria");
+  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  BEGIN_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)");
 
-	if(CORBA::is_nil(field)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return 0.0;
-	}
+  if(CORBA::is_nil(field)) {
+    _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+    return 0.0;
+  }
 
-    double criteria=1;
-	static auto_ptr<TFieldDouble> fold(0);
-	auto_ptr<TFieldDouble> fnew (new TFieldDouble_c(field) );
+  double criteria=1;
+  static auto_ptr<TFieldDouble> fold(0);
+  auto_ptr<TFieldDouble> fnew (new TFieldDouble_c(field) );
 
-	try {
-		if (fold.get() == NULL) // if old field is not set, set it and return 1
-		fold=fnew;
-		else
-		{
-		// if size of fields are not equal, return 1
-		const int size=fold->getNumberOfValues()*fold->getNumberOfComponents();
-		if ( size == fnew->getNumberOfValues()*fnew->getNumberOfComponents() )
-		{
-			//MED_EN::medModeSwitch mode=fold->getInterlacingType(); // storage mode
-			const double* oldVal= fold->getValue(); // retrieve values
-			const double* newVal= fnew->getValue();
-			criteria=0.0;
-			double ecart_rel=0.0;
-			for (unsigned i=0; i!=size; ++i) // compute criteria
-			{
-			if ( oldVal[i] != 0.0)
-			{
-			    ecart_rel = std::abs( (oldVal[i]-newVal[i])/oldVal[i] );
-				if ( ecart_rel>criteria )
-				criteria=ecart_rel;
-			}
-			}
-		}
-		}
-	}
-	catch(...) {
-	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
-	}
+  try {
+    if (fold.get() == NULL) // if old field is not set, set it and return 1
+      fold=fnew;
+    else
+    {
+      // if size of fields are not equal, return 1
+      const int size=fold->getNumberOfValues()*fold->getNumberOfComponents();
+      if ( size == fnew->getNumberOfValues()*fnew->getNumberOfComponents() )
+      {
+        //MED_EN::medModeSwitch mode=fold->getInterlacingType(); // storage mode
+        const double* oldVal= fold->getValue(); // retrieve values
+        const double* newVal= fnew->getValue();
+        criteria=0.0;
+        double ecart_rel=0.0;
+        for (unsigned i=0; i!=size; ++i) // compute criteria
+        {
+          //if ( oldVal[i] != 0.0) // PAL14028
+          if ( std::abs( oldVal[i] ) > DBL_MIN )
+          {
+            ecart_rel = std::abs( (oldVal[i]-newVal[i])/oldVal[i] );
+            if ( ecart_rel>criteria )
+              criteria=ecart_rel;
+          }
+        }
+      }
+    }
+  }
+  catch(...) {
+    _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
+  }
 
-    endService( "CALCULATOR::convergenceCriteria");
-    END_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field1)");
-    return criteria;
+  endService( "CALCULATOR::convergenceCriteria");
+  END_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  return criteria;
 }
 
 CORBA::Boolean CALCULATOR::isDone()
