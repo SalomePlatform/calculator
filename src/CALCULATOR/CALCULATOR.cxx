@@ -348,11 +348,14 @@ void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
 	    int N=(i-1)*dim_space;
 	    cout << setw(width) << i << setw(width) << coord[N] << " " << setw(width) << coord[N+1]<<  " " << setw(width) << coord[N+2] << "  : " ;
 	}
-	if(displayBary)
-	    cout << setw(width) << i << setw(width) << barycenter->getValueIJ(i,1) << " " << setw(width) << barycenter->getValueIJ(i,2) 
-		 <<  " " << setw(width) << barycenter->getValueIJ(i,3) << "  : " ;
+	if(displayBary) {
+	  cout << setw(width) << i;
+	  for (int j=1; j<=dim_space; j++ ) 
+	    cout<< setw(width) << barycenter->getValueIJ(i,j) << " " ;
+	  cout<< "  : " ;
+	}
 	for (int j=0; j<NumberOfComponents; j++)
-	    cout << value[j]<< " ";
+	  cout << value[j]<< " ";
 	cout<<endl;
     }
     cout << endl;
