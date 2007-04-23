@@ -29,7 +29,7 @@ VPATH=.:@srcdir@:@top_srcdir@/idl:${MED_ROOT_DIR}/idl/salome
 LIB = libCALCULATOREngine.la
 LIB_SRC = CALCULATOR.cxx
 LIB_SERVER_IDL = CALCULATOR_Gen.idl 
-LIB_CLIENT_IDL = SALOME_Component.idl SALOME_Comm.idl SALOME_Exception.idl SALOMEDS.idl Logger.idl MED.idl SALOMEDS_Attributes.idl SALOME_GenericObj.idl
+LIB_CLIENT_IDL = SALOME_Component.idl SALOME_Comm.idl SALOME_Exception.idl SALOMEDS.idl Logger.idl SALOMEDS_Attributes.idl SALOME_GenericObj.idl MED.idl
 
 
 EXPORT_PYSCRIPTS = CALCULATOR_TEST.py CALCULATOR_TEST_STUDY_WITHOUTIHM.py CALCULATOR_TEST_WITHOUTIHM.py
@@ -42,8 +42,8 @@ CPPFLAGS += $(KERNEL_CXXFLAGS) $(MED_CXXFLAGS) $(MED2_INCLUDES) $(HDF5_INCLUDES)
 
 LDFLAGS+= $(KERNEL_LDFLAGS) -lSalomeContainer -lOpUtil $(MED2_LIBS) $(HDF5_LIBS) $(MED_LDFLAGS) -lMEDClientcmodule
 
-MED.hh MEDSK.cc: MED.idl
-	omniidl -bcxx -Wbtp -I$(top_builddir)/idl -I${KERNEL_ROOT_DIR}/idl/salome $^
+#MED.hh MEDSK.cc: MED.idl
+#	omniidl -bcxx -Wbtp -I$(top_builddir)/idl -I${KERNEL_ROOT_DIR}/idl/salome $^
 
 
  
