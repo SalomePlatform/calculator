@@ -15,9 +15,11 @@
 # Created from configure.in.base
 #
 
-AC_INIT(src)
-AC_CONFIG_AUX_DIR(${KERNEL_ROOT_DIR}/salome_adm/unix/config_files)
+AC_INIT([Salome2 Project CALCULATOR module], [4.0.0], [gboulant@CS], [salome])
+AC_CONFIG_AUX_DIR(salome_adm/unix/config_files)
 AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+AM_INIT_AUTOMAKE
 
 PACKAGE=salome
 AC_SUBST(PACKAGE)
@@ -50,11 +52,8 @@ echo Build  root directory : $ROOT_BUILDDIR
 echo
 echo
 
-dnl Modification B. Secher portage sur osf CCRT
-AC_CHECK_PROG(SHELL,sh,,)
+AC_CHECK_PROG(SHELL,sh)
 AC_SUBST(SHELL)
-
-AUX_CONFIG_DIR=${KERNEL_ROOT_DIR}/salome_adm/unix/config_files
 
 if test -z "$AR"; then
    AC_CHECK_PROGS(AR,ar xar,:,$PATH)
@@ -121,6 +120,8 @@ echo ---------------------------------------------
 echo
 
 CHECK_PYTHON
+
+AM_PATH_PYTHON(2.3)
 
 echo
 echo ---------------------------------------------
@@ -236,15 +237,6 @@ echo
 echo "Default ORB   : $DEFAULT_ORB"
 echo
 
-dnl generals files which could be included in every makefile
-
-AC_SUBST_FILE(COMMENCE) COMMENCE=adm_local/unix/make_commence
-AC_SUBST_FILE(CONCLUDE) CONCLUDE=salome_adm/unix/make_conclude
-AC_SUBST_FILE(MODULE) MODULE=salome_adm/unix/make_module
-
-dnl les dependences
-AC_SUBST_FILE(DEPEND) DEPEND=salome_adm/unix/depend
-
 dnl We don t need to say when we re entering directories if we re using
 dnl GNU make becuase make does it for us.
 if test "X$GMAKE" = "Xyes"; then
@@ -252,38 +244,6 @@ if test "X$GMAKE" = "Xyes"; then
 else
    AC_SUBST(SETX) SETX="set -x"
 fi
-
-# make other build directories
-for rep in salome_adm adm_local doc bin/salome include/salome lib lib${LIB_LOCATION_SUFFIX}/salome share/salome/resources/${MODULE_NAME} share/salome/doc idl
-do
-    $INSTALL -d $rep
-done
-
-echo 
-echo ---------------------------------------------
-echo copying resource files, shell scripts, and 
-echo xml files
-echo ---------------------------------------------
-echo
-
-dnl copy shells and utilities contained in the bin directory
-dnl excluding .in files (treated in AC-OUTPUT below) and CVS 
-dnl directory
-
-cd bin
-for i in $ROOT_SRCDIR/bin/*
-do
-  local_bin=`echo $i | sed -e "s,$ROOT_SRCDIR,.,"`
-  case "$local_bin" in
-        *.in | *~)                    ;;
-        ./bin/CVS)                    ;;
-        *) ln -fs $i; echo $local_bin ;;
-  esac
-done
-cd $ROOT_BUILDDIR
-
-AC_SUBST_FILE(ENVSCRIPT) ENVSCRIPT=salome_adm/unix/envScript
-
 echo
 echo ---------------------------------------------
 echo generating Makefiles and configure files
@@ -291,7 +251,26 @@ echo ---------------------------------------------
 echo
 
 AC_OUTPUT_COMMANDS([ \
-	chmod +x ./bin/* \
+      chmod +x ./bin/*; \
 ])
 
-## do not delete this line
+# This list is initiated using autoscan and must be updated manually
+# when adding a new file <filename>.in to manage. When you execute
+# autoscan, the Makefile list is generated in the output file configure.scan.
+# This could be helpfull to update de configuration.
+AC_OUTPUT([ \
+  ./salome_adm/unix/SALOMEconfig.h \
+  ./adm_local/Makefile \
+  ./adm_local/unix/Makefile \
+  ./adm_local/unix/config_files/Makefile \
+  ./bin/VERSION \
+  ./bin/runAppli \
+  ./bin/Makefile \
+  ./CALCULATOR_version.h \
+  ./src/Makefile \
+  ./src/CALCULATOR/Makefile \
+  ./resources/Makefile \
+  ./resources/CALCULATORCatalog.xml \
+  ./idl/Makefile \
+  Makefile \
+])
