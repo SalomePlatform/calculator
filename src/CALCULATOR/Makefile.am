@@ -49,7 +49,7 @@ libCALCULATOREngine_la_CPPFLAGS = \
 libCALCULATOREngine_la_LDFLAGS = \
 	$(CORBA_LIBS) \
 	$(CAS_OCAF) \
-	$(MED2_LIBS) \
+	$(HDF5_LIBS) \
 	$(KERNEL_LDFLAGS) \
 	-lSalomeContainer \
 	-lOpUtil \
@@ -58,9 +58,6 @@ libCALCULATOREngine_la_LDFLAGS = \
 	-lSalomeIDLMED \
 	-lMEDClientcmodule \
 	$(top_builddir)/idl/libSalomeIDLCALCULATOR.la
-
-#	$(HDF5_LIBS) \
-#	$(MED2_LIBS)
 
 # Scripts to be installed
 dist_salomescript_DATA = \
