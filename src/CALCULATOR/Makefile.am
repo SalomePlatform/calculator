@@ -17,7 +17,7 @@
 #  License along with this library; if not, write to the Free Software 
 #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA 
 # 
-# See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
+#  See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 #
 #
@@ -36,16 +36,20 @@ dist_libCALCULATOREngine_la_SOURCES = \
 	CALCULATOR.cxx
 
 libCALCULATOREngine_la_CPPFLAGS = \
-	$(MED2_INCLUDES) \
-	$(HDF5_INCLUDES) \
 	$(CORBA_CXXFLAGS) \
 	$(CORBA_INCLUDES) \
+	$(CAS_CPPFLAGS) \
+	$(MED2_INCLUDES) \
+	$(HDF5_INCLUDES) \
 	$(KERNEL_CXXFLAGS) \
 	$(MED_CXXFLAGS) \
 	-I$(top_builddir)/idl \
 	-I$(top_builddir)/salome_adm/unix
+
 libCALCULATOREngine_la_LDFLAGS = \
-	../../idl/libSalomeIDLCALCULATOR.la \
+	$(CORBA_LIBS) \
+	$(CAS_OCAF) \
+	$(MED2_LIBS) \
 	$(KERNEL_LDFLAGS) \
 	-lSalomeContainer \
 	-lOpUtil \
@@ -53,9 +57,10 @@ libCALCULATOREngine_la_LDFLAGS = \
 	$(MED_LDFLAGS) \
 	-lSalomeIDLMED \
 	-lMEDClientcmodule \
-	$(MED2_LIBS) \
-	$(HDF5_LIBS) \
-	$(CORBA_LIBS)
+	$(top_builddir)/idl/libSalomeIDLCALCULATOR.la
+
+#	$(HDF5_LIBS) \
+#	$(MED2_LIBS)
 
 # Scripts to be installed
 dist_salomescript_DATA = \

@@ -16,17 +16,23 @@
 //
 // See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 //
+
 #include "CALCULATOR.hxx"
+
 #include "FIELDClient.hxx"
 #include "MESHClient.hxx"
-#include <string>
-#include <strstream>
+
 #include "MEDMEM_Mesh_i.hxx"
 #include "MEDMEM_Support_i.hxx"
 #include "MEDMEM_FieldTemplate_i.hxx"
+
+#include <string>
+#include <strstream>
+
 #include <iomanip>
 #include <cmath>
 #include <float.h>
+
 using namespace std;
 using namespace MEDMEM;
 
@@ -34,18 +40,17 @@ typedef FIELD<double,MEDMEM::FullInterlace> TFieldDouble;
 typedef FIELDClient<double,MEDMEM::FullInterlace> TFieldDouble_c;
 typedef FIELDTEMPLATE_I<double,MEDMEM::FullInterlace> TFieldDouble_i;
 
-CALCULATOR::CALCULATOR(CORBA::ORB_ptr orb,
-	PortableServer::POA_ptr poa,
-	PortableServer::ObjectId * contId, 
-	const char *instanceName, 
-	const char *interfaceName) :
-  Engines_Component_i(orb, poa, contId, instanceName, interfaceName,true)
+CALCULATOR::CALCULATOR (CORBA::ORB_ptr orb,
+                        PortableServer::POA_ptr poa,
+                        PortableServer::ObjectId * contId, 
+                        const char *instanceName, 
+                        const char *interfaceName)
+  : Engines_Component_i(orb, poa, contId, instanceName, interfaceName, true),
+    _errorCode(CALCULATOR_ORB::NO_ERROR)
 {
   MESSAGE("activate object");
-  _thisObj = this ;
+  _thisObj = this;
   _id = _poa->activate_object(_thisObj);
-
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
 }
 
 CALCULATOR::~CALCULATOR()
@@ -429,19 +434,26 @@ CALCULATOR_ORB::ErrorCode CALCULATOR::getErrorCode()
 }
 
 
+//=============================================================================
+/*!
+ *  CALCULATOREngine_factory
+ *
+ *  C factory, accessible with dlsym, after dlopen
+ */
+//=============================================================================
+
 extern "C"
 {
-  PortableServer::ObjectId * CALCULATOREngine_factory(
-			       CORBA::ORB_ptr orb,
-			       PortableServer::POA_ptr poa, 
-			       PortableServer::ObjectId * contId,
-			       const char *instanceName, 
-		       	       const char *interfaceName)
+  PortableServer::ObjectId * CALCULATOREngine_factory (CORBA::ORB_ptr orb,
+                                                       PortableServer::POA_ptr poa,
+                                                       PortableServer::ObjectId * contId,
+                                                       const char *instanceName,
+                                                       const char *interfaceName)
   {
     MESSAGE("PortableServer::ObjectId * CALCULATOREngine_factory()");
     SCRUTE(interfaceName);
-    CALCULATOR * myCALCULATOR 
-      = new CALCULATOR(orb, poa, contId, instanceName, interfaceName);
-    return myCALCULATOR->getId() ;
+    CALCULATOR * myCALCULATOR =
+      new CALCULATOR (orb, poa, contId, instanceName, interfaceName);
+    return myCALCULATOR->getId();
   }
 }

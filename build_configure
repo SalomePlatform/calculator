@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Tool for updating list of .in file for the SALOME project 
+# Tool for updating list of .in file for the SALOME project
 # and regenerating configure script
 #
 # Author : 
@@ -19,6 +19,8 @@ if test ! -d "${KERNEL_ROOT_DIR}"; then
     echo "failed : KERNEL_ROOT_DIR variable is not correct !"
     exit
 fi
+
+CALCULATOR_WITH_GUI="yes"
 
 for option
 do

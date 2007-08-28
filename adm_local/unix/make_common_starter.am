@@ -10,6 +10,7 @@
 salomeincludedir   = $(includedir)/@PACKAGE@
 libdir             = $(prefix)/lib@LIB_LOCATION_SUFFIX@/@PACKAGE@
 bindir             = $(prefix)/bin/@PACKAGE@
+purebindir         = $(prefix)/bin
 salomescriptdir    = $(bindir)
 
 # Directory for installing idl files
