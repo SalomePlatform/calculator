@@ -40,6 +40,7 @@ lib_LTLIBRARIES = libSalomeIDLCALCULATOR.la
 nodist_libSalomeIDLCALCULATOR_la_SOURCES = \
 	CALCULATOR_GenSK.cc \
 	CALCULATOR_GenDynSK.cc
+CALCULATOR_GenDynSK.cc: CALCULATOR_GenSK.cc
 
 # header files must be exported: other modules have to use this library
 nodist_salomeinclude_HEADERS= $(BASEIDL_FILES:%.idl=%.hh)
