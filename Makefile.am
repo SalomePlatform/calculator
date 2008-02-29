@@ -21,7 +21,7 @@
 # Author : Patrick GOLDBRONN (CEA)
 # Date : 28/06/2001
 #  Modified by : Alexander BORODIN (OCN) - autotools usage
-# $Header:
+# $Header$
 #
 
 include $(top_srcdir)/adm_local/unix/make_common_starter.am

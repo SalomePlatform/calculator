@@ -12,21 +12,14 @@
 # Modified by : Patrick GOLDBRONN (CEA)
 # Modified by : Marc Tajchman (CEA)
 #
-# Created from configure.in.base
-#
 
-AC_INIT([Salome2 Project CALCULATOR module], [4.0.0], [gboulant@CS], [salome])
+AC_INIT([Salome2 Project CALCULATOR module], [4.1.1], [webmaster.salome@opencascade.com], [salome])
 AC_CONFIG_AUX_DIR(salome_adm/unix/config_files)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
 
-PACKAGE=salome
-AC_SUBST(PACKAGE)
-
-VERSION=4.0.0
-XVERSION=0x040000
-AC_SUBST(VERSION)
+XVERSION=`echo $VERSION | awk -F. '{printf("0x%02x%02x%02x",$1,$2,$3)}'`
 AC_SUBST(XVERSION)
 
 # set up MODULE_NAME variable for dynamic construction of directories (resources, etc.)
@@ -93,6 +86,8 @@ dnl Fix up the INSTALL macro if it s a relative path. We want the
 dnl full-path to the binary instead.
 case "$INSTALL" in
    *install-sh*)
+     #INSTALL='\${ROOT_BUILDDIR}'/salome_adm/unix/config_files/install-sh
+     #;;
      case $host_os in
        osf*)
          INSTALL="${AUX_CONFIG_DIR}/install-sh -c"
@@ -103,6 +98,36 @@ case "$INSTALL" in
      esac
 esac
 
+echo
+echo ---------------------------------------------
+echo testing C/C++
+echo ---------------------------------------------
+echo
+
+cc_ok=no
+dnl inutil car libtool
+dnl AC_PROG_CC
+AC_PROG_CXX
+AC_CXX_WARNINGS
+AC_CXX_TEMPLATE_OPTIONS
+AC_DEPEND_FLAG
+# AC_CC_WARNINGS([ansi])
+cc_ok=yes
+
+dnl Library libdl :
+AC_CHECK_LIB(dl,dlopen)
+
+dnl Library librt : for alpha/osf
+AC_CHECK_LIB(rt,nanosleep)
+
+dnl add library libm :
+AC_CHECK_LIB(m,ceil)
+
+dnl 
+dnl Check if we use std iostream by default or if we must add
+dnl a compiler directive for that
+dnl
+
 AC_CXX_USE_STD_IOSTREAM
 
 dnl 
@@ -111,7 +136,23 @@ dnl We must test if it exists. If not, add it in include !
 dnl
 
 AC_CXX_HAVE_SSTREAM
+#AM_CONDITIONAL(MED_ENABLE_SSTREAM, [test "$HAVE_SSTREAM" = yes])
 
+dnl
+dnl ---------------------------------------------
+dnl testing linker
+dnl ---------------------------------------------
+dnl
+
+AC_LINKER_OPTIONS
+
+echo
+echo ---------------------------------------------
+echo testing threads
+echo ---------------------------------------------
+echo
+
+ENABLE_PTHREADS
 
 echo
 echo ---------------------------------------------
@@ -121,29 +162,15 @@ echo
 
 CHECK_PYTHON
 
+echo
+echo ---------------------------------------------
+echo testing swig
+echo ---------------------------------------------
+echo
+
 AM_PATH_PYTHON(2.3)
-
-echo
-echo ---------------------------------------------
-echo testing QT
-echo ---------------------------------------------
-echo
-
-CHECK_QT
-
-echo
-echo ---------------------------------------------
-echo Testing OpenCascade
-echo ---------------------------------------------
-echo
-
-CHECK_CAS
-
-echo
-echo ---------------------------------------------
-echo testing omniORB
-echo ---------------------------------------------
-echo
+CHECK_SWIG
+#AM_CONDITIONAL(MED_SWIG_1_3_21, [test "$SWIG_VERSION" = 1.3.21])
 
 echo
 echo ---------------------------------------------
@@ -155,23 +182,25 @@ CHECK_HDF5
 
 echo
 echo ---------------------------------------------
+echo BOOST Library
+echo ---------------------------------------------
+echo
+
+CHECK_BOOST
+
+echo
+echo ---------------------------------------------
 echo testing MED2
 echo ---------------------------------------------
 echo
 
 CHECK_MED2
 
-
 echo
 echo ---------------------------------------------
-echo testing MED
+echo testing omniORB
 echo ---------------------------------------------
 echo
-
-CHECK_MED
-
-dnl For the sake of $MACHINE needed for MED Wrapper
-AC_DEPEND_FLAG
 
 CHECK_OMNIORB
 
@@ -187,6 +216,29 @@ CHECK_CORBA
 AC_SUBST_FILE(CORBA)
 corba=make_$ORB
 CORBA=adm_local/unix/$corba
+
+echo
+echo ---------------------------------------------
+echo Testing OpenCascade
+echo ---------------------------------------------
+echo
+
+CHECK_CAS
+
+echo
+echo ---------------------------------------------
+echo testing MED
+echo ---------------------------------------------
+echo
+
+CHECK_MED
+
+dnl For the sake of $MACHINE needed for MED Wrapper
+AC_DEPEND_FLAG
+
+
+CALCULATOR_WITH_GUI=yes
+qt_ok=no
 
 if test "${CALCULATOR_WITH_GUI}" = "yes"; then
     echo
@@ -208,6 +260,14 @@ if test "${CALCULATOR_WITH_GUI}" = "yes"; then
       echo "failed : For configure CALCULATOR module necessary full GUI !"
       exit
     fi
+
+    echo
+    echo ---------------------------------------------
+    echo testing QT
+    echo ---------------------------------------------
+    echo
+
+    CHECK_QT
 fi
 
 echo
@@ -244,6 +304,7 @@ if test "X$GMAKE" = "Xyes"; then
 else
    AC_SUBST(SETX) SETX="set -x"
 fi
+
 echo
 echo ---------------------------------------------
 echo generating Makefiles and configure files
@@ -274,3 +335,6 @@ AC_OUTPUT([ \
   ./idl/Makefile \
   Makefile \
 ])
+
+dnl To avoid recompiling half of the sources because of SALOMEconfig.h recreating
+touch -d 01Jan2007 ./salome_adm/unix/SALOMEconfig.h
