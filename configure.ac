@@ -238,7 +238,6 @@ AC_DEPEND_FLAG
 
 
 CALCULATOR_WITH_GUI=yes
-qt_ok=no
 
 if test "${CALCULATOR_WITH_GUI}" = "yes"; then
     echo
@@ -261,13 +260,6 @@ if test "${CALCULATOR_WITH_GUI}" = "yes"; then
       exit
     fi
 
-    echo
-    echo ---------------------------------------------
-    echo testing QT
-    echo ---------------------------------------------
-    echo
-
-    CHECK_QT
 fi
 
 echo
@@ -285,7 +277,7 @@ echo ---------------------------------------------
 echo
 
 echo Configure
-variables="python_ok omniORB_ok Kernel_ok qt_ok"
+variables="python_ok omniORB_ok Kernel_ok"
 
 for var in $variables
 do
