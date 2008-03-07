@@ -16,16 +16,23 @@
 //
 // See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 //
+
 #include "CALCULATOR.hxx"
+
 #include "FIELDClient.hxx"
 #include "MESHClient.hxx"
-#include <string>
-#include <strstream>
+
 #include "MEDMEM_Mesh_i.hxx"
 #include "MEDMEM_Support_i.hxx"
 #include "MEDMEM_FieldTemplate_i.hxx"
+
+#include <string>
+#include <strstream>
+
 #include <iomanip>
 #include <cmath>
+#include <float.h>
+
 using namespace std;
 using namespace MEDMEM;
 
@@ -33,18 +40,17 @@ typedef FIELD<double,MEDMEM::FullInterlace> TFieldDouble;
 typedef FIELDClient<double,MEDMEM::FullInterlace> TFieldDouble_c;
 typedef FIELDTEMPLATE_I<double,MEDMEM::FullInterlace> TFieldDouble_i;
 
-CALCULATOR::CALCULATOR(CORBA::ORB_ptr orb,
-	PortableServer::POA_ptr poa,
-	PortableServer::ObjectId * contId, 
-	const char *instanceName, 
-	const char *interfaceName) :
-  Engines_Component_i(orb, poa, contId, instanceName, interfaceName,true)
+CALCULATOR::CALCULATOR (CORBA::ORB_ptr orb,
+                        PortableServer::POA_ptr poa,
+                        PortableServer::ObjectId * contId, 
+                        const char *instanceName, 
+                        const char *interfaceName)
+  : Engines_Component_i(orb, poa, contId, instanceName, interfaceName, true),
+    _errorCode(CALCULATOR_ORB::NO_ERROR)
 {
   MESSAGE("activate object");
-  _thisObj = this ;
+  _thisObj = this;
   _id = _poa->activate_object(_thisObj);
-
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
 }
 
 CALCULATOR::~CALCULATOR()
@@ -347,11 +353,14 @@ void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
 	    int N=(i-1)*dim_space;
 	    cout << setw(width) << i << setw(width) << coord[N] << " " << setw(width) << coord[N+1]<<  " " << setw(width) << coord[N+2] << "  : " ;
 	}
-	if(displayBary)
-	    cout << setw(width) << i << setw(width) << barycenter->getValueIJ(i,1) << " " << setw(width) << barycenter->getValueIJ(i,2) 
-		 <<  " " << setw(width) << barycenter->getValueIJ(i,3) << "  : " ;
+	if(displayBary) {
+	  cout << setw(width) << i;
+	  for (int j=1; j<=dim_space; j++ ) 
+	    cout<< setw(width) << barycenter->getValueIJ(i,j) << " " ;
+	  cout<< "  : " ;
+	}
 	for (int j=0; j<NumberOfComponents; j++)
-	    cout << value[j]<< " ";
+	  cout << value[j]<< " ";
 	cout<<endl;
     }
     cout << endl;
@@ -365,52 +374,53 @@ void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
 
 CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)
 {
-    beginService( "CALCULATOR::convergenceCriteria");
-	_errorCode = CALCULATOR_ORB::NO_ERROR;
-    BEGIN_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)");
+  beginService( "CALCULATOR::convergenceCriteria");
+  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  BEGIN_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)");
 
-	if(CORBA::is_nil(field)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return 0.0;
-	}
+  if(CORBA::is_nil(field)) {
+    _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+    return 0.0;
+  }
 
-    double criteria=1;
-	static auto_ptr<TFieldDouble> fold(0);
-	auto_ptr<TFieldDouble> fnew (new TFieldDouble_c(field) );
+  double criteria=1;
+  static auto_ptr<TFieldDouble> fold(0);
+  auto_ptr<TFieldDouble> fnew (new TFieldDouble_c(field) );
 
-	try {
-		if (fold.get() == NULL) // if old field is not set, set it and return 1
-		fold=fnew;
-		else
-		{
-		// if size of fields are not equal, return 1
-		const int size=fold->getNumberOfValues()*fold->getNumberOfComponents();
-		if ( size == fnew->getNumberOfValues()*fnew->getNumberOfComponents() )
-		{
-			//MED_EN::medModeSwitch mode=fold->getInterlacingType(); // storage mode
-			const double* oldVal= fold->getValue(); // retrieve values
-			const double* newVal= fnew->getValue();
-			criteria=0.0;
-			double ecart_rel=0.0;
-			for (unsigned i=0; i!=size; ++i) // compute criteria
-			{
-			if ( oldVal[i] != 0.0)
-			{
-			    ecart_rel = std::abs( (oldVal[i]-newVal[i])/oldVal[i] );
-				if ( ecart_rel>criteria )
-				criteria=ecart_rel;
-			}
-			}
-		}
-		}
-	}
-	catch(...) {
-	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
-	}
+  try {
+    if (fold.get() == NULL) // if old field is not set, set it and return 1
+      fold=fnew;
+    else
+    {
+      // if size of fields are not equal, return 1
+      const int size=fold->getNumberOfValues()*fold->getNumberOfComponents();
+      if ( size == fnew->getNumberOfValues()*fnew->getNumberOfComponents() )
+      {
+        //MED_EN::medModeSwitch mode=fold->getInterlacingType(); // storage mode
+        const double* oldVal= fold->getValue(); // retrieve values
+        const double* newVal= fnew->getValue();
+        criteria=0.0;
+        double ecart_rel=0.0;
+        for (unsigned i=0; i!=size; ++i) // compute criteria
+        {
+          //if ( oldVal[i] != 0.0) // PAL14028
+          if ( std::abs( oldVal[i] ) > DBL_MIN )
+          {
+            ecart_rel = std::abs( (oldVal[i]-newVal[i])/oldVal[i] );
+            if ( ecart_rel>criteria )
+              criteria=ecart_rel;
+          }
+        }
+      }
+    }
+  }
+  catch(...) {
+    _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
+  }
 
-    endService( "CALCULATOR::convergenceCriteria");
-    END_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field1)");
-    return criteria;
+  endService( "CALCULATOR::convergenceCriteria");
+  END_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  return criteria;
 }
 
 CORBA::Boolean CALCULATOR::isDone()
@@ -424,19 +434,26 @@ CALCULATOR_ORB::ErrorCode CALCULATOR::getErrorCode()
 }
 
 
+//=============================================================================
+/*!
+ *  CALCULATOREngine_factory
+ *
+ *  C factory, accessible with dlsym, after dlopen
+ */
+//=============================================================================
+
 extern "C"
 {
-  PortableServer::ObjectId * CALCULATOREngine_factory(
-			       CORBA::ORB_ptr orb,
-			       PortableServer::POA_ptr poa, 
-			       PortableServer::ObjectId * contId,
-			       const char *instanceName, 
-		       	       const char *interfaceName)
+  PortableServer::ObjectId * CALCULATOREngine_factory (CORBA::ORB_ptr orb,
+                                                       PortableServer::POA_ptr poa,
+                                                       PortableServer::ObjectId * contId,
+                                                       const char *instanceName,
+                                                       const char *interfaceName)
   {
     MESSAGE("PortableServer::ObjectId * CALCULATOREngine_factory()");
     SCRUTE(interfaceName);
-    CALCULATOR * myCALCULATOR 
-      = new CALCULATOR(orb, poa, contId, instanceName, interfaceName);
-    return myCALCULATOR->getId() ;
+    CALCULATOR * myCALCULATOR =
+      new CALCULATOR (orb, poa, contId, instanceName, interfaceName);
+    return myCALCULATOR->getId();
   }
 }

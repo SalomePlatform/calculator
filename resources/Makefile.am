@@ -1,4 +1,5 @@
-#  Copyright (C) 2005  CEA/DEN, EDF R&D
+#  Copyright (C) 2005  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
+#  CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
 #
 #  This library is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU Lesser General Public
@@ -16,23 +17,21 @@
 #
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
-#==============================================================================
-#  File      : Makefile.in
-#  Created   : ven déc  7 13:32:20 CET 2001
-#  Author    : Paul RASCLE, EDF
-#  Project   : SALOME
-#  Copyright : EDF 2001
-#  $Header$
-#==============================================================================
+# -* Makefile *- 
+#
+# Author : Patrick GOLDBRONN (CEA)
+# Date : 28/06/2001
+#  Modified by : Alexander BORODIN (OCN) - autotools usage
 
-# source path
-top_srcdir=@top_srcdir@
-top_builddir=..
-srcdir=@srcdir@
-VPATH=.:@srcdir@
+include $(top_srcdir)/adm_local/unix/make_common_starter.am
 
-@COMMENCE@
+dist_salomeres_DATA = \
+	CALCULATOR.png \
+	CALCULATOR_en.ps \
+	CALCULATOR_en.xml \
+	CALCULATOR_fr.xml \
+	ExecCALCULATOR.png \
+	config \
+	SalomeApp.xml
 
-SUBDIRS = CALCULATOR 
-
-@MODULE@
+nodist_salomeres_DATA = CALCULATORCatalog.xml

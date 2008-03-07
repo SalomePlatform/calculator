@@ -12,20 +12,19 @@
 # Modified by : Patrick GOLDBRONN (CEA)
 # Modified by : Marc Tajchman (CEA)
 #
-# Created from configure.in.base
-#
 
-AC_INIT(src)
-AC_CONFIG_AUX_DIR(${KERNEL_ROOT_DIR}/salome_adm/unix/config_files)
+AC_INIT([Salome2 Project CALCULATOR module], [4.1.1], [webmaster.salome@opencascade.com], [salome])
+AC_CONFIG_AUX_DIR(salome_adm/unix/config_files)
 AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+AM_INIT_AUTOMAKE
 
-PACKAGE=salome
-AC_SUBST(PACKAGE)
-
-VERSION=3.2.0
-XVERSION=0x030200
-AC_SUBST(VERSION)
+XVERSION=`echo $VERSION | awk -F. '{printf("0x%02x%02x%02x",$1,$2,$3)}'`
 AC_SUBST(XVERSION)
+
+# set up MODULE_NAME variable for dynamic construction of directories (resources, etc.)
+MODULE_NAME=calculator
+AC_SUBST(MODULE_NAME)
 
 dnl
 dnl Initialize source and build root directories
@@ -46,11 +45,8 @@ echo Build  root directory : $ROOT_BUILDDIR
 echo
 echo
 
-dnl Modification B. Secher portage sur osf CCRT
-AC_CHECK_PROG(SHELL,sh,,)
+AC_CHECK_PROG(SHELL,sh)
 AC_SUBST(SHELL)
-
-AUX_CONFIG_DIR=${KERNEL_ROOT_DIR}/salome_adm/unix/config_files
 
 if test -z "$AR"; then
    AC_CHECK_PROGS(AR,ar xar,:,$PATH)
@@ -90,6 +86,8 @@ dnl Fix up the INSTALL macro if it s a relative path. We want the
 dnl full-path to the binary instead.
 case "$INSTALL" in
    *install-sh*)
+     #INSTALL='\${ROOT_BUILDDIR}'/salome_adm/unix/config_files/install-sh
+     #;;
      case $host_os in
        osf*)
          INSTALL="${AUX_CONFIG_DIR}/install-sh -c"
@@ -100,6 +98,36 @@ case "$INSTALL" in
      esac
 esac
 
+echo
+echo ---------------------------------------------
+echo testing C/C++
+echo ---------------------------------------------
+echo
+
+cc_ok=no
+dnl inutil car libtool
+dnl AC_PROG_CC
+AC_PROG_CXX
+AC_CXX_WARNINGS
+AC_CXX_TEMPLATE_OPTIONS
+AC_DEPEND_FLAG
+# AC_CC_WARNINGS([ansi])
+cc_ok=yes
+
+dnl Library libdl :
+AC_CHECK_LIB(dl,dlopen)
+
+dnl Library librt : for alpha/osf
+AC_CHECK_LIB(rt,nanosleep)
+
+dnl add library libm :
+AC_CHECK_LIB(m,ceil)
+
+dnl 
+dnl Check if we use std iostream by default or if we must add
+dnl a compiler directive for that
+dnl
+
 AC_CXX_USE_STD_IOSTREAM
 
 dnl 
@@ -108,7 +136,23 @@ dnl We must test if it exists. If not, add it in include !
 dnl
 
 AC_CXX_HAVE_SSTREAM
+#AM_CONDITIONAL(MED_ENABLE_SSTREAM, [test "$HAVE_SSTREAM" = yes])
 
+dnl
+dnl ---------------------------------------------
+dnl testing linker
+dnl ---------------------------------------------
+dnl
+
+AC_LINKER_OPTIONS
+
+echo
+echo ---------------------------------------------
+echo testing threads
+echo ---------------------------------------------
+echo
+
+ENABLE_PTHREADS
 
 echo
 echo ---------------------------------------------
@@ -120,25 +164,13 @@ CHECK_PYTHON
 
 echo
 echo ---------------------------------------------
-echo testing QT
+echo testing swig
 echo ---------------------------------------------
 echo
 
-CHECK_QT
-
-echo
-echo ---------------------------------------------
-echo Testing OpenCascade
-echo ---------------------------------------------
-echo
-
-CHECK_CAS
-
-echo
-echo ---------------------------------------------
-echo testing omniORB
-echo ---------------------------------------------
-echo
+AM_PATH_PYTHON(2.3)
+CHECK_SWIG
+#AM_CONDITIONAL(MED_SWIG_1_3_21, [test "$SWIG_VERSION" = 1.3.21])
 
 echo
 echo ---------------------------------------------
@@ -150,23 +182,25 @@ CHECK_HDF5
 
 echo
 echo ---------------------------------------------
+echo BOOST Library
+echo ---------------------------------------------
+echo
+
+CHECK_BOOST
+
+echo
+echo ---------------------------------------------
 echo testing MED2
 echo ---------------------------------------------
 echo
 
 CHECK_MED2
 
-
 echo
 echo ---------------------------------------------
-echo testing MED
+echo testing omniORB
 echo ---------------------------------------------
 echo
-
-CHECK_MED
-
-dnl For the sake of $MACHINE needed for MED Wrapper
-AC_DEPEND_FLAG
 
 CHECK_OMNIORB
 
@@ -185,22 +219,55 @@ CORBA=adm_local/unix/$corba
 
 echo
 echo ---------------------------------------------
-echo Testing GUI
+echo Testing OpenCascade
 echo ---------------------------------------------
 echo
 
-CHECK_SALOME_GUI
+CHECK_CAS
 
 echo
 echo ---------------------------------------------
-echo Testing full GUI
+echo testing MED
 echo ---------------------------------------------
 echo
 
-CHECK_CORBA_IN_GUI
-if test "x${CORBA_IN_GUI}" != "xyes"; then
-  echo "failed : For configure CALCULATOR module necessary full GUI !"
-  exit
+CHECK_MED
+
+dnl For the sake of $MACHINE needed for MED Wrapper
+AC_DEPEND_FLAG
+
+
+CALCULATOR_WITH_GUI=yes
+qt_ok=no
+
+if test "${CALCULATOR_WITH_GUI}" = "yes"; then
+    echo
+    echo ---------------------------------------------
+    echo Testing GUI
+    echo ---------------------------------------------
+    echo
+
+    CHECK_SALOME_GUI
+
+    echo
+    echo ---------------------------------------------
+    echo Testing full GUI
+    echo ---------------------------------------------
+    echo
+
+    CHECK_CORBA_IN_GUI
+    if test "x${CORBA_IN_GUI}" != "xyes"; then
+      echo "failed : For configure CALCULATOR module necessary full GUI !"
+      exit
+    fi
+
+    echo
+    echo ---------------------------------------------
+    echo testing QT
+    echo ---------------------------------------------
+    echo
+
+    CHECK_QT
 fi
 
 echo
@@ -230,15 +297,6 @@ echo
 echo "Default ORB   : $DEFAULT_ORB"
 echo
 
-dnl generals files which could be included in every makefile
-
-AC_SUBST_FILE(COMMENCE) COMMENCE=adm_local/unix/make_commence
-AC_SUBST_FILE(CONCLUDE) CONCLUDE=salome_adm/unix/make_conclude
-AC_SUBST_FILE(MODULE) MODULE=salome_adm/unix/make_module
-
-dnl les dependences
-AC_SUBST_FILE(DEPEND) DEPEND=salome_adm/unix/depend
-
 dnl We don t need to say when we re entering directories if we re using
 dnl GNU make becuase make does it for us.
 if test "X$GMAKE" = "Xyes"; then
@@ -247,37 +305,6 @@ else
    AC_SUBST(SETX) SETX="set -x"
 fi
 
-# make other build directories
-for rep in salome_adm adm_local doc bin/salome include/salome lib${LIB_LOCATION_SUFFIX}/salome share/salome/resources share/salome/doc idl
-do
-    $INSTALL -d $rep
-done
-
-echo 
-echo ---------------------------------------------
-echo copying resource files, shell scripts, and 
-echo xml files
-echo ---------------------------------------------
-echo
-
-dnl copy shells and utilities contained in the bin directory
-dnl excluding .in files (treated in AC-OUTPUT below) and CVS 
-dnl directory
-
-cd bin
-for i in $ROOT_SRCDIR/bin/*
-do
-  local_bin=`echo $i | sed -e "s,$ROOT_SRCDIR,.,"`
-  case "$local_bin" in
-        *.in | *~)                    ;;
-        ./bin/CVS)                    ;;
-        *) ln -fs $i; echo $local_bin ;;
-  esac
-done
-cd $ROOT_BUILDDIR
-
-AC_SUBST_FILE(ENVSCRIPT) ENVSCRIPT=salome_adm/unix/envScript
-
 echo
 echo ---------------------------------------------
 echo generating Makefiles and configure files
@@ -285,7 +312,29 @@ echo ---------------------------------------------
 echo
 
 AC_OUTPUT_COMMANDS([ \
-	chmod +x ./bin/* \
+      chmod +x ./bin/*; \
 ])
 
-## do not delete this line
+# This list is initiated using autoscan and must be updated manually
+# when adding a new file <filename>.in to manage. When you execute
+# autoscan, the Makefile list is generated in the output file configure.scan.
+# This could be helpfull to update de configuration.
+AC_OUTPUT([ \
+  ./salome_adm/unix/SALOMEconfig.h \
+  ./adm_local/Makefile \
+  ./adm_local/unix/Makefile \
+  ./adm_local/unix/config_files/Makefile \
+  ./bin/VERSION \
+  ./bin/runAppli \
+  ./bin/Makefile \
+  ./CALCULATOR_version.h \
+  ./src/Makefile \
+  ./src/CALCULATOR/Makefile \
+  ./resources/Makefile \
+  ./resources/CALCULATORCatalog.xml \
+  ./idl/Makefile \
+  Makefile \
+])
+
+dnl To avoid recompiling half of the sources because of SALOMEconfig.h recreating
+touch -d 01Jan2007 ./salome_adm/unix/SALOMEconfig.h

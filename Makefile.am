@@ -1,4 +1,4 @@
-#  Copyright (C) 2005  CEA/DEN, EDF R&D
+#  Copyright (C) 2005  CEA/DEN, EDF R&D, OPEN CASCADE, PRINCIPIA R&D
 #
 #  This library is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU Lesser General Public
@@ -16,44 +16,29 @@
 #
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
-# source path
-top_srcdir=@top_srcdir@
-top_builddir=..
-srcdir=@srcdir@
-VPATH=.:$(srcdir)/adm_local
+# -* Makefile *-
+#
+# Author : Patrick GOLDBRONN (CEA)
+# Date : 28/06/2001
+#  Modified by : Alexander BORODIN (OCN) - autotools usage
+# $Header$
+#
+
+include $(top_srcdir)/adm_local/unix/make_common_starter.am
 
 
-all: resources
+SUBDIRS = idl adm_local resources src bin 
 
-install:
-	cp -rf @top_srcdir@/adm_local @prefix@
+DIST_SUBDIRS = idl adm_local resources src bin 
 
-bin:
+DISTCLEANFILES = a.out aclocal.m4 configure
 
-resources :
-	cp -rf @top_srcdir@/adm_local $(top_builddir)
+salomeinclude_DATA=CALCULATOR_version.h
 
-inc:
+EXTRA_DIST+= \
+	build_configure \
+	clean_configure \
+	LICENCE
 
-lib:
-
-depend:
-
-depend_idl:
-
-install-end:
-
-install-include:
-
-install-bin:
-
-uninstall:
-
-uninstall-idl:
-
-distclean:
-
-clean:
-
-distclean-other:
-
+dist-hook:
+	rm -rf `find $(distdir) -name CVS`

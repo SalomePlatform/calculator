@@ -76,7 +76,7 @@ def DefaNewDataFlow() :
     Pyinit_parameter.append( '    print "init_parameter : myStudyName = ", StudyName              ' )
     Pyinit_parameter.append( '    from os import environ                 ' )
     Pyinit_parameter.append( '    filePath=environ["MED_ROOT_DIR"]                 ' )
-    Pyinit_parameter.append( '    filePath=filePath+"/share/salome/resources/"                 ' )
+    Pyinit_parameter.append( '    filePath=filePath+"/share/salome/resources/med/"                 ' )
     Pyinit_parameter.append( '    fromMedFile=filePath+"pointe.med"                            ' )
     Pyinit_parameter.append( '    print "init_parameter : fromMedFile = ", fromMedFile                             ' )
     Pyinit_parameter.append( '    fromfieldname="fieldcelldouble"                     ' )
