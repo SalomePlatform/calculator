@@ -62,25 +62,25 @@ CORBA::Double CALCULATOR::norm2(SALOME_MED::FIELDDOUBLE_ptr field1)
     beginService( "CALCULATOR::norm2");
 	_errorCode = CALCULATOR_ORB::NO_ERROR;
     BEGIN_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
-	
-	if(CORBA::is_nil(field1)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return 0.0;
-	}
 
-	CORBA::Double norme = 0.0;
-	// Create a local field from corba field, apply method normMax on it.
-	// When exiting the function, f1 is deleted, and with it the remote corba field.
-	TFieldDouble_c f1(field1);
-	
-	try {
-		norme = f1.norm2();
-	}
-	catch(...) {
-	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
-	}
+    if (CORBA::is_nil(field1)) {
+      _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+      return 0.0;
+    }
 
-	END_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    CORBA::Double norme = 0.0;
+    // Create a local field from corba field, apply method normMax on it.
+    // When exiting the function, f1 is deleted, and with it the remote corba field.
+    TFieldDouble_c f1(field1);
+
+    try {
+      norme = f1.norm2();
+    }
+    catch(...) {
+      _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
+    }
+
+    END_OF();
     endService( "CALCULATOR::norm2");
     return norme;
 }
@@ -119,7 +119,7 @@ CORBA::Double CALCULATOR::normL2(SALOME_MED::FIELDDOUBLE_ptr field1)
     ostringstream message("CALCULATOR::normL2 : ");
     message << norme;
     sendMessage("warning",message.str().c_str());
-    END_OF("CALCULATOR::NormL2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    END_OF();
     endService( "CALCULATOR::normL2");
     return norme;
 }
@@ -148,7 +148,7 @@ CORBA::Double CALCULATOR::normMax(SALOME_MED::FIELDDOUBLE_ptr field1)
 	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
 	}
     
-	END_OF("CALCULATOR::NormMax(SALOME_MED::FIELDDOUBLE_ptr field1)");
+	END_OF();
     endService( "CALCULATOR::normMax");
     return norme;
 }
@@ -182,7 +182,7 @@ CORBA::Double CALCULATOR::normL1(SALOME_MED::FIELDDOUBLE_ptr field1)
 	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
 	}
 
-    END_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+    END_OF();
     endService( "CALCULATOR::normL1");
     return norme;
 }
@@ -217,7 +217,7 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::applyLin(SALOME_MED::FIELDDOUBLE_ptr fie
 	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
 	}
 
-    END_OF("applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b)");
+    END_OF();
     endService( "CALCULATOR::applyLin");
     return myFieldIOR;
 }
@@ -255,7 +255,7 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, 
     TFieldDouble_i * myFieldDoubleI = new TFieldDouble_i(fres,true);
     SALOME_MED::FIELDDOUBLE_ptr myFieldIOR = myFieldDoubleI->_this() ;
 
-    END_OF("CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2)");
+    END_OF();
     endService( "CALCULATOR::add");
     return myFieldIOR;
 }
@@ -295,7 +295,7 @@ void CALCULATOR::cloneField(SALOME_MED::FIELDDOUBLE_ptr field,
     clone2 = myClone2->_this();
     clone3 = myClone3->_this();
     clone4 = myClone4->_this();
-    END_OF("CALCULATOR::cloneField");
+    END_OF();
     endService( "CALCULATOR::cloneField");
     return;
 }
@@ -419,7 +419,7 @@ CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)
   }
 
   endService( "CALCULATOR::convergenceCriteria");
-  END_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  END_OF();
   return criteria;
 }
 
