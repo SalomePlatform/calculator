@@ -20,7 +20,7 @@ if test ! -d "${KERNEL_ROOT_DIR}"; then
     exit
 fi
 
-CALCULATOR_WITH_GUI="yes"
+CALCULATOR_WITH_GUI="no"
 
 for option
 do
@@ -28,7 +28,13 @@ do
       -with-ihm | --with-ihm)
           CALCULATOR_WITH_GUI="yes"
           break;;
+      -with-gui | --with-gui)
+          CALCULATOR_WITH_GUI="yes"
+          break;;
       -without-ihm | --without-ihm | -with-ihm=no | --with-ihm=no)
+          CALCULATOR_WITH_GUI="no"
+          break;;
+      -without-gui | --without-gui | -with-gui=no | --with-gui=no )
           CALCULATOR_WITH_GUI="no"
           break;;
   esac
@@ -54,6 +60,11 @@ fi
 
 cd ${CONF_DIR}
 ABS_CONF_DIR=`pwd`
+
+#######################################################################
+# Update configure.ac script: to set NETGENPLUGIN_WITH_GUI variable
+sed -e s/CALCULATOR_WITH_GUI=[a-z]*/CALCULATOR_WITH_GUI=${CALCULATOR_WITH_GUI}/g configure.ac > configure.tmp
+mv -f configure.tmp configure.ac
 
 mkdir -p salome_adm/unix/config_files
 #cp -f ${KERNEL_ROOT_DIR}/salome_adm/unix/config_files/* salome_adm/unix/config_files

@@ -15,17 +15,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 # 
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
-# -* Makefile *- 
-#
-# Author : Guillaume Boulant (CSSI)
-# Module : COMPONENT
 #
 
 include $(top_srcdir)/adm_local/unix/make_common_starter.am
 
-dist_salomescript_SCRIPTS = \
-	myrunSalome.py
+dist_doc_DATA = Calculator_guide.sxw calculator.pdf
 
-nodist_salomescript_DATA = \
-	VERSION \
-	runAppli
+EXTRA_DIST   += snapshot1.png snapshot2.png

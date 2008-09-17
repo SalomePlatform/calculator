@@ -13,7 +13,7 @@
 # Modified by : Marc Tajchman (CEA)
 #
 
-AC_INIT([Salome2 Project CALCULATOR module], [5.0.0], [webmaster.salome@opencascade.com], [salome])
+AC_INIT([Salome2 Project CALCULATOR module], [5.0.0], [webmaster.salome@opencascade.com], [SalomeCALCULATOR])
 AC_CONFIG_AUX_DIR(salome_adm/unix/config_files)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
@@ -237,7 +237,9 @@ dnl For the sake of $MACHINE needed for MED Wrapper
 AC_DEPEND_FLAG
 
 
-CALCULATOR_WITH_GUI=yes
+CALCULATOR_WITH_GUI=no
+
+AM_CONDITIONAL(CALCULATOR_ENABLE_GUI, [test "${CALCULATOR_WITH_GUI}" = "yes"])
 
 if test "${CALCULATOR_WITH_GUI}" = "yes"; then
     echo
@@ -319,6 +321,7 @@ AC_OUTPUT([ \
   ./bin/VERSION \
   ./bin/runAppli \
   ./bin/Makefile \
+  ./doc/Makefile \
   ./CALCULATOR_version.h \
   ./src/Makefile \
   ./src/CALCULATOR/Makefile \

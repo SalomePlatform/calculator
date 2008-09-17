@@ -56,7 +56,6 @@ libCALCULATOREngine_la_LDFLAGS = \
 	-lSalomeIDLKernel \
 	$(MED_LDFLAGS) \
 	-lSalomeIDLMED \
-	-lMEDClientcmodule \
 	$(top_builddir)/idl/libSalomeIDLCALCULATOR.la
 
 # Scripts to be installed
@@ -64,3 +63,6 @@ dist_salomescript_DATA = \
 	CALCULATOR_TEST.py \
 	CALCULATOR_TEST_STUDY_WITHOUTIHM.py \
 	CALCULATOR_TEST_WITHOUTIHM.py
+
+dist_salomeres_DATA       = graphe1.xml 
+dist_salomescript_SCRIPTS = graphe1.py

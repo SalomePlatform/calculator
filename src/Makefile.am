@@ -28,5 +28,3 @@
 include $(top_srcdir)/adm_local/unix/make_common_starter.am
 
 SUBDIRS = CALCULATOR
-
-DIST_SUBDIRS = CALCULATOR
