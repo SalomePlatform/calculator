@@ -62,7 +62,7 @@ cd ${CONF_DIR}
 ABS_CONF_DIR=`pwd`
 
 #######################################################################
-# Update configure.ac script: to set NETGENPLUGIN_WITH_GUI variable
+# Update configure.ac script: to set CALCULATOR_WITH_GUI variable
 sed -e s/CALCULATOR_WITH_GUI=[a-z]*/CALCULATOR_WITH_GUI=${CALCULATOR_WITH_GUI}/g configure.ac > configure.tmp
 mv -f configure.tmp configure.ac
 
