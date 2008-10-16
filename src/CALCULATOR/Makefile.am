@@ -56,6 +56,7 @@ libCALCULATOREngine_la_LDFLAGS = \
 	-lSalomeIDLKernel \
 	$(MED_LDFLAGS) \
 	-lSalomeIDLMED \
+	-lMEDClientcmodule \
 	$(top_builddir)/idl/libSalomeIDLCALCULATOR.la
 
 # Scripts to be installed
