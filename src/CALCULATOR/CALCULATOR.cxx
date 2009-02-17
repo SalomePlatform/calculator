@@ -1,22 +1,24 @@
-// Copyright (C) 2005  CEA/DEN, EDF R&D
+//  Copyright (C) 2007-2008  CEA/DEN, EDF R&D, OPEN CASCADE
 //
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License.
+//  Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
+//  CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
 //
-// This library is distributed in the hope that it will be useful
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Lesser General Public License for more details.
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU Lesser General Public
+//  License as published by the Free Software Foundation; either
+//  version 2.1 of the License.
 //
-// You should have received a copy of the GNU Lesser General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  Lesser General Public License for more details.
 //
-// See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
+//  You should have received a copy of the GNU Lesser General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 //
-
+//  See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
+//
 #include "CALCULATOR.hxx"
 
 #include "FIELDClient.hxx"
@@ -32,6 +34,8 @@
 #include <iomanip>
 #include <cmath>
 #include <float.h>
+
+#include <memory>
 
 using namespace std;
 using namespace MEDMEM;
@@ -61,7 +65,8 @@ CORBA::Double CALCULATOR::norm2(SALOME_MED::FIELDDOUBLE_ptr field1)
 {
     beginService( "CALCULATOR::norm2");
 	_errorCode = CALCULATOR_ORB::NO_ERROR;
-    BEGIN_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  const char* LOC = "CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)";
+  BEGIN_OF(LOC);
 	
 	if(CORBA::is_nil(field1)) {
 		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
@@ -80,7 +85,7 @@ CORBA::Double CALCULATOR::norm2(SALOME_MED::FIELDDOUBLE_ptr field1)
 	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
 	}
 
-	END_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  END_OF(LOC);
     endService( "CALCULATOR::norm2");
     return norme;
 }
@@ -89,7 +94,8 @@ CORBA::Double CALCULATOR::normL2(SALOME_MED::FIELDDOUBLE_ptr field1)
 {
     beginService( "CALCULATOR::normL2");
 	_errorCode = CALCULATOR_ORB::NO_ERROR;
-	BEGIN_OF("CALCULATOR::NormL2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  const char* LOC = "CALCULATOR::NormL2(SALOME_MED::FIELDDOUBLE_ptr field1)";
+  BEGIN_OF(LOC);
 
 	if(CORBA::is_nil(field1)) {
 		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
@@ -119,7 +125,7 @@ CORBA::Double CALCULATOR::normL2(SALOME_MED::FIELDDOUBLE_ptr field1)
     ostringstream message("CALCULATOR::normL2 : ");
     message << norme;
     sendMessage("warning",message.str().c_str());
-    END_OF("CALCULATOR::NormL2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  END_OF(LOC);
     endService( "CALCULATOR::normL2");
     return norme;
 }
@@ -128,7 +134,8 @@ CORBA::Double CALCULATOR::normMax(SALOME_MED::FIELDDOUBLE_ptr field1)
 {
     beginService( "CALCULATOR::normMax");
 	_errorCode = CALCULATOR_ORB::NO_ERROR;
-    BEGIN_OF("CALCULATOR::NormMax(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  const char* LOC = "CALCULATOR::NormMax(SALOME_MED::FIELDDOUBLE_ptr field1)";
+  BEGIN_OF(LOC);
 	
 	if(CORBA::is_nil(field1)) {
 		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
@@ -148,7 +155,7 @@ CORBA::Double CALCULATOR::normMax(SALOME_MED::FIELDDOUBLE_ptr field1)
 	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
 	}
     
-	END_OF("CALCULATOR::NormMax(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  END_OF(LOC);
     endService( "CALCULATOR::normMax");
     return norme;
 }
@@ -157,7 +164,8 @@ CORBA::Double CALCULATOR::normL1(SALOME_MED::FIELDDOUBLE_ptr field1)
 {
     beginService( "CALCULATOR::normL1");
 	_errorCode = CALCULATOR_ORB::NO_ERROR;
-    BEGIN_OF("CALCULATOR::NormL1(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  const char* LOC = "CALCULATOR::NormL1(SALOME_MED::FIELDDOUBLE_ptr field1)";
+  BEGIN_OF(LOC);
 
 	if(CORBA::is_nil(field1)) {
 		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
@@ -182,7 +190,7 @@ CORBA::Double CALCULATOR::normL1(SALOME_MED::FIELDDOUBLE_ptr field1)
 	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
 	}
 
-    END_OF("CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  END_OF(LOC);
     endService( "CALCULATOR::normL1");
     return norme;
 }
@@ -192,7 +200,8 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::applyLin(SALOME_MED::FIELDDOUBLE_ptr fie
 {
     beginService( "CALCULATOR::applyLin");
 	_errorCode = CALCULATOR_ORB::NO_ERROR;
-    BEGIN_OF("applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b)");
+  const char* LOC = "applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b)";
+  BEGIN_OF(LOC);
     
 	if(CORBA::is_nil(field1)) {
 		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
@@ -217,7 +226,7 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::applyLin(SALOME_MED::FIELDDOUBLE_ptr fie
 	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
 	}
 
-    END_OF("applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b)");
+  END_OF(LOC);
     endService( "CALCULATOR::applyLin");
     return myFieldIOR;
 }
@@ -226,7 +235,8 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, 
 {
     beginService( "CALCULATOR::add");
 	_errorCode = CALCULATOR_ORB::NO_ERROR;
-    BEGIN_OF("CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2)");
+  const char* LOC = "CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2)";
+  BEGIN_OF(LOC);
 
 	if(CORBA::is_nil(field1) || CORBA::is_nil(field2)) {
 		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
@@ -255,7 +265,7 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, 
     TFieldDouble_i * myFieldDoubleI = new TFieldDouble_i(fres,true);
     SALOME_MED::FIELDDOUBLE_ptr myFieldIOR = myFieldDoubleI->_this() ;
 
-    END_OF("CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2)");
+  END_OF(LOC);
     endService( "CALCULATOR::add");
     return myFieldIOR;
 }
@@ -266,7 +276,8 @@ void CALCULATOR::cloneField(SALOME_MED::FIELDDOUBLE_ptr field,
 {
     beginService( "CALCULATOR::cloneField");
 	_errorCode = CALCULATOR_ORB::NO_ERROR;
-    BEGIN_OF("CALCULATOR::cloneField");
+  const char* LOC = "CALCULATOR::cloneField";
+  BEGIN_OF(LOC);
 
 	if(CORBA::is_nil(field)) {
 		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
@@ -295,7 +306,7 @@ void CALCULATOR::cloneField(SALOME_MED::FIELDDOUBLE_ptr field,
     clone2 = myClone2->_this();
     clone3 = myClone3->_this();
     clone4 = myClone4->_this();
-    END_OF("CALCULATOR::cloneField");
+  END_OF(LOC);
     endService( "CALCULATOR::cloneField");
     return;
 }
@@ -376,7 +387,8 @@ CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)
 {
   beginService( "CALCULATOR::convergenceCriteria");
   _errorCode = CALCULATOR_ORB::NO_ERROR;
-  BEGIN_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)");
+  const char* LOC = "CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)";
+  BEGIN_OF(LOC);
 
   if(CORBA::is_nil(field)) {
     _errorCode = CALCULATOR_ORB::INVALID_FIELD;
@@ -419,7 +431,7 @@ CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)
   }
 
   endService( "CALCULATOR::convergenceCriteria");
-  END_OF("CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field1)");
+  END_OF(LOC);
   return criteria;
 }
 

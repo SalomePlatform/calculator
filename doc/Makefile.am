@@ -19,34 +19,8 @@
 #
 #  See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
-# -* Makefile *-
-# Author : Patrick GOLDBRONN (CEA)
-# Date : 28/06/2001
-#  Modified by : Alexander BORODIN (OCN) - autotools usage
-# $Header$
-#
 include $(top_srcdir)/adm_local/unix/make_common_starter.am
 
-if CALCULATOR_ENABLE_GUI
-  ACLOCAL_AMFLAGS = -I adm_local/unix/config_files \
-                    -I ${KERNEL_ROOT_DIR}/salome_adm/unix/config_files \
-                    -I ${GUI_ROOT_DIR}/adm_local/unix/config_files \
-                    -I ${MED_ROOT_DIR}/adm_local/unix/config_files
-else !CALCULATOR_ENABLE_GUI
-  ACLOCAL_AMFLAGS = -I adm_local/unix/config_files \
-                    -I ${KERNEL_ROOT_DIR}/salome_adm/unix/config_files \
-                    -I ${MED_ROOT_DIR}/adm_local/unix/config_files
-endif
+dist_doc_DATA = Calculator_guide.sxw calculator.pdf
 
-SUBDIRS = idl adm_local resources src bin doc
-
-DISTCLEANFILES = a.out aclocal.m4 configure
-
-salomeinclude_DATA = CALCULATOR_version.h
-
-EXTRA_DIST +=		\
-	build_configure	\
-	clean_configure
-
-dist-hook:
-	rm -rf `find $(distdir) -name CVS`
+EXTRA_DIST   += snapshot1.png snapshot2.png
