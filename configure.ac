@@ -28,7 +28,7 @@
 # Modified by : Patrick GOLDBRONN (CEA)
 # Modified by : Marc Tajchman (CEA)
 #
-AC_INIT([Salome2 Project CALCULATOR module], [5.1.0], [webmaster.salome@opencascade.com], [SalomeCALCULATOR])
+AC_INIT([Salome2 Project CALCULATOR module], [5.1.1], [webmaster.salome@opencascade.com], [SalomeCALCULATOR])
 AC_CONFIG_AUX_DIR(salome_adm/unix/config_files)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
