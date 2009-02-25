@@ -251,34 +251,6 @@ CHECK_MED
 dnl For the sake of $MACHINE needed for MED Wrapper
 AC_DEPEND_FLAG
 
-
-CALCULATOR_WITH_GUI=no
-
-AM_CONDITIONAL(CALCULATOR_ENABLE_GUI, [test "${CALCULATOR_WITH_GUI}" = "yes"])
-
-if test "${CALCULATOR_WITH_GUI}" = "yes"; then
-    echo
-    echo ---------------------------------------------
-    echo Testing GUI
-    echo ---------------------------------------------
-    echo
-
-    CHECK_SALOME_GUI
-
-    echo
-    echo ---------------------------------------------
-    echo Testing full GUI
-    echo ---------------------------------------------
-    echo
-
-    CHECK_CORBA_IN_GUI
-    if test "x${CORBA_IN_GUI}" != "xyes"; then
-      echo "failed : For configure CALCULATOR module necessary full GUI !"
-      exit
-    fi
-
-fi
-
 echo
 echo ---------------------------------------------
 echo Testing Kernel
