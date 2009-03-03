@@ -29,7 +29,7 @@
 #include "MEDMEM_FieldTemplate_i.hxx"
 
 #include <string>
-#include <strstream>
+#include <sstream>
 
 #include <iomanip>
 #include <cmath>

@@ -49,7 +49,7 @@
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/FIELDDOUBLE</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -71,7 +71,7 @@
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field1</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/FIELDDOUBLE</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                             <inParameter>
@@ -88,7 +88,7 @@
                         <outParameter-list>
                             <outParameter>
                                 <outParameter-name>return</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/FIELDDOUBLE</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                         </outParameter-list>
@@ -103,19 +103,19 @@
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field1</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/FIELDDOUBLE</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                             <inParameter>
                                 <inParameter-name>field2</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/FIELDDOUBLE</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
                         <outParameter-list>
                             <outParameter>
                                 <outParameter-name>return</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/FIELDDOUBLE</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                         </outParameter-list>
@@ -130,7 +130,7 @@
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/FIELDDOUBLE</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -152,7 +152,7 @@
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/FIELDDOUBLE</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -174,7 +174,7 @@
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/FIELDDOUBLE</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -196,7 +196,7 @@
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/FIELDDOUBLE</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -218,7 +218,7 @@
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/FIELDDOUBLE</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -234,29 +234,29 @@
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/FIELDDOUBLE</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
                         <outParameter-list>
                             <outParameter>
                                 <outParameter-name>clone1</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/FIELDDOUBLE</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                             <outParameter>
                                 <outParameter-name>clone2</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/FIELDDOUBLE</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                             <outParameter>
                                 <outParameter-name>clone3</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/FIELDDOUBLE</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                             <outParameter>
                                 <outParameter-name>clone4</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/FIELDDOUBLE</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                         </outParameter-list>
