@@ -32,7 +32,7 @@ AC_INIT([Salome2 Project CALCULATOR module], [5.1.1], [webmaster.salome@opencasc
 AC_CONFIG_AUX_DIR(salome_adm/unix/config_files)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([-Wno-portability])
 
 XVERSION=`echo $VERSION | awk -F. '{printf("0x%02x%02x%02x",$1,$2,$3)}'`
 AC_SUBST(XVERSION)
@@ -301,22 +301,22 @@ AC_OUTPUT_COMMANDS([ \
 # autoscan, the Makefile list is generated in the output file configure.scan.
 # This could be helpfull to update de configuration.
 AC_OUTPUT([ \
-  ./salome_adm/unix/SALOMEconfig.h \
-  ./adm_local/Makefile \
-  ./adm_local/unix/Makefile \
-  ./adm_local/unix/config_files/Makefile \
-  ./bin/VERSION \
-  ./bin/runAppli \
-  ./bin/Makefile \
-  ./doc/Makefile \
-  ./CALCULATOR_version.h \
-  ./src/Makefile \
-  ./src/CALCULATOR/Makefile \
-  ./resources/Makefile \
-  ./resources/CALCULATORCatalog.xml \
-  ./idl/Makefile \
+  salome_adm/unix/SALOMEconfig.h \
+  adm_local/Makefile \
+  adm_local/unix/Makefile \
+  adm_local/unix/config_files/Makefile \
+  bin/VERSION \
+  bin/runAppli \
+  bin/Makefile \
+  doc/Makefile \
+  CALCULATOR_version.h \
+  src/Makefile \
+  src/CALCULATOR/Makefile \
+  resources/Makefile \
+  resources/CALCULATORCatalog.xml \
+  idl/Makefile \
   Makefile \
 ])
 
 dnl To avoid recompiling half of the sources because of SALOMEconfig.h recreating
-touch -d 01Jan2007 ./salome_adm/unix/SALOMEconfig.h
+touch -d 01Jan2007 salome_adm/unix/SALOMEconfig.h
