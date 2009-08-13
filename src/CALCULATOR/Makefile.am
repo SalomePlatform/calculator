@@ -42,8 +42,7 @@ libCALCULATOREngine_la_CPPFLAGS = \
 	$(HDF5_INCLUDES) \
 	$(KERNEL_CXXFLAGS) \
 	$(MED_CXXFLAGS) \
-	-I$(top_builddir)/idl \
-	-I$(top_builddir)/salome_adm/unix
+	-I$(top_builddir)/idl
 
 libCALCULATOREngine_la_LDFLAGS = \
 	$(CORBA_LIBS) \
