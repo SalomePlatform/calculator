@@ -26,7 +26,7 @@
 # Modified by : Patrick GOLDBRONN (CEA)
 # Modified by : Marc Tajchman (CEA)
 #
-AC_INIT([Salome2 Project CALCULATOR module], [6.1.0], [webmaster.salome@opencascade.com], [SalomeCALCULATOR])
+AC_INIT([Salome2 Project CALCULATOR module], [6.2.0], [webmaster.salome@opencascade.com], [SalomeCALCULATOR])
 AC_CONFIG_AUX_DIR(adm_local/unix/config_files)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
@@ -170,6 +170,14 @@ ENABLE_PTHREADS
 
 echo
 echo ---------------------------------------------
+echo testing MPI
+echo ---------------------------------------------
+echo
+
+CHECK_MPI
+
+echo
+echo ---------------------------------------------
 echo testing python
 echo ---------------------------------------------
 echo
@@ -294,6 +302,19 @@ echo
 AC_OUTPUT_COMMANDS([ \
       chmod +x ./bin/*; \
 ])
+
+AC_CONFIG_COMMANDS([hack_libtool],[
+sed -i "s%^CC=\"\(.*\)\"%hack_libtool (){ \n\
+  if test \"\$(echo \$[@] | grep -E '\\\-L/usr/lib(/../lib)?(64)? ')\" == \"\" \n\
+  then\n\
+    cmd=\"\1 \$[@]\"\n\
+  else\n\
+    cmd=\"\1 \"\`echo \$[@] | sed -r -e 's|(.*)-L/usr/lib(/../lib)?(64)? (.*)|\\\1\\\4 -L/usr/lib\\\3|g'\`\n\
+  fi\n\
+  \$cmd\n\
+}\n\
+CC=\"hack_libtool\"%g" libtool
+],[])
 
 # This list is initiated using autoscan and must be updated manually
 # when adding a new file <filename>.in to manage. When you execute
