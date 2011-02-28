@@ -18,7 +18,6 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 //
 //  See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
-//
 
 #ifndef __CALCULATOR_GEN__
 #define __CALCULATOR_GEN__
@@ -50,7 +49,7 @@ module CALCULATOR_ORB
 	
   /*! \brief Interface of the %CALCULATOR component
    */
-  interface CALCULATOR_Gen : Engines::Component
+  interface CALCULATOR_Gen : Engines::EngineComponent
   {
      /*!
          Calculate the maximum relative difference of field with the previous one.
@@ -121,4 +120,3 @@ module CALCULATOR_ORB
 };
 
 #endif
-
