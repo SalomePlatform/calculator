@@ -346,12 +346,12 @@ void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
     cout << "- Type : " << myField->getValueType()<< endl;
     
     cout << "- Valeurs :"<<endl;
-    int NumberOf = mySupport->getNumberOfElements(MED_ALL_ELEMENTS);
+    int NumberOf = mySupport->getNumberOfElements(MEDMEM_ALL_ELEMENTS);
 
     bool displayNode = mySupport->isOnAllElements() && mySupport->getEntity()==MED_NODE;
     bool displayBary = mySupport->isOnAllElements() && mySupport->getEntity()==MED_CELL;
     int dim_space = mySupport->getMesh()->getSpaceDimension();
-    const double * coord = mySupport->getMesh()->getCoordinates(MED_FULL_INTERLACE);
+    const double * coord = mySupport->getMesh()->convertInMESH()->getCoordinates(MED_FULL_INTERLACE);
 
     auto_ptr<TFieldDouble> barycenter(0);
     if(displayBary)
