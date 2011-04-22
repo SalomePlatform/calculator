@@ -65,26 +65,26 @@ CALCULATOR::~CALCULATOR()
 CORBA::Double CALCULATOR::norm2(SALOME_MED::FIELDDOUBLE_ptr field1)
 {
     beginService( "CALCULATOR::norm2");
-	_errorCode = CALCULATOR_ORB::NO_ERROR;
+        _errorCode = CALCULATOR_ORB::NO_ERROR;
   const char* LOC = "CALCULATOR::Norm2(SALOME_MED::FIELDDOUBLE_ptr field1)";
   BEGIN_OF(LOC);
-	
-	if(CORBA::is_nil(field1)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return 0.0;
-	}
+        
+        if(CORBA::is_nil(field1)) {
+                _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+                return 0.0;
+        }
 
-	CORBA::Double norme = 0.0;
-	// Create a local field from corba field, apply method normMax on it.
-	// When exiting the function, f1 is deleted, and with it the remote corba field.
-	TFieldDouble_c f1(field1);
-	
-	try {
-		norme = f1.norm2();
-	}
-	catch(...) {
-	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
-	}
+        CORBA::Double norme = 0.0;
+        // Create a local field from corba field, apply method normMax on it.
+        // When exiting the function, f1 is deleted, and with it the remote corba field.
+        TFieldDouble_c f1(field1);
+        
+        try {
+                norme = f1.norm2();
+        }
+        catch(...) {
+          _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
+        }
 
   END_OF(LOC);
     endService( "CALCULATOR::norm2");
@@ -94,35 +94,35 @@ CORBA::Double CALCULATOR::norm2(SALOME_MED::FIELDDOUBLE_ptr field1)
 CORBA::Double CALCULATOR::normL2(SALOME_MED::FIELDDOUBLE_ptr field1)
 {
     beginService( "CALCULATOR::normL2");
-	_errorCode = CALCULATOR_ORB::NO_ERROR;
+        _errorCode = CALCULATOR_ORB::NO_ERROR;
   const char* LOC = "CALCULATOR::NormL2(SALOME_MED::FIELDDOUBLE_ptr field1)";
   BEGIN_OF(LOC);
 
-	if(CORBA::is_nil(field1)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return 0.0;
-	}
+        if(CORBA::is_nil(field1)) {
+                _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+                return 0.0;
+        }
 
     //Check that the Field is not on the Nodes (a limitation of normL2)
-	SALOME_MED::SUPPORT_var aSupport = field1->getSupport();
-	if(CORBA::is_nil(aSupport) || aSupport->getEntity() == SALOME_MED::MED_NODE) {
-	   _errorCode = CALCULATOR_ORB::NOT_COMPATIBLE;
-	   return 0.0;
-	}
+        SALOME_MED::SUPPORT_var aSupport = field1->getSupport();
+        if(CORBA::is_nil(aSupport) || aSupport->getEntity() == SALOME_MED::MED_NODE) {
+           _errorCode = CALCULATOR_ORB::NOT_COMPATIBLE;
+           return 0.0;
+        }
 
     // Create a local field (on the stack) from corba field, apply method normMax on it.
     // When exiting the function, FIELDClient f1 is deleted, and with it the remote corba field.
     TFieldDouble_c  f1(field1);
-	
+        
     CORBA::Double norme = 0.0;
-	try {
-		norme = f1.normL2();
-	}	
-	catch(...) {
-	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
-	}
+        try {
+                norme = f1.normL2();
+        }       
+        catch(...) {
+          _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
+        }
     
-	// Send a notification message to supervision
+        // Send a notification message to supervision
     ostringstream message("CALCULATOR::normL2 : ");
     message << norme;
     sendMessage("warning",message.str().c_str());
@@ -134,27 +134,27 @@ CORBA::Double CALCULATOR::normL2(SALOME_MED::FIELDDOUBLE_ptr field1)
 CORBA::Double CALCULATOR::normMax(SALOME_MED::FIELDDOUBLE_ptr field1)
 {
     beginService( "CALCULATOR::normMax");
-	_errorCode = CALCULATOR_ORB::NO_ERROR;
+        _errorCode = CALCULATOR_ORB::NO_ERROR;
   const char* LOC = "CALCULATOR::NormMax(SALOME_MED::FIELDDOUBLE_ptr field1)";
   BEGIN_OF(LOC);
-	
-	if(CORBA::is_nil(field1)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return 0.0;
-	}
+        
+        if(CORBA::is_nil(field1)) {
+                _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+                return 0.0;
+        }
 
-	CORBA::Double norme = 0.0;
-	// An other way to do it : create an local field on the heap, inside an auto_ptr.
-	// When exiting the function, auto_ptr is deleted, and with it the local field and 
-	// the remote field if ownership was transferred.
-	auto_ptr<TFieldDouble> f1 (new TFieldDouble_c(field1) );
+        CORBA::Double norme = 0.0;
+        // An other way to do it : create an local field on the heap, inside an auto_ptr.
+        // When exiting the function, auto_ptr is deleted, and with it the local field and 
+        // the remote field if ownership was transferred.
+        auto_ptr<TFieldDouble> f1 (new TFieldDouble_c(field1) );
 
-	try {
-		norme = f1->normMax();
-	}
-	catch(...) {
-	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
-	}
+        try {
+                norme = f1->normMax();
+        }
+        catch(...) {
+          _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
+        }
     
   END_OF(LOC);
     endService( "CALCULATOR::normMax");
@@ -164,32 +164,32 @@ CORBA::Double CALCULATOR::normMax(SALOME_MED::FIELDDOUBLE_ptr field1)
 CORBA::Double CALCULATOR::normL1(SALOME_MED::FIELDDOUBLE_ptr field1)
 {
     beginService( "CALCULATOR::normL1");
-	_errorCode = CALCULATOR_ORB::NO_ERROR;
+        _errorCode = CALCULATOR_ORB::NO_ERROR;
   const char* LOC = "CALCULATOR::NormL1(SALOME_MED::FIELDDOUBLE_ptr field1)";
   BEGIN_OF(LOC);
 
-	if(CORBA::is_nil(field1)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return 0.0;
-	}
+        if(CORBA::is_nil(field1)) {
+                _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+                return 0.0;
+        }
 
-	//Check that the Field is not on the Nodes (a limitation of normL1)
-	SALOME_MED::SUPPORT_var aSupport = field1->getSupport();
+        //Check that the Field is not on the Nodes (a limitation of normL1)
+        SALOME_MED::SUPPORT_var aSupport = field1->getSupport();
 
-	if(CORBA::is_nil(aSupport) || aSupport->getEntity() == SALOME_MED::MED_NODE) {
-	   _errorCode = CALCULATOR_ORB::NOT_COMPATIBLE;
-	   return 0.0;
-	}	
-	
-	CORBA::Double norme = 0.0;
-	auto_ptr<TFieldDouble> f1 (new TFieldDouble_c(field1) );
+        if(CORBA::is_nil(aSupport) || aSupport->getEntity() == SALOME_MED::MED_NODE) {
+           _errorCode = CALCULATOR_ORB::NOT_COMPATIBLE;
+           return 0.0;
+        }       
+        
+        CORBA::Double norme = 0.0;
+        auto_ptr<TFieldDouble> f1 (new TFieldDouble_c(field1) );
 
-	try {
-		norme = f1->normL1();
-	}
-	catch(...) {
-	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
-	}
+        try {
+                norme = f1->normL1();
+        }
+        catch(...) {
+          _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
+        }
 
   END_OF(LOC);
     endService( "CALCULATOR::normL1");
@@ -200,32 +200,32 @@ CORBA::Double CALCULATOR::normL1(SALOME_MED::FIELDDOUBLE_ptr field1)
 SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b)
 {
     beginService( "CALCULATOR::applyLin");
-	_errorCode = CALCULATOR_ORB::NO_ERROR;
+        _errorCode = CALCULATOR_ORB::NO_ERROR;
   const char* LOC = "applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b)";
   BEGIN_OF(LOC);
     
-	if(CORBA::is_nil(field1)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return NULL;
-	}
+        if(CORBA::is_nil(field1)) {
+                _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+                return NULL;
+        }
 
-	SALOME_MED::FIELDDOUBLE_ptr myFieldIOR = NULL;
-	// create a local field on the heap, because it has to remain after exiting the function
-	TFieldDouble * f1 = new TFieldDouble_c(field1);
-	TFieldDouble_i * NewField = NULL;
+        SALOME_MED::FIELDDOUBLE_ptr myFieldIOR = NULL;
+        // create a local field on the heap, because it has to remain after exiting the function
+        TFieldDouble * f1 = new TFieldDouble_c(field1);
+        TFieldDouble_i * NewField = NULL;
 
-	try {
-		f1->applyLin(a,b);
-		// create servant from f1, give it the property of c++ field (parameter true).
-		// This imply that when the client will release it's field, it will delete NewField,
-		// and f1.
-		NewField = new TFieldDouble_i(f1,true) ;
-		// activate object
-		myFieldIOR = NewField->_this() ;
-	}
-	catch(...) {
-	  _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
-	}
+        try {
+                f1->applyLin(a,b);
+                // create servant from f1, give it the property of c++ field (parameter true).
+                // This imply that when the client will release it's field, it will delete NewField,
+                // and f1.
+                NewField = new TFieldDouble_i(f1,true) ;
+                // activate object
+                myFieldIOR = NewField->_this() ;
+        }
+        catch(...) {
+          _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
+        }
 
   END_OF(LOC);
     endService( "CALCULATOR::applyLin");
@@ -235,14 +235,14 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::applyLin(SALOME_MED::FIELDDOUBLE_ptr fie
 SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2) 
 {
     beginService( "CALCULATOR::add");
-	_errorCode = CALCULATOR_ORB::NO_ERROR;
+        _errorCode = CALCULATOR_ORB::NO_ERROR;
   const char* LOC = "CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2)";
   BEGIN_OF(LOC);
 
-	if(CORBA::is_nil(field1) || CORBA::is_nil(field2)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return NULL;
-	}
+        if(CORBA::is_nil(field1) || CORBA::is_nil(field2)) {
+                _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+                return NULL;
+        }
 
     // Create local fields from corba field
     TFieldDouble_c f1(field1);
@@ -251,15 +251,15 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, 
     // Create new c++ field on the heap by copying f1, add f2 to it.
     TFieldDouble* fres = new TFieldDouble(f1);
     
-	// catch exception for non compatible fields
+        // catch exception for non compatible fields
     try
     {
         *fres+=f2;
     }
     catch(MEDEXCEPTION)
     {
-		 _errorCode = CALCULATOR_ORB::NOT_COMPATIBLE;
-		 return NULL;
+                 _errorCode = CALCULATOR_ORB::NOT_COMPATIBLE;
+                 return NULL;
     }
 
     // create CORBA field from c++ toField. give property to servant (true)
@@ -272,18 +272,18 @@ SALOME_MED::FIELDDOUBLE_ptr CALCULATOR::add(SALOME_MED::FIELDDOUBLE_ptr field1, 
 }
 
 void CALCULATOR::cloneField(SALOME_MED::FIELDDOUBLE_ptr field,
-	        SALOME_MED::FIELDDOUBLE_out clone1, SALOME_MED::FIELDDOUBLE_out clone2,
+                SALOME_MED::FIELDDOUBLE_out clone1, SALOME_MED::FIELDDOUBLE_out clone2,
                 SALOME_MED::FIELDDOUBLE_out clone3, SALOME_MED::FIELDDOUBLE_out clone4)
 {
     beginService( "CALCULATOR::cloneField");
-	_errorCode = CALCULATOR_ORB::NO_ERROR;
+        _errorCode = CALCULATOR_ORB::NO_ERROR;
   const char* LOC = "CALCULATOR::cloneField";
   BEGIN_OF(LOC);
 
-	if(CORBA::is_nil(field)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return;
-	}
+        if(CORBA::is_nil(field)) {
+                _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+                return;
+        }
 
     // load local field, using MED ressource file pointe.med
     TFieldDouble_c f(field);
@@ -317,10 +317,10 @@ void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
     beginService( "CALCULATOR::printField");
     _errorCode = CALCULATOR_ORB::NO_ERROR;
 
-	if(CORBA::is_nil(field)) {
-		_errorCode = CALCULATOR_ORB::INVALID_FIELD;
-		return;
-	}
+        if(CORBA::is_nil(field)) {
+                _errorCode = CALCULATOR_ORB::INVALID_FIELD;
+                return;
+        }
 
     // Create a local field from corba field.
     // Use auto_ptr to perform automatic deletion after usage.
@@ -334,10 +334,10 @@ void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
     cout << "- Nombre de composantes : "<< NumberOfComponents << endl ;
     cout << "- Nombre de valeurs     : "<< myField->getNumberOfValues() << endl ;
     for (int i=1; i<NumberOfComponents+1; i++) {
-	cout << "  - composante "<<i<<" :"<<endl ;
-	cout << "      - nom         : "<<myField->getComponentName(i)<< endl;
-	cout << "      - description : "<<myField->getComponentDescription(i) << endl;
-	cout << "      - units       : "<<myField->getMEDComponentUnit(i) << endl;
+        cout << "  - composante "<<i<<" :"<<endl ;
+        cout << "      - nom         : "<<myField->getComponentName(i)<< endl;
+        cout << "      - description : "<<myField->getComponentDescription(i) << endl;
+        cout << "      - units       : "<<myField->getMEDComponentUnit(i) << endl;
     }
     cout << "- iteration :" << endl ;
     cout << "    - numero : " << myField->getIterationNumber()<< endl  ;
@@ -355,25 +355,25 @@ void CALCULATOR::printField(SALOME_MED::FIELDDOUBLE_ptr field)
 
     auto_ptr<TFieldDouble> barycenter(0);
     if(displayBary)
-	barycenter=auto_ptr<TFieldDouble>(mySupport->getMesh()->getBarycenter(mySupport)) ;
+        barycenter=auto_ptr<TFieldDouble>(mySupport->getMesh()->getBarycenter(mySupport)) ;
 
     const int width=10;
     for (int i=1; i<NumberOf+1; i++) {
-	const double * value = myField->getRow(i) ;
-	if(displayNode)
-	{
-	    int N=(i-1)*dim_space;
-	    cout << setw(width) << i << setw(width) << coord[N] << " " << setw(width) << coord[N+1]<<  " " << setw(width) << coord[N+2] << "  : " ;
-	}
-	if(displayBary) {
-	  cout << setw(width) << i;
-	  for (int j=1; j<=dim_space; j++ ) 
-	    cout<< setw(width) << barycenter->getValueIJ(i,j) << " " ;
-	  cout<< "  : " ;
-	}
-	for (int j=0; j<NumberOfComponents; j++)
-	  cout << value[j]<< " ";
-	cout<<endl;
+        const double * value = myField->getRow(i) ;
+        if(displayNode)
+        {
+            int N=(i-1)*dim_space;
+            cout << setw(width) << i << setw(width) << coord[N] << " " << setw(width) << coord[N+1]<<  " " << setw(width) << coord[N+2] << "  : " ;
+        }
+        if(displayBary) {
+          cout << setw(width) << i;
+          for (int j=1; j<=dim_space; j++ ) 
+            cout<< setw(width) << barycenter->getValueIJ(i,j) << " " ;
+          cout<< "  : " ;
+        }
+        for (int j=0; j<NumberOfComponents; j++)
+          cout << value[j]<< " ";
+        cout<<endl;
     }
     cout << endl;
     cout << "Norme euclidienne : " << myField->norm2() << endl;
@@ -438,12 +438,12 @@ CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field)
 
 CORBA::Boolean CALCULATOR::isDone()
 {
-	return (_errorCode == CALCULATOR_ORB::NO_ERROR);		
+        return (_errorCode == CALCULATOR_ORB::NO_ERROR);                
 }
 
 CALCULATOR_ORB::ErrorCode CALCULATOR::getErrorCode()
 {
-	return _errorCode;
+        return _errorCode;
 }
 
 
