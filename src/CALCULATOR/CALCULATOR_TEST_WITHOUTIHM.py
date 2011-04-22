@@ -116,9 +116,10 @@ print " -> norme = ",norme
 #
 from libMEDClient import *
 
-meshDistant = f_add.getSupport().getMesh()
+gmeshDistant = f_add.getSupport().getMesh()
+gmeshLocal = GMESHClient(gmeshDistant)
 
-meshLocal = MESHClient(meshDistant)
+meshLocal = gmeshLocal.convertInMESH()
 
 f_addLocal = FIELDDOUBLEClient(f_add)
 
@@ -129,36 +130,36 @@ f_linLocal = FIELDDOUBLEClient(f_lin)
 f_linLocal.setName(f_linLocal.getName()+"lin")
 
 # med file with 2.1 format
-OutmedFile21="Calculatorpointe_V21.med"
-os.system( 'rm -fr ' + OutmedFile21 )
+# OutmedFile21="Calculatorpointe_V21.med"
+# os.system( 'rm -fr ' + OutmedFile21 )
 
-medFileVersion = getMedFileVersionForWriting()
-if (medFileVersion == V22):
-    print "setMedFileVersionForWriting(V21)"
-    setMedFileVersionForWriting(V21)
+# medFileVersion = getMedFileVersionForWriting()
+# if (medFileVersion == V22):
+#     print "setMedFileVersionForWriting(V21)"
+#     setMedFileVersionForWriting(V21)
 
-# writting the mesh
-print "meshLocal.write :"
-idMed = meshLocal.addDriver(MED_DRIVER, OutmedFile21, meshLocal.getName(), MED_REMP)
-meshLocal.write(idMed)
+# # writting the mesh
+# print "meshLocal.write :"
+# idMed = meshLocal.addDriver(MED_DRIVER, OutmedFile21, meshLocal.getName(), MED_REMP)
+# meshLocal.write(idMed)
 
-# writting the 2 fields
-print "f_addLocal.write :"
-idMed = f_addLocal.addDriver(MED_DRIVER, OutmedFile21, f_addLocal.getName())
-f_addLocal.write(idMed)
+# # writting the 2 fields
+# print "f_addLocal.write :"
+# idMed = f_addLocal.addDriver(MED_DRIVER, OutmedFile21, f_addLocal.getName())
+# f_addLocal.write(idMed)
 
-print "f_linLocal.write :"
-idMed = f_linLocal.addDriver(MED_DRIVER, OutmedFile21, f_linLocal.getName())
-f_linLocal.write(idMed)
+# print "f_linLocal.write :"
+# idMed = f_linLocal.addDriver(MED_DRIVER, OutmedFile21, f_linLocal.getName())
+# f_linLocal.write(idMed)
 
 # med file with 2.2 format
 OutmedFile22="Calculatorpointe_V22.med"
 os.system( 'rm -fr ' + OutmedFile22 )
 
-medFileVersion = getMedFileVersionForWriting()
-if (medFileVersion == V21):
-    print "setMedFileVersionForWriting(V22)"
-    setMedFileVersionForWriting(V22)
+# medFileVersion = getMedFileVersionForWriting()
+# if (medFileVersion == V21):
+#     print "setMedFileVersionForWriting(V22)"
+#     setMedFileVersionForWriting(V22)
 
 # writting the mesh
 print "meshLocal.write :"
