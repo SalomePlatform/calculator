@@ -1,23 +1,23 @@
-#  Copyright (C) 2007-2010  CEA/DEN, EDF R&D, OPEN CASCADE
+# Copyright (C) 2007-2011  CEA/DEN, EDF R&D, OPEN CASCADE
 #
-#  Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
-#  CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
+# Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
+# CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
 #
-#  This library is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU Lesser General Public
-#  License as published by the Free Software Foundation; either
-#  version 2.1 of the License.
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License.
 #
-#  This library is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#  Lesser General Public License for more details.
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
 #
-#  You should have received a copy of the GNU Lesser General Public
-#  License along with this library; if not, write to the Free Software
-#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-#  See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
+# See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
 ####################################################################################################
@@ -246,9 +246,10 @@ print " -> norme = ",norme
 #                   via Client classes
 #
 
-meshDistant = f_add.getSupport().getMesh()
+gmeshDistant = f_add.getSupport().getMesh()
+gmeshLocalCopy = GMESHClient(gmeshDistant)
 
-meshLocalCopy = MESHClient(meshDistant)
+meshLocalCopy = gmeshLocalCopy.convertInMESH()
 
 
 print "      getting information from the local copy of the distant mesh"
@@ -284,7 +285,7 @@ if (nbTypesCell>0):
         type = types[k]
         nbElemType = meshLocalCopy.getNumberOfElements(MED_CELL,type)
         print "     For the type:",type,"there is(are)",nbElemType,"elemnt(s)"
-        connectivity = meshLocalCopy.getConnectivity(MED_FULL_INTERLACE,MED_NODAL,MED_CELL,type)
+        connectivity = meshLocalCopy.getConnectivity( MED_NODAL, MED_CELL, type )
         nbNodesPerCell = type%100
         for j in range(nbElemType):
             print "       Element",(j+1)," ",connectivity[j*nbNodesPerCell:(j+1)*nbNodesPerCell]
@@ -295,7 +296,7 @@ if (nbTypesCell>0):
 ##
 ## TEST METHODS ABOUT POLY ELEMENTS ##
 ##
-nbTypesCellWithPoly = meshLocalCopy.getNumberOfTypesWithPoly(MED_CELL)
+nbTypesCellWithPoly = meshLocalCopy.getNumberOfTypes(MED_CELL)
 if (nbTypesCell == nbTypesCellWithPoly):
     print ""
     print "          No Poly Cells in the mesh"
@@ -306,7 +307,7 @@ else:
     print "          The Cell Nodal Connectivity of the Poly Cells:"
     print ""
     print "      The Mesh has",nbTypesCellWithPoly-nbTypesCell,"Type(s) of Poly Cell"
-    types = meshLocalCopy.getTypesWithPoly(MED_CELL)
+    types = meshLocalCopy.getTypes(MED_CELL)
     for k in range(nbTypesCellWithPoly):
         type = types[k]
         if type == MED_POLYGON:
@@ -350,30 +351,30 @@ f_linLocal = FIELDDOUBLEClient(f_lin)
 f_linLocal.setName(f_linLocal.getName()+"lin")
 
 #Warning : OutputMedFiles are removed here after =================================
-Outmed21File="OutCalculatorpointe21_V3.2.0b1.med"
-os.system( 'rm -fr ' + Outmed21File )
+#Outmed21File="OutCalculatorpointe21_V3.2.0b1.med"
+#os.system( 'rm -fr ' + Outmed21File )
 Outmed22File="OutCalculatorpointe22_V3.2.0b1.med"
 os.system( 'rm -fr ' + Outmed22File )
 
 # writting the mesh and the fields
-medFileVersion = getMedFileVersionForWriting()
+# medFileVersion = getMedFileVersionForWriting()
 
-if (medFileVersion == V22):
-    setMedFileVersionForWriting(V21)
+# if (medFileVersion == V22):
+#     setMedFileVersionForWriting(V21)
 
-idMed = meshLocalCopy.addDriver(MED_DRIVER, Outmed21File, meshLocalCopy.getName(), MED_REMP)
-meshLocalCopy.write(idMed)
+# idMed = meshLocalCopy.addDriver(MED_DRIVER, Outmed21File, meshLocalCopy.getName(), MED_REMP)
+# meshLocalCopy.write(idMed)
 
-idMed = f_addLocal.addDriver(MED_DRIVER, Outmed21File, f_addLocal.getName())
-f_addLocal.write(idMed)
+# idMed = f_addLocal.addDriver(MED_DRIVER, Outmed21File, f_addLocal.getName())
+# f_addLocal.write(idMed)
 
-idMed = f_linLocal.addDriver(MED_DRIVER, Outmed21File, f_linLocal.getName())
-f_linLocal.write(idMed)
+# idMed = f_linLocal.addDriver(MED_DRIVER, Outmed21File, f_linLocal.getName())
+# f_linLocal.write(idMed)
 
-medFileVersion = getMedFileVersionForWriting()
+# medFileVersion = getMedFileVersionForWriting()
 
-if (medFileVersion == V21):
-    setMedFileVersionForWriting(V22)
+# if (medFileVersion == V21):
+#     setMedFileVersionForWriting(V22)
 
 idMed = meshLocalCopy.addDriver(MED_DRIVER, Outmed22File, meshLocalCopy.getName(), MED_REMP)
 meshLocalCopy.write(idMed)
@@ -428,16 +429,16 @@ studynameId = myStudy._get_StudyId()
 studyname = myStudy._get_Name()
 print "We are working in the study ",studyname," with the ID ",studynameId
 
-print "Reading the .med file ",Outmed21File," and pushing corba objects in the SALOME study"
+print "Reading the .med file ",Outmed22File," and pushing corba objects in the SALOME study"
 
-medComp.readStructFileWithFieldType(Outmed21File,studyname)
+medComp.readStructFileWithFieldType(Outmed22File,studyname)
 
-Outf_add  = medComp.readFieldInFile(Outmed21File,studyname,'fieldcelldoublevectoradd',-1,-1)
-Outf_lin  = medComp.readFieldInFile(Outmed21File,studyname,'fieldcelldoublevectorlin',-1,-1)
+Outf_add  = medComp.readFieldInFile(Outmed22File,studyname,'fieldcelldoublevectoradd',-1,-1)
+Outf_lin  = medComp.readFieldInFile(Outmed22File,studyname,'fieldcelldoublevectorlin',-1,-1)
 
 myStudy.GetObjectNames('/Med')
 
-myStudy.GetObjectNames('/Med/MED_OBJECT_FROM_FILE_OutCalculatorpointe21_V3.2.0b1.med')
+myStudy.GetObjectNames('/Med/MED_OBJECT_FROM_FILE_OutCalculatorpointe22_V3.2.0b1.med')
 
 myStudy.GetObjectNames('/Med/MEDMESH')
 myStudy.GetObjectNames('/Med/MEDMESH/maa1')
