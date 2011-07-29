@@ -35,16 +35,12 @@ dist_libCALCULATOREngine_la_SOURCES = \
 libCALCULATOREngine_la_CPPFLAGS = \
 	$(CORBA_CXXFLAGS) \
 	$(CORBA_INCLUDES) \
-	$(CAS_CPPFLAGS) \
-	$(MED2_INCLUDES) \
-	$(HDF5_INCLUDES) \
-	$(KERNEL_CXXFLAGS) \
 	$(MED_CXXFLAGS) \
+	$(KERNEL_CXXFLAGS) \
 	-I$(top_builddir)/idl
 
 libCALCULATOREngine_la_LDFLAGS = \
 	$(CORBA_LIBS) \
-	$(CAS_OCAF) \
 	$(HDF5_LIBS) \
 	$(KERNEL_LDFLAGS) \
 	-lSalomeContainer \
@@ -52,7 +48,8 @@ libCALCULATOREngine_la_LDFLAGS = \
 	-lSalomeIDLKernel \
 	$(MED_LDFLAGS) \
 	-lSalomeIDLMED \
-	-lMEDClientcmodule \
+	-lmedcouplingclient \
+	-lmedcouplingcorba \
 	$(top_builddir)/idl/libSalomeIDLCALCULATOR.la
 
 # Scripts to be installed

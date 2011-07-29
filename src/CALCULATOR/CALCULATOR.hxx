@@ -25,7 +25,7 @@
 
 #include <SALOMEconfig.h>
 #include CORBA_SERVER_HEADER(CALCULATOR_Gen)
-#include CORBA_CLIENT_HEADER(MED)
+#include CORBA_CLIENT_HEADER(MEDCouplingCorbaServant)
 #include "SALOME_Component_i.hxx"
 
 class CALCULATOR:
@@ -41,17 +41,17 @@ public:
                const char *interfaceName);
     virtual ~CALCULATOR();
 
-    CORBA::Double convergenceCriteria(SALOME_MED::FIELDDOUBLE_ptr field);
-    CORBA::Double normMax(SALOME_MED::FIELDDOUBLE_ptr field1);
-    CORBA::Double normL2(SALOME_MED::FIELDDOUBLE_ptr field1);
-    CORBA::Double norm2(SALOME_MED::FIELDDOUBLE_ptr field1);
-    CORBA::Double normL1(SALOME_MED::FIELDDOUBLE_ptr field1);
-    SALOME_MED::FIELDDOUBLE_ptr applyLin(SALOME_MED::FIELDDOUBLE_ptr field1,CORBA::Double a,CORBA::Double b);
-    SALOME_MED::FIELDDOUBLE_ptr add(SALOME_MED::FIELDDOUBLE_ptr field1, SALOME_MED::FIELDDOUBLE_ptr field2);
-    void printField(SALOME_MED::FIELDDOUBLE_ptr field);
-    void cloneField(SALOME_MED::FIELDDOUBLE_ptr field,
-                    SALOME_MED::FIELDDOUBLE_out clone1, SALOME_MED::FIELDDOUBLE_out clone2,
-	            SALOME_MED::FIELDDOUBLE_out clone3, SALOME_MED::FIELDDOUBLE_out clone4);
+    CORBA::Double convergenceCriteria(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field);
+    CORBA::Double normMax(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1);
+    CORBA::Double normL2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1);
+    CORBA::Double norm2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1);
+    CORBA::Double normL1(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1);
+    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr applyLin(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1,CORBA::Double a,CORBA::Double b);
+    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr add(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1, SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field2);
+    void printField(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field);
+    void cloneField(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field,
+                    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone1, SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone2,
+	            SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone3, SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone4);
     CORBA::Boolean isDone();
     CALCULATOR_ORB::ErrorCode getErrorCode();
 
