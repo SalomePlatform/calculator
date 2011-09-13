@@ -331,6 +331,7 @@ AC_OUTPUT([ \
   src/CALCULATOR/Makefile \
   resources/Makefile \
   resources/CALCULATORCatalog.xml \
+  resources/SalomeApp.xml \
   idl/Makefile \
   Makefile \
 ])
