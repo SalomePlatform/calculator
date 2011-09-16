@@ -26,10 +26,10 @@
     <!-- Major module parameters -->
     <parameter name="name" value="Calculator"/>
     <parameter name="icon" value="CALCULATOR.png"/>
-    <parameter name="CALCULATOR_VERSION" value="@VERSION@"/>
+    <parameter name="version" value="@VERSION@"/>
   </section>
   <section name="resources">
     <!-- Module resources -->
-    <parameter name="CALCULATOR" value="${CALCULATOR_ROOT_DIR}/share/salome/resources/calculator"/>
+    <parameter name="CALCULATOR" value="%CALCULATOR_ROOT_DIR%/share/salome/resources/calculator"/>
   </section>
 </document>
