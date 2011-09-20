@@ -29,8 +29,7 @@ dist_salomeres_DATA = \
 	CALCULATOR_en.ps \
 	CALCULATOR_en.xml \
 	CALCULATOR_fr.xml \
-	ExecCALCULATOR.png \
-	$(top_builddir)/resources/SalomeApp.xml
+	ExecCALCULATOR.png
 
 # VSR: little trick to avoid putting if CALCULATORCatalog.xml to the distribution archive
-nodist_salomeres_SCRIPTS = CALCULATORCatalog.xml
+nodist_salomeres_SCRIPTS = CALCULATORCatalog.xml SalomeApp.xml
