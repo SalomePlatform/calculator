@@ -28,7 +28,7 @@
     <type-list></type-list>
     <component-list>
         <component>
-            <component-name>CALCULATOR_Gen</component-name>
+            <component-name>CALCULATOR</component-name>
             <component-username>CALCULATOR</component-username>
             <component-type>MED EXAMPLE</component-type>
             <component-author>ngore</component-author>
