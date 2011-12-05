@@ -29,6 +29,10 @@ import SALOME
 import SALOME_MED
 import SALOMEDS
 
+from MEDCouplingCorba import *
+from MEDCoupling import *
+from MEDLoader import *
+
 import os
 host = os.getenv( 'HOST' )
 orb, lcc, naming_service, contmgr = salome.salome_kernel.salome_kernel_init()
@@ -41,6 +45,7 @@ filePath=os.environ["MED_ROOT_DIR"]
 filePath=filePath+"/share/salome/resources/med/"
 medFile=filePath+"pointe.med"
 fieldname = "fieldcelldoublevector"
+meshname = "maa1"
 
 # Launch the Med Component and use it to load into memory the test field 
 print "Launch the Med Component: "
@@ -48,16 +53,17 @@ med_comp = lcc.FindOrLoadComponent("FactoryServer", "MED")
 
 # Get a Corba field proxy on the distant field (located in the med_comp server).
 try:
-    obj = naming_service.Resolve('myStudyManager')
-    myStudyManager = obj._narrow(SALOMEDS.StudyManager)
-    print "studyManager found"
-    myStudy = myStudyManager.NewStudy('CALCULATOR_TEST')
-    studynameId = myStudy._get_StudyId()
-    studyname = myStudy._get_Name()
-    print "We are working in the study ",studyname," with the ID ",studynameId
+    #TODO
+    #Manager = obj._narrow(SALOMEDS.StudyManager)
+    #print "studyManager found"
+    #myStudy = myStudyManager.NewStudy('CALCULATOR_TEST')
+    #studynameId = myStudy._get_StudyId()
+    #studyname = myStudy._get_Name()
+    #print "We are working in the study ",studyname," with the ID ",studynameId
     print "Read field ",fieldname
-    fieldcell  = med_comp.readFieldInFile(medFile,studyname,fieldname,-1,-1)
-    fieldcelldouble = fieldcell._narrow(SALOME_MED.FIELDDOUBLE)
+    
+    f = MEDLoader.ReadFieldCell(medFile,meshname,0,fieldname,-1,-1)
+    fieldcelldouble=MEDCouplingFieldDoubleServant._this(f)
 except SALOME.SALOME_Exception, ex:
     print ex.details
     print ex.details.type
@@ -67,10 +73,10 @@ except SALOME.SALOME_Exception, ex:
     raise
 
 print "Description of Field : "
-print fieldcelldouble
-print fieldcelldouble.getName()
-print fieldcelldouble.getDescription()
-print fieldcelldouble.getNumberOfComponents()
+print f
+print f.getName()
+print f.getDescription()
+print f.getNumberOfComponents()
 
 #
 #
