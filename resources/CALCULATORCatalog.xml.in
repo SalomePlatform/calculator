@@ -25,7 +25,10 @@
 
 <begin-catalog>
     <path-prefix-list></path-prefix-list>
-    <type-list></type-list>
+    <type-list>
+      <type name="ErrorCode" kind="int"/>
+      <objref name="SALOME_MED/MEDCouplingFieldDoubleCorbaInterface" id="IDL:SALOME_MED/MEDCouplingFieldDoubleCorbaInterface:1.0"/>
+    </type-list>
     <component-list>
         <component>
             <component-name>CALCULATOR</component-name>
@@ -289,7 +292,7 @@
                         <outParameter-list>
                             <outParameter>
                                 <outParameter-name>return</outParameter-name>
-                                <outParameter-type>CALCULATOR_ORB/ErrorCode</outParameter-type>
+                                <outParameter-type>ErrorCode</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                         </outParameter-list>
