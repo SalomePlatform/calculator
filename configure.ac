@@ -212,11 +212,11 @@ CHECK_BOOST
 
 echo
 echo ---------------------------------------------
-echo testing MED2
+echo testing MED3
 echo ---------------------------------------------
 echo
 
-CHECK_MED2
+CHECK_MED3
 
 echo
 echo ---------------------------------------------
