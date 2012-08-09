@@ -1,24 +1,25 @@
-#  Copyright (C) 2007-2008  CEA/DEN, EDF R&D, OPEN CASCADE
+# Copyright (C) 2007-2012  CEA/DEN, EDF R&D, OPEN CASCADE
 #
-#  Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
-#  CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
+# Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
+# CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
 #
-#  This library is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU Lesser General Public
-#  License as published by the Free Software Foundation; either
-#  version 2.1 of the License.
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License.
 #
-#  This library is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#  Lesser General Public License for more details.
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
 #
-#  You should have received a copy of the GNU Lesser General Public
-#  License along with this library; if not, write to the Free Software
-#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-#  See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
+# See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
+
 #CALCULATOR_TEST_WITHOUTIHM.py
 #
 from omniORB import CORBA
@@ -27,6 +28,11 @@ import salome
 import SALOME
 import SALOME_MED
 import SALOMEDS
+
+from MEDCouplingCorba import *
+from MEDCoupling import *
+from MEDLoader import *
+
 
 import os
 host = os.getenv( 'HOST' )
@@ -40,6 +46,7 @@ filePath=os.environ["MED_ROOT_DIR"]
 filePath=filePath+"/share/salome/resources/med/"
 medFile=filePath+"pointe.med"
 fieldname = "fieldcelldoublevector"
+meshname = "maa1"
 
 # Launch the Med Component and use it to load into memory the test field 
 print "Launch the Med Component: "
@@ -47,16 +54,17 @@ med_comp = lcc.FindOrLoadComponent("FactoryServer", "MED")
 
 # Get a Corba field proxy on the distant field (located in the med_comp server).
 try:
-    obj = naming_service.Resolve('myStudyManager')
-    myStudyManager = obj._narrow(SALOMEDS.StudyManager)
-    print "studyManager found"
-    myStudy = myStudyManager.NewStudy('CALCULATOR_TEST_WITHOUTIHM')
-    studynameId = myStudy._get_StudyId()
-    studyname = myStudy._get_Name()
-    print "We are working in the study ",studyname," with the ID ",studynameId
+    #TODO
+    #obj = naming_service.Resolve('myStudyManager')
+    #myStudyManager = obj._narrow(SALOMEDS.StudyManager)
+    #print "studyManager found"
+    #myStudy = myStudyManager.NewStudy('CALCULATOR_TEST_WITHOUTIHM')
+    #studynameId = myStudy._get_StudyId()
+    #studyname = myStudy._get_Name()
+    #print "We are working in the study ",studyname," with the ID ",studynameId
     print "Read field ",fieldname
-    fieldcell  = med_comp.readFieldInFile(medFile,studyname,fieldname,-1,-1)
-    fieldcelldouble = fieldcell._narrow(SALOME_MED.FIELDDOUBLE)
+    f = MEDLoader.ReadFieldCell(medFile,meshname,0,fieldname,-1,-1)
+    fieldcelldouble=MEDCouplingFieldDoubleServant._this(f)
 except SALOME.SALOME_Exception, ex:
     print ex.details
     print ex.details.type
@@ -66,10 +74,10 @@ except SALOME.SALOME_Exception, ex:
     raise
 
 print "Description of Field : "
-print fieldcelldouble
-print fieldcelldouble.getName()
-print fieldcelldouble.getDescription()
-print fieldcelldouble.getNumberOfComponents()
+print f
+print f.getName()
+print f.getDescription()
+print f.getNumberOfComponents()
 
 #
 #
@@ -113,64 +121,24 @@ print " -> norme = ",norme
 ############  Creation of a MED file with fields created by Caculator  #################
 #                   via Client classes
 #
-from libMEDClient import *
+#from libMEDClient import *
+from MEDCouplingClient import *
+import MEDCouplingCorbaServant_idl
 
-meshDistant = f_add.getSupport().getMesh()
-
-meshLocal = MESHClient(meshDistant)
-
-f_addLocal = FIELDDOUBLEClient(f_add)
-
+f_addLocal=MEDCouplingFieldDoubleClient.New(f_add)
 f_addLocal.setName(f_addLocal.getName()+"add")
+f_add.UnRegister()
 
-f_linLocal = FIELDDOUBLEClient(f_lin)
-
+f_linLocal=MEDCouplingFieldDoubleClient.New(f_lin)
 f_linLocal.setName(f_linLocal.getName()+"lin")
+f_lin.UnRegister()
 
-# med file with 2.1 format
-OutmedFile21="Calculatorpointe_V21.med"
-os.system( 'rm -fr ' + OutmedFile21 )
 
-medFileVersion = getMedFileVersionForWriting()
-if (medFileVersion == V22):
-    print "setMedFileVersionForWriting(V21)"
-    setMedFileVersionForWriting(V21)
 
-# writting the mesh
-print "meshLocal.write :"
-idMed = meshLocal.addDriver(MED_DRIVER, OutmedFile21, meshLocal.getName(), MED_REMP)
-meshLocal.write(idMed)
-
-# writting the 2 fields
-print "f_addLocal.write :"
-idMed = f_addLocal.addDriver(MED_DRIVER, OutmedFile21, f_addLocal.getName())
-f_addLocal.write(idMed)
-
-print "f_linLocal.write :"
-idMed = f_linLocal.addDriver(MED_DRIVER, OutmedFile21, f_linLocal.getName())
-f_linLocal.write(idMed)
-
-# med file with 2.2 format
 OutmedFile22="Calculatorpointe_V22.med"
-os.system( 'rm -fr ' + OutmedFile22 )
+#os.system( 'rm -fr ' + OutmedFile22 )
+MEDLoader.WriteField(OutmedFile22,f_addLocal,True)
+MEDLoader.WriteFieldUsingAlreadyWrittenMesh(OutmedFile22,f_linLocal)
 
-medFileVersion = getMedFileVersionForWriting()
-if (medFileVersion == V21):
-    print "setMedFileVersionForWriting(V22)"
-    setMedFileVersionForWriting(V22)
-
-# writting the mesh
-print "meshLocal.write :"
-idMed = meshLocal.addDriver(MED_DRIVER, OutmedFile22, meshLocal.getName(), MED_REMP)
-meshLocal.write(idMed)
-
-# writting the 2 fields
-print "f_addLocal.write :"
-idMed = f_addLocal.addDriver(MED_DRIVER, OutmedFile22, f_addLocal.getName())
-f_addLocal.write(idMed)
-
-print "f_linLocal.write :"
-idMed = f_linLocal.addDriver(MED_DRIVER, OutmedFile22, f_linLocal.getName())
-f_linLocal.write(idMed)
 
 print "End of Calculator Test!"

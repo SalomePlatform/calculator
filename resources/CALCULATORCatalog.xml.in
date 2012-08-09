@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='us-ascii' ?>
 <!--
-  Copyright (C) 2007-2008  CEA/DEN, EDF R&D, OPEN CASCADE
+  Copyright (C) 2007-2012  CEA/DEN, EDF R&D, OPEN CASCADE
 
   Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
   CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
@@ -25,12 +25,16 @@
 
 <begin-catalog>
     <path-prefix-list></path-prefix-list>
+    <type-list>
+      <type name="ErrorCode" kind="int"/>
+      <objref name="SALOME_MED/MEDCouplingFieldDoubleCorbaInterface" id="IDL:SALOME_MED/MEDCouplingFieldDoubleCorbaInterface:1.0"/>
+    </type-list>
     <component-list>
         <component>
             <component-name>CALCULATOR</component-name>
             <component-username>CALCULATOR</component-username>
             <component-type>MED EXAMPLE</component-type>
-            <component-author>crouzet</component-author>
+            <component-author>ngore</component-author>
             <component-version>@VERSION@</component-version>
             <component-comment>unknown</component-comment>
             <component-multistudy>1</component-multistudy>
@@ -42,14 +46,14 @@
                 <component-service-list>
                     <component-service>
                         <service-name>convergenceCriteria</service-name>
-                        <service-author>crouzet</service-author>
-                        <service-version>2.2.2</service-version>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
                         <service-comment>unknown</service-comment>
                         <service-by-default>0</service-by-default>
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -64,14 +68,14 @@
                     </component-service>
                     <component-service>
                         <service-name>applyLin</service-name>
-                        <service-author>crouzet</service-author>
-                        <service-version>2.2.2</service-version>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
                         <service-comment>unknown</service-comment>
                         <service-by-default>0</service-by-default>
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field1</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                             <inParameter>
@@ -88,7 +92,7 @@
                         <outParameter-list>
                             <outParameter>
                                 <outParameter-name>return</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                         </outParameter-list>
@@ -96,26 +100,26 @@
                     </component-service>
                     <component-service>
                         <service-name>add</service-name>
-                        <service-author>crouzet</service-author>
-                        <service-version>2.2.2</service-version>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
                         <service-comment>unknown</service-comment>
                         <service-by-default>0</service-by-default>
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field1</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                             <inParameter>
                                 <inParameter-name>field2</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
                         <outParameter-list>
                             <outParameter>
                                 <outParameter-name>return</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                         </outParameter-list>
@@ -123,14 +127,14 @@
                     </component-service>
                     <component-service>
                         <service-name>norm2</service-name>
-                        <service-author>crouzet</service-author>
-                        <service-version>2.2.2</service-version>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
                         <service-comment>unknown</service-comment>
                         <service-by-default>0</service-by-default>
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -145,14 +149,14 @@
                     </component-service>
                     <component-service>
                         <service-name>normL2</service-name>
-                        <service-author>crouzet</service-author>
-                        <service-version>2.2.2</service-version>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
                         <service-comment>unknown</service-comment>
                         <service-by-default>0</service-by-default>
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -167,14 +171,14 @@
                     </component-service>
                     <component-service>
                         <service-name>normL1</service-name>
-                        <service-author>crouzet</service-author>
-                        <service-version>2.2.2</service-version>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
                         <service-comment>unknown</service-comment>
                         <service-by-default>0</service-by-default>
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -189,14 +193,14 @@
                     </component-service>
                     <component-service>
                         <service-name>normMax</service-name>
-                        <service-author>crouzet</service-author>
-                        <service-version>2.2.2</service-version>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
                         <service-comment>unknown</service-comment>
                         <service-by-default>0</service-by-default>
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -211,14 +215,14 @@
                     </component-service>
                     <component-service>
                         <service-name>printField</service-name>
-                        <service-author>crouzet</service-author>
-                        <service-version>2.2.2</service-version>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
                         <service-comment>unknown</service-comment>
                         <service-by-default>0</service-by-default>
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
@@ -227,36 +231,68 @@
                     </component-service>
                     <component-service>
                         <service-name>cloneField</service-name>
-                        <service-author>crouzet</service-author>
-                        <service-version>2.2.2</service-version>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
                         <service-comment>unknown</service-comment>
                         <service-by-default>0</service-by-default>
                         <inParameter-list>
                             <inParameter>
                                 <inParameter-name>field</inParameter-name>
-                                <inParameter-type>FIELDDOUBLE</inParameter-type>
+                                <inParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</inParameter-type>
                                 <inParameter-comment>unknown</inParameter-comment>
                             </inParameter>
                         </inParameter-list>
                         <outParameter-list>
                             <outParameter>
                                 <outParameter-name>clone1</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                             <outParameter>
                                 <outParameter-name>clone2</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                             <outParameter>
                                 <outParameter-name>clone3</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                             <outParameter>
                                 <outParameter-name>clone4</outParameter-name>
-                                <outParameter-type>FIELDDOUBLE</outParameter-type>
+                                <outParameter-type>SALOME_MED/MEDCouplingFieldDoubleCorbaInterface</outParameter-type>
+                                <outParameter-comment>unknown</outParameter-comment>
+                            </outParameter>
+                        </outParameter-list>
+                        <DataStream-list></DataStream-list>
+                    </component-service>
+                    <component-service>
+                        <service-name>isDone</service-name>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
+                        <service-comment>unknown</service-comment>
+                        <service-by-default>0</service-by-default>
+                        <inParameter-list></inParameter-list>
+                        <outParameter-list>
+                            <outParameter>
+                                <outParameter-name>return</outParameter-name>
+                                <outParameter-type>boolean</outParameter-type>
+                                <outParameter-comment>unknown</outParameter-comment>
+                            </outParameter>
+                        </outParameter-list>
+                        <DataStream-list></DataStream-list>
+                    </component-service>
+                    <component-service>
+                        <service-name>getErrorCode</service-name>
+                        <service-author>ngore</service-author>
+                        <service-version>6.3.1</service-version>
+                        <service-comment>unknown</service-comment>
+                        <service-by-default>0</service-by-default>
+                        <inParameter-list></inParameter-list>
+                        <outParameter-list>
+                            <outParameter>
+                                <outParameter-name>return</outParameter-name>
+                                <outParameter-type>ErrorCode</outParameter-type>
                                 <outParameter-comment>unknown</outParameter-comment>
                             </outParameter>
                         </outParameter-list>

@@ -1,24 +1,25 @@
-#  Copyright (C) 2007-2008  CEA/DEN, EDF R&D, OPEN CASCADE
+# Copyright (C) 2007-2012  CEA/DEN, EDF R&D, OPEN CASCADE
 #
-#  Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
-#  CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
+# Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
+# CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
 #
-#  This library is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU Lesser General Public
-#  License as published by the Free Software Foundation; either
-#  version 2.1 of the License.
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License.
 #
-#  This library is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#  Lesser General Public License for more details.
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
 #
-#  You should have received a copy of the GNU Lesser General Public
-#  License along with this library; if not, write to the Free Software
-#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-#  See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
+# See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
+
 ####################################################################################################
 # CALCULATOR_TEST_STUDY_WITHOUTIHM.py
 # Test the calculator component: using Med Client classes with writing in a med file
@@ -157,6 +158,12 @@ def getFieldObjectFromStudy(dt,it,fieldName,supportName,meshName):
 
 fileName = "pointe.med"
 
+from MEDCoupling import *
+from MEDLoader import *
+from MEDCouplingCorba import *
+from MEDCouplingClient import *
+import MEDCouplingCorbaServant_idl
+
 #CCRTmedComp=salome.lcc.FindOrLoadComponent("FactoryServer", "MED")
 medComp=lcc.FindOrLoadComponent("FactoryServer", "MED")
 
@@ -169,35 +176,25 @@ filePathName = filePath + fileName
 
 print "Reading the .med file ",filePathName," and pushing corba objects in the SALOME study"
 #CCRTmedComp.readStructFileWithFieldType(filePathName,salome.myStudyName)
-medComp.readStructFileWithFieldType(filePathName,studyname)
+##medComp.readStructFileWithFieldType(filePathName,studyname)
 #CCRTsg.updateObjBrowser(1)
 
-print "getting the MED object from the study"
-medObj = getMedObjectFromStudy(fileName)
+##print "getting the MED object from the study"
+##medObj = getMedObjectFromStudy(fileName)
 
-nbOfMeshes = medObj.getNumberOfMeshes()
-meshNames = medObj.getMeshNames()
+meshNames = MEDLoader.GetMeshNames(filePathName)
+nbOfMeshes = len(meshNames)#medObj.getNumberOfMeshes()
 
 print "in this med file there is(are) ",nbOfMeshes," mesh(es):"
 
 meshName = meshNames[0]
 
-meshObj = medObj.getMeshByName(meshName)
+#meshObj = medObj.getMeshByName(meshName)
+meshObj3D = MEDLoader.ReadUMeshFromFile(filePathName,meshName,0)
 
 fieldName = "fieldcelldoublevector"
-dt = -1
-it = -1
-entitySupport = "MED_MAILLE"
-supportName = "SupportOnAll_"+entitySupport
-
-fieldTypedObj,typeField = getFieldObjectFromStudy(dt,it,fieldName,supportName,meshName)
-
-if(typeField == 1):
-    fieldTypedLocalCopy = FIELDDOUBLEClient(fieldTypedObj)
-elif (typeField == 0):
-    fieldTypedLocalCopy = FIELDINTClient(fieldTypedObj)
-else:
-    print "Problem with the type of the field"
+fieldTypedObj = MEDLoader.ReadFieldCell(filePathName,meshName,0,fieldName,-1,-1)
+fieldTypedObjCORBA=MEDCouplingFieldDoubleServant._this(fieldTypedObj)
 
 ##############  Load Calculator Component ###################
 # Calculator Component must be in the Container of MED
@@ -217,8 +214,8 @@ calculator = lcc.FindOrLoadComponent("FactoryServer", "CALCULATOR")
 #
 #
 print "Appel cloneField : fieldTypedObj -> f1,f2,f3,f4"
-fieldTypedObj.Register()
-(f1,f2,f3,f4)=calculator.cloneField(fieldTypedObj)  # fieldTypedObj is consumed
+#fieldTypedObj.Register()
+(f1,f2,f3,f4)=calculator.cloneField(fieldTypedObjCORBA)  # fieldTypedObj is consumed
 #
 ##f1.Register()
 ##calculator.printField(f1)
@@ -234,7 +231,7 @@ f_lin=calculator.applyLin(f4,2.0,1.0)
 ##calculator.printField( f_lin ) # f_lin is consumed
 #
 print "Appel Norme Max "
-f_lin.Register()
+#f_lin.Register()
 norme=calculator.normMax(f_lin) # f_lin is consumed
 print " -> norme = ",norme
 #
@@ -244,224 +241,32 @@ print " -> norme = ",norme
 ############  Creation of a MED file with fields created by Caculator  #################
 #                   via Client classes
 #
+f_addLocal=MEDCouplingFieldDoubleClient.New(f_add)
+f_add.UnRegister()
+f_addLocal.setName(fieldName+"add")
+f_linLocal=MEDCouplingFieldDoubleClient.New(f_lin)
+f_lin.UnRegister()
+f_linLocal.setName(fieldName+"lin")
 
-meshDistant = f_add.getSupport().getMesh()
-
-meshLocalCopy = MESHClient(meshDistant)
-
+meshLocal = f_addLocal.getMesh()
 
 print "      getting information from the local copy of the distant mesh"
-name = meshLocalCopy.getName()
-spaceDimension = meshLocalCopy.getSpaceDimension()
-meshDimension = meshLocalCopy.getMeshDimension()
-numberOfNodes = meshLocalCopy.getNumberOfNodes()
+name = meshLocal.getName()
+spaceDimension = meshLocal.getSpaceDimension()
+meshDimension = meshLocal.getMeshDimension()
+numberOfNodes = meshLocal.getNumberOfNodes()
 print "          Name = ", name, " space Dim = ", spaceDimension, " mesh Dim = ", meshDimension, " Nb of Nodes = ", numberOfNodes
-coordSyst = meshLocalCopy.getCoordinatesSystem()
-print "          The coordinates system is",coordSyst
-print "          The Coordinates :"
-coordNames = []
-coordUnits = []
-for isd in range(spaceDimension):
-    coordNames.append(meshLocalCopy.getCoordinateName(isd))
-    coordUnits.append(meshLocalCopy.getCoordinateUnit(isd))
 
-print "          names:", coordNames
-print "          units", coordUnits
-print "          values:"
-coordinates = meshLocalCopy.getCoordinates(MED_FULL_INTERLACE)
-for k in range(numberOfNodes):
-    kp1 = k+1
-    print "         ---- ", coordinates[k*spaceDimension:(kp1*spaceDimension)]
-print ""
-print "          The Cell Nodal Connectivity of the Cells:"
-nbTypesCell = meshLocalCopy.getNumberOfTypes(MED_CELL)
-print ""
-if (nbTypesCell>0):
-    print "      The Mesh has",nbTypesCell,"Type(s) of Cell"
-    types = meshLocalCopy.getTypes(MED_CELL)
-    for k in range(nbTypesCell):
-        type = types[k]
-        nbElemType = meshLocalCopy.getNumberOfElements(MED_CELL,type)
-        print "     For the type:",type,"there is(are)",nbElemType,"elemnt(s)"
-        connectivity = meshLocalCopy.getConnectivity(MED_FULL_INTERLACE,MED_NODAL,MED_CELL,type)
-        nbNodesPerCell = type%100
-        for j in range(nbElemType):
-            print "       Element",(j+1)," ",connectivity[j*nbNodesPerCell:(j+1)*nbNodesPerCell]
-            pass
-        pass
-    pass
-
-##
-## TEST METHODS ABOUT POLY ELEMENTS ##
-##
-nbTypesCellWithPoly = meshLocalCopy.getNumberOfTypesWithPoly(MED_CELL)
-if (nbTypesCell == nbTypesCellWithPoly):
-    print ""
-    print "          No Poly Cells in the mesh"
-    print ""
-    pass
-else:
-    print ""
-    print "          The Cell Nodal Connectivity of the Poly Cells:"
-    print ""
-    print "      The Mesh has",nbTypesCellWithPoly-nbTypesCell,"Type(s) of Poly Cell"
-    types = meshLocalCopy.getTypesWithPoly(MED_CELL)
-    for k in range(nbTypesCellWithPoly):
-        type = types[k]
-        if type == MED_POLYGON:
-            nbElemType = meshLocalCopy.getNumberOfPolygons()
-        elif type == MED_POLYHEDRA:
-            nbElemType = meshLocalCopy.getNumberOfPolyhedron()
-        else:
-            continue
-        print ""
-        print "     For the type:",type,"there is(are)",nbElemType,"elemnt(s)"
-        if type == MED_POLYGON:
-            connectivity = meshLocalCopy.getPolygonsConnectivity(MED_NODAL,MED_CELL)
-            index = meshLocalCopy.getPolygonsConnectivityIndex(MED_NODAL,MED_CELL)
-            for j in range(nbElemType):
-                print "       Polygon",(j+1)," ",connectivity[ index[j]-1 : index[j+1]-1 ]
-                pass
-            pass
-        else:
-            connectivity = meshLocalCopy.getPolyhedronConnectivity(MED_NODAL)
-            fIndex = meshLocalCopy.getPolyhedronFacesIndex()
-            index = meshLocalCopy.getPolyhedronIndex(MED_NODAL)
-            for j in range(nbElemType):
-                print     "       Polyhedra",(j+1)
-                iF1, iF2 = index[ j ]-1, index[ j+1 ]-1
-                for f in range( iF2 - iF1 ):
-                    iN1, iN2 = fIndex[ iF1+f ]-1, fIndex[ iF1+f+1 ]-1
-                    print "         Face",f+1," ",connectivity[ iN1 : iN2 ]
-                    pass
-                pass
-            pass
-        pass
-    pass
-pass
-
-f_addLocal = FIELDDOUBLEClient(f_add)
-
-f_addLocal.setName(f_addLocal.getName()+"add")
-
-f_linLocal = FIELDDOUBLEClient(f_lin)
-
-f_linLocal.setName(f_linLocal.getName()+"lin")
 
 #Warning : OutputMedFiles are removed here after =================================
-Outmed21File="OutCalculatorpointe21_V3.2.0b1.med"
-os.system( 'rm -fr ' + Outmed21File )
+#Outmed21File="OutCalculatorpointe21_V3.2.0b1.med"
+#os.system( 'rm -fr ' + Outmed21File )
 Outmed22File="OutCalculatorpointe22_V3.2.0b1.med"
 os.system( 'rm -fr ' + Outmed22File )
 
-# writting the mesh and the fields
-medFileVersion = getMedFileVersionForWriting()
-
-if (medFileVersion == V22):
-    setMedFileVersionForWriting(V21)
-
-idMed = meshLocalCopy.addDriver(MED_DRIVER, Outmed21File, meshLocalCopy.getName(), MED_REMP)
-meshLocalCopy.write(idMed)
-
-idMed = f_addLocal.addDriver(MED_DRIVER, Outmed21File, f_addLocal.getName())
-f_addLocal.write(idMed)
-
-idMed = f_linLocal.addDriver(MED_DRIVER, Outmed21File, f_linLocal.getName())
-f_linLocal.write(idMed)
-
-medFileVersion = getMedFileVersionForWriting()
-
-if (medFileVersion == V21):
-    setMedFileVersionForWriting(V22)
-
-idMed = meshLocalCopy.addDriver(MED_DRIVER, Outmed22File, meshLocalCopy.getName(), MED_REMP)
-meshLocalCopy.write(idMed)
-
-idMed = f_addLocal.addDriver(MED_DRIVER, Outmed22File, f_addLocal.getName())
-f_addLocal.write(idMed)
-
-idMed = f_linLocal.addDriver(MED_DRIVER, Outmed22File, f_linLocal.getName())
-f_linLocal.write(idMed)
-
-myStudy.GetObjectNames('/Med')
-myStudy.GetObjectNames('/Med/MED_OBJECT_FROM_FILE_pointe.med')
-myStudy.GetObjectNames('/Med/MEDMESH')
-myStudy.GetObjectNames('/Med/MEDMESH/maa1')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/FAMILLE_ELEMENT_1')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/FAMILLE_ELEMENT_2')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/FAMILLE_ELEMENT_3')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/groupe1')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/FAMILLE_NOEUD_1')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/FAMILLE_NOEUD_2')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/FAMILLE_NOEUD_3')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/FAMILLE_NOEUD_4')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/groupe2')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/groupe3')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/groupe4')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/groupe5')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/SupportOnAll_MED_MAILLE')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/SupportOnAll_MED_NOEUD')
-
-myStudy.GetObjectNames('/Med/MEDFIELD')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevector')
-#myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevector/(-1,-1)_ON_SupportOnAll_MED_MAILLE_OF_maa1')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldnodedouble')
-#myStudy.GetObjectNames('/Med/MEDFIELD/fieldnodedouble/(-1,-1)_ON_SupportOnAll_MED_NOEUD_OF_maa1')
-#myStudy.GetObjectNames('/Med/MEDFIELD/fieldnodedouble/1,-1)_ON_SupportOnAll_MED_NOEUD_OF_maa1')
-#myStudy.GetObjectNames('/Med/MEDFIELD/fieldnodedouble/(2,-1)_ON_SupportOnAll_MED_NOEUD_OF_maa1')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldnodeint')
-#myStudy.GetObjectNames('/Med/MEDFIELD/fieldnodeint/(-1,-1)_ON_SupportOnAll_MED_NOEUD_OF_maa1')
-
-#myStudyManager.Close(myStudy)
-#myStudy.Close()
-
-#
-#
-############   Output MED file with fields created by Caculator  #################
-#                   via Client classes
-#
-
-myStudy = myStudyManager.NewStudy('medClient_withoutIHM_add_lin')
-studynameId = myStudy._get_StudyId()
-studyname = myStudy._get_Name()
-print "We are working in the study ",studyname," with the ID ",studynameId
-
-print "Reading the .med file ",Outmed21File," and pushing corba objects in the SALOME study"
-
-medComp.readStructFileWithFieldType(Outmed21File,studyname)
-
-Outf_add  = medComp.readFieldInFile(Outmed21File,studyname,'fieldcelldoublevectoradd',-1,-1)
-Outf_lin  = medComp.readFieldInFile(Outmed21File,studyname,'fieldcelldoublevectorlin',-1,-1)
-
-myStudy.GetObjectNames('/Med')
-
-myStudy.GetObjectNames('/Med/MED_OBJECT_FROM_FILE_OutCalculatorpointe21_V3.2.0b1.med')
-
-myStudy.GetObjectNames('/Med/MEDMESH')
-myStudy.GetObjectNames('/Med/MEDMESH/maa1')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/FAMILLE_ELEMENT_1')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/FAMILLE_ELEMENT_2')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/FAMILLE_ELEMENT_3')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/groupe1')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/groupe2')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/groupe3')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/groupe4')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/groupe5')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/SupportOnAll_MED_MAILLE')
-myStudy.GetObjectNames('/Med/MEDMESH/MEDSUPPORTS_OF_maa1/SupportOnAll_MED_NOEUD')
-
-myStudy.GetObjectNames('/Med/MEDFIELD')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevectoradd')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevectoradd/(-1,-1)_ON_SupportOnAll_MED_MAILLE_OF_maa1')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevectorlin')
-myStudy.GetObjectNames('/Med/MEDFIELD/fieldcelldoublevectorlin/(-1,-1)_ON_SupportOnAll_MED_MAILLE_OF_maa1')
-
-#myStudyManager.Save(myStudy,1)
-#myStudy.DumpStudy("/tmp","medClient_withoutIHM_add_lin",1)
-
-myStudyManager.SaveAs(studyname+'.hdf',myStudy,0)
+MEDLoader.WriteUMesh(Outmed22File,meshLocal,True)
+MEDLoader.WriteFieldUsingAlreadyWrittenMesh(Outmed22File,f_addLocal)
+MEDLoader.WriteFieldUsingAlreadyWrittenMesh(Outmed22File,f_linLocal)
 
 print ""
 print "END of the Pyhton script ..... Ctrl D to exit"

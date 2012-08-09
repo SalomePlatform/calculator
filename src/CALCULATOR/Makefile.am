@@ -1,24 +1,22 @@
-#  Copyright (C) 2007-2008  CEA/DEN, EDF R&D, OPEN CASCADE
+# Copyright (C) 2007-2012  CEA/DEN, EDF R&D, OPEN CASCADE
 #
-#  Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
-#  CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License.
 #
-#  This library is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU Lesser General Public
-#  License as published by the Free Software Foundation; either
-#  version 2.1 of the License.
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
 #
-#  This library is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#  Lesser General Public License for more details.
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-#  You should have received a copy of the GNU Lesser General Public
-#  License along with this library; if not, write to the Free Software
-#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+# See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
-#  See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
-#
+
 #  SuperVisionTest AddComponent : example of component that adds two numbers
 #  File   : Makefile.in
 #  Author : , CEA
@@ -37,17 +35,12 @@ dist_libCALCULATOREngine_la_SOURCES = \
 libCALCULATOREngine_la_CPPFLAGS = \
 	$(CORBA_CXXFLAGS) \
 	$(CORBA_INCLUDES) \
-	$(CAS_CPPFLAGS) \
-	$(MED2_INCLUDES) \
-	$(HDF5_INCLUDES) \
-	$(KERNEL_CXXFLAGS) \
 	$(MED_CXXFLAGS) \
-	-I$(top_builddir)/idl \
-	-I$(top_builddir)/salome_adm/unix
+	$(KERNEL_CXXFLAGS) \
+	-I$(top_builddir)/idl
 
 libCALCULATOREngine_la_LDFLAGS = \
 	$(CORBA_LIBS) \
-	$(CAS_OCAF) \
 	$(HDF5_LIBS) \
 	$(KERNEL_LDFLAGS) \
 	-lSalomeContainer \
@@ -55,7 +48,8 @@ libCALCULATOREngine_la_LDFLAGS = \
 	-lSalomeIDLKernel \
 	$(MED_LDFLAGS) \
 	-lSalomeIDLMED \
-	-lMEDClientcmodule \
+	-lmedcouplingclient \
+	-lmedcouplingcorba \
 	$(top_builddir)/idl/libSalomeIDLCALCULATOR.la
 
 # Scripts to be installed

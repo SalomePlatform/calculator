@@ -1,24 +1,25 @@
-//  Copyright (C) 2007-2008  CEA/DEN, EDF R&D, OPEN CASCADE
+// Copyright (C) 2007-2012  CEA/DEN, EDF R&D, OPEN CASCADE
 //
-//  Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
-//  CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
+// Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
+// CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
 //
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License.
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License.
 //
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
 //
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 //
-//  See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
+// See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 //
+
 #ifndef __CALCULATOR_GEN__
 #define __CALCULATOR_GEN__
 /*!
@@ -27,7 +28,7 @@
 
 #include "SALOME_Component.idl"
 #include "SALOME_Exception.idl"
-#include "MED.idl"
+#include "MEDCouplingCorbaServant.idl"
 
 
 /*!  \ingroup EXAMPLES
@@ -49,62 +50,62 @@ module CALCULATOR_ORB
 	
   /*! \brief Interface of the %CALCULATOR component
    */
-  interface CALCULATOR_Gen : Engines::Component
+  interface CALCULATOR_Gen : Engines::EngineComponent
   {
      /*!
          Calculate the maximum relative difference of field with the previous one.
          At first call, store passed field and return 1.
       */
-     double convergenceCriteria(in SALOME_MED::FIELDDOUBLE field);
+     double convergenceCriteria(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
      /*!
          Apply to each (scalar) field component the linear function x -> ax+b.
          Release field1 after use.
       */
-     SALOME_MED::FIELDDOUBLE applyLin(in SALOME_MED::FIELDDOUBLE field1, in double a1, in double a2);
+     SALOME_MED::MEDCouplingFieldDoubleCorbaInterface applyLin(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field1, in double a1, in double a2);
 
      /*!
          Addition of fields. 
          Release field1 and field2 after use.
      */
-     SALOME_MED::FIELDDOUBLE add(in SALOME_MED::FIELDDOUBLE field1, in SALOME_MED::FIELDDOUBLE field2);
+     SALOME_MED::MEDCouplingFieldDoubleCorbaInterface add(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field1, in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field2);
 
      /*!
      	 return euclidian norm of field
          Release field after use.
       */
-     double norm2(in SALOME_MED::FIELDDOUBLE field);
+     double norm2(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
 
      /*!
      	 return L2 norm of field
          Release field after use.
       */
-     double normL2(in SALOME_MED::FIELDDOUBLE field);
+     double normL2(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
 
      /*!
      	 return L1 norm of field
          Release field after use.
       */
-     double normL1(in SALOME_MED::FIELDDOUBLE field);
+     double normL1(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
 
      /*!
      	 return max norm of field
          Release field after use.
       */
-     double normMax(in SALOME_MED::FIELDDOUBLE field);
+     double normMax(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
 
      /*!
          This utility method print in standard output the coordinates & field values
          Release field after use.
       */
-     void printField(in SALOME_MED::FIELDDOUBLE field);
+     void printField(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
 
      /*!
          This method clones field in four examples.
          Release field after use.
       */
-     void cloneField(in SALOME_MED::FIELDDOUBLE field, out SALOME_MED::FIELDDOUBLE clone1, 
-                     out SALOME_MED::FIELDDOUBLE clone2, out SALOME_MED::FIELDDOUBLE clone3,
-		     out SALOME_MED::FIELDDOUBLE clone4 );
+     void cloneField(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field, out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone1, 
+                     out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone2, out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone3,
+		     out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone4 );
 
      /*!
          This method returns True if the operation succeded.
@@ -120,4 +121,3 @@ module CALCULATOR_ORB
 };
 
 #endif
-

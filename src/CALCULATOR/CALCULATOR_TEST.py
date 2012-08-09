@@ -1,24 +1,25 @@
-#  Copyright (C) 2007-2008  CEA/DEN, EDF R&D, OPEN CASCADE
+# Copyright (C) 2007-2012  CEA/DEN, EDF R&D, OPEN CASCADE
 #
-#  Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
-#  CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
+# Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
+# CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
 #
-#  This library is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU Lesser General Public
-#  License as published by the Free Software Foundation; either
-#  version 2.1 of the License.
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License.
 #
-#  This library is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#  Lesser General Public License for more details.
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
 #
-#  You should have received a copy of the GNU Lesser General Public
-#  License along with this library; if not, write to the Free Software
-#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-#  See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
+# See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
+
 #CALCULATOR_TEST_WITHOUTIHM.py
 #
 from omniORB import CORBA
@@ -27,6 +28,10 @@ import salome
 import SALOME
 import SALOME_MED
 import SALOMEDS
+
+from MEDCouplingCorba import *
+from MEDCoupling import *
+from MEDLoader import *
 
 import os
 host = os.getenv( 'HOST' )
@@ -40,6 +45,7 @@ filePath=os.environ["MED_ROOT_DIR"]
 filePath=filePath+"/share/salome/resources/med/"
 medFile=filePath+"pointe.med"
 fieldname = "fieldcelldoublevector"
+meshname = "maa1"
 
 # Launch the Med Component and use it to load into memory the test field 
 print "Launch the Med Component: "
@@ -47,16 +53,17 @@ med_comp = lcc.FindOrLoadComponent("FactoryServer", "MED")
 
 # Get a Corba field proxy on the distant field (located in the med_comp server).
 try:
-    obj = naming_service.Resolve('myStudyManager')
-    myStudyManager = obj._narrow(SALOMEDS.StudyManager)
-    print "studyManager found"
-    myStudy = myStudyManager.NewStudy('CALCULATOR_TEST')
-    studynameId = myStudy._get_StudyId()
-    studyname = myStudy._get_Name()
-    print "We are working in the study ",studyname," with the ID ",studynameId
+    #TODO
+    #Manager = obj._narrow(SALOMEDS.StudyManager)
+    #print "studyManager found"
+    #myStudy = myStudyManager.NewStudy('CALCULATOR_TEST')
+    #studynameId = myStudy._get_StudyId()
+    #studyname = myStudy._get_Name()
+    #print "We are working in the study ",studyname," with the ID ",studynameId
     print "Read field ",fieldname
-    fieldcell  = med_comp.readFieldInFile(medFile,studyname,fieldname,-1,-1)
-    fieldcelldouble = fieldcell._narrow(SALOME_MED.FIELDDOUBLE)
+    
+    f = MEDLoader.ReadFieldCell(medFile,meshname,0,fieldname,-1,-1)
+    fieldcelldouble=MEDCouplingFieldDoubleServant._this(f)
 except SALOME.SALOME_Exception, ex:
     print ex.details
     print ex.details.type
@@ -66,10 +73,10 @@ except SALOME.SALOME_Exception, ex:
     raise
 
 print "Description of Field : "
-print fieldcelldouble
-print fieldcelldouble.getName()
-print fieldcelldouble.getDescription()
-print fieldcelldouble.getNumberOfComponents()
+print f
+print f.getName()
+print f.getDescription()
+print f.getNumberOfComponents()
 
 #
 #
