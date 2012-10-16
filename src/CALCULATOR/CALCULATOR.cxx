@@ -21,6 +21,7 @@
 //
 
 #include "CALCULATOR.hxx"
+#include "CALCULATOR_version.h"
 
 #include "MEDCouplingFieldDoubleClient.hxx"
 #include "MEDCouplingMeshClient.hxx"
@@ -386,6 +387,15 @@ CALCULATOR_ORB::ErrorCode CALCULATOR::getErrorCode()
   return _errorCode;
 }
 
+// Version information
+char* CALCULATOR::getVersion()
+{
+#if CALCULATOR_DEVELOPMENT
+  return CORBA::string_dup(CALCULATOR_VERSION_STR"dev");
+#else
+  return CORBA::string_dup(CALCULATOR_VERSION_STR);
+#endif
+}
 
 //=============================================================================
 /*!

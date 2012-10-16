@@ -37,6 +37,7 @@ libCALCULATOREngine_la_CPPFLAGS = \
 	$(CORBA_INCLUDES) \
 	$(MED_CXXFLAGS) \
 	$(KERNEL_CXXFLAGS) \
+	-I$(top_builddir) \
 	-I$(top_builddir)/idl
 
 libCALCULATOREngine_la_LDFLAGS = \

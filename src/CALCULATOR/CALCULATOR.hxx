@@ -40,6 +40,7 @@ public:
                const char *instanceName, 
                const char *interfaceName);
     virtual ~CALCULATOR();
+    virtual char* getVersion();
 
     CORBA::Double convergenceCriteria(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field);
     CORBA::Double normMax(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1);
