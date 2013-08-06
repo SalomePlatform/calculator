@@ -20,14 +20,6 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-####################################################################################################
-# CALCULATOR_TEST_STUDY_WITHOUTIHM.py
-# Test the calculator component: using Med Client classes with writing in a med file
-# results from the calculator component
-####################################################################################################
-#
-from libMEDClient import *
-
 import string
 
 import salome
