@@ -1,5 +1,4 @@
-#!/bin/sh
-# Copyright (C) 2007-2013  CEA/DEN, EDF R&D, OPEN CASCADE
+# Copyright (C) 2012-2013  CEA/DEN, EDF R&D, OPEN CASCADE
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,8 +17,28 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-rm -rf autom4te.cache aclocal.m4 configure make_config
-find . -name "*~" -print -exec rm {} \;
-find . -name "*.pyc" -print -exec rm {} \;
-find . -name Makefile.in | xargs rm -f
-( cd adm_local/unix/config_files && rm -f config.* depcomp install-sh l*.m4 ltmain.sh missing py-compile )
+INCLUDE(UseOmniORB)  # Provided by KERNEL
+
+INCLUDE_DIRECTORIES(
+  ${OMNIORB_INCLUDE_DIR}
+  ${KERNEL_INCLUDE_DIRS}
+  ${MED_INCLUDE_DIRS}
+  ${PROJECT_BINARY_DIR}/idl
+)
+
+SET(SalomeIDLCALCULATOR_IDLSOURCES
+  CALCULATOR_Gen.idl
+)
+
+SET(_idl_include_dirs
+  ${KERNEL_ROOT_DIR}/idl/salome
+  ${MED_ROOT_DIR}/idl/salome
+)
+
+SET(_idl_link_flags
+  ${KERNEL_SalomeIDLKernel}
+  ${MED_SalomeIDLMED}
+)
+
+OMNIORB_ADD_MODULE(SalomeIDLCALCULATOR "${SalomeIDLCALCULATOR_IDLSOURCES}" "${_idl_include_dirs}" "${_idl_link_flags}")
+INSTALL(TARGETS SalomeIDLCALCULATOR EXPORT ${PROJECT_NAME}TargetGroup DESTINATION ${SALOME_INSTALL_LIBS})

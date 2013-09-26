@@ -35,7 +35,7 @@
             <component-username>CALCULATOR</component-username>
             <component-type>MED EXAMPLE</component-type>
             <component-author>ngore</component-author>
-            <component-version>@VERSION@</component-version>
+            <component-version>@SALOMECALCULATOR_VERSION@</component-version>
             <component-comment>unknown</component-comment>
             <component-multistudy>1</component-multistudy>
             <component-icone>CALCULATOR.png</component-icone>

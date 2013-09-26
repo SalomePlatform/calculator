@@ -16,9 +16,16 @@
 #
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
+#
 
-include $(top_srcdir)/adm_local/unix/make_common_starter.am
+IF(NOT SalomeCALCULATOR_FIND_QUIETLY)
+  MESSAGE(STATUS "Looking for Salome CALCULATOR ...")
+ENDIF()
 
-dist_doc_DATA = Calculator_guide.sxw calculator.pdf
+SET(CMAKE_PREFIX_PATH "${CALCULATOR_ROOT_DIR}")
 
-EXTRA_DIST   += snapshot1.png snapshot2.png
+SALOME_FIND_PACKAGE(SalomeCALCULATOR SalomeCALCULATOR CONFIG)
+
+IF(NOT SalomeCALCULATOR_FIND_QUIETLY)
+  MESSAGE(STATUS "Found Salome CALCULATOR: ${CALCULATOR_ROOT_DIR}")
+ENDIF()

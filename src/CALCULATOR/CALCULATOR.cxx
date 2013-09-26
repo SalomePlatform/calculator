@@ -390,7 +390,7 @@ CALCULATOR_ORB::ErrorCode CALCULATOR::getErrorCode()
 // Version information
 char* CALCULATOR::getVersion()
 {
-#if CALCULATOR_DEVELOPMENT
+#if defined(CALCULATOR_DEVELOPMENT)
   return CORBA::string_dup(CALCULATOR_VERSION_STR"dev");
 #else
   return CORBA::string_dup(CALCULATOR_VERSION_STR);

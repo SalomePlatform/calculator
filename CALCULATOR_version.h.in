@@ -27,12 +27,22 @@
 #if !defined(__CALCULATOR_VERSION_H__)
 #define __CALCULATOR_VERSION_H__
 
-/*
-  CALCULATOR_VERSION is (major << 16) + (minor << 8) + patch.
+/*!
+  Specify version of SALOME CALCULATOR module, as follows
+
+  CALCULATOR_VERSION_MAJOR       : (integer) number identifying major version
+  CALCULATOR_VERSION_MINOR       : (integer) number identifying minor version
+  CALCULATOR_VERSION_MAINTENANCE : (integer) number identifying maintenance version
+  CALCULATOR_VERSION_STR         : (string)  complete version number "major.minor.maintenance"
+  CALCULATOR_VERSION             : (hex)     complete version number (major << 16) + (minor << 8) + maintenance
+  CALCULATOR_DEVELOPMENT         : (integer) indicates development version when set to 1
 */
 
-#define CALCULATOR_VERSION_STR "@VERSION@"
-#define CALCULATOR_VERSION     @XVERSION@
-#define CALCULATOR_DEVELOPMENT @VERSION_DEV@
+#define CALCULATOR_VERSION_MAJOR       @SALOMECALCULATOR_MAJOR_VERSION@
+#define CALCULATOR_VERSION_MINOR       @SALOMECALCULATOR_MINOR_VERSION@
+#define CALCULATOR_VERSION_MAINTENANCE @SALOMECALCULATOR_PATCH_VERSION@
+#define CALCULATOR_VERSION_STR         "@SALOMECALCULATOR_VERSION@"
+#define CALCULATOR_VERSION             @SALOMECALCULATOR_XVERSION@
+#define CALCULATOR_DEVELOPMENT         @SALOMECALCULATOR_VERSION_DEV@
 
 #endif // __CALCULATOR_VERSION_H__
