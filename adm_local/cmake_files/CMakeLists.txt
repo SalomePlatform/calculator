@@ -23,7 +23,6 @@
 
 # These files are data, module or lib files
 SET(_adm_data
-  FindCALCULATOR.cmake
   FindSalomeCALCULATOR.cmake
 )
 INSTALL(FILES ${_adm_data} DESTINATION ${SALOME_INSTALL_CMAKE_LOCAL})
