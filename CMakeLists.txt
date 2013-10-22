@@ -49,6 +49,13 @@ IF(SALOME_LIGHT_ONLY)
   MESSAGE(FATAL_ERROR "CALCULATOR module can't be built in Light mode (without CORBA)")
 ENDIF()
 
+##
+## From KERNEL:
+##
+FIND_PACKAGE(SalomePython REQUIRED)
+FIND_PACKAGE(SalomeOmniORB REQUIRED)
+FIND_PACKAGE(SalomeOmniORBPy REQUIRED)
+
 # Platform setup
 # ==============
 INCLUDE(SalomeSetupPlatform)   # From KERNEL
@@ -60,9 +67,9 @@ LIST(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/adm_local/cmake_files")
 # User options
 # (some options have already been defined in KERNEL) 
 # ============
-#OPTION(SALOME_BUILD_TESTS "Build SALOME tests" ${SALOME_BUILD_TESTS}) For use in the future
-OPTION(SALOME_BUILD_DOC "Generate SALOME CALCULATOR documentation" ${SALOME_BUILD_DOC})
-  
+# OPTION(SALOME_BUILD_TESTS "Build SALOME tests" ON) #for use in the future
+OPTION(SALOME_BUILD_DOC "Generate SALOME CALCULATOR documentation" ON)
+
 # Find MED
 # ===========
 
@@ -70,17 +77,11 @@ SET(MED_ROOT_DIR $ENV{MED_ROOT_DIR} CACHE PATH "Path to the Salome MED")
 IF(EXISTS ${MED_ROOT_DIR})
   LIST(APPEND CMAKE_MODULE_PATH "${MED_ROOT_DIR}/adm_local/cmake_files")
   FIND_PACKAGE(SalomeMED REQUIRED)
+  ADD_DEFINITIONS(${MED_DEFINITIONS})
+  INCLUDE_DIRECTORIES(${MED_INCLUDE_DIRS})
 ELSE(EXISTS ${MED_ROOT_DIR})
   MESSAGE(FATAL_ERROR "We absolutely need a Salome MED, please define MED_ROOT_DIR")
 ENDIF(EXISTS ${MED_ROOT_DIR})
-
-##
-## CALCULATOR specifics
-##
-
-FIND_PACKAGE(SalomePython REQUIRED)
-FIND_PACKAGE(SalomeOmniORB REQUIRED)
-FIND_PACKAGE(SalomeOmniORBPy REQUIRED)
 
 # Directories
 # (default values taken from KERNEL)
@@ -128,7 +129,9 @@ ADD_SUBDIRECTORY(adm_local)
 ADD_SUBDIRECTORY(resources)
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(bin)
-ADD_SUBDIRECTORY(doc)
+IF(SALOME_BUILD_DOC)
+  ADD_SUBDIRECTORY(doc)
+ENDIF(SALOME_BUILD_DOC)
 
 # Header configuration
 # ====================
