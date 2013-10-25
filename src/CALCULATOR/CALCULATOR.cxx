@@ -49,7 +49,7 @@ CALCULATOR::CALCULATOR (CORBA::ORB_ptr orb,
                         const char *instanceName, 
                         const char *interfaceName)
   : Engines_Component_i(orb, poa, contId, instanceName, interfaceName, true),
-    _errorCode(CALCULATOR_ORB::NO_ERROR)
+    _errorCode(CALCULATOR_ORB::RES_OK)
 {
   _thisObj = this;
   _id = _poa->activate_object(_thisObj);
@@ -62,7 +62,7 @@ CALCULATOR::~CALCULATOR()
 CORBA::Double CALCULATOR::norm2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1)
 {
   beginService( "CALCULATOR::norm2");
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  _errorCode = CALCULATOR_ORB::RES_OK;
   //const char* LOC = "CALCULATOR::Norm2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1)";
         
   if(CORBA::is_nil(field1))
@@ -99,7 +99,7 @@ CORBA::Double CALCULATOR::norm2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface
 CORBA::Double CALCULATOR::normL2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1)
 {
   beginService( "CALCULATOR::normL2");
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  _errorCode = CALCULATOR_ORB::RES_OK;
   //const char* LOC = "CALCULATOR::NormL2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1)";
   //BEGIN_OF(LOC);
 
@@ -140,7 +140,7 @@ CORBA::Double CALCULATOR::normL2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterfac
 CORBA::Double CALCULATOR::normMax(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1)
 {
   beginService( "CALCULATOR::normMax");
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  _errorCode = CALCULATOR_ORB::RES_OK;
          
   if(CORBA::is_nil(field1))
     {
@@ -167,7 +167,7 @@ CORBA::Double CALCULATOR::normMax(SALOME_MED::MEDCouplingFieldDoubleCorbaInterfa
 CORBA::Double CALCULATOR::normL1(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1)
 {
   beginService( "CALCULATOR::normL1");
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  _errorCode = CALCULATOR_ORB::RES_OK;
 
   if(CORBA::is_nil(field1)) {
     _errorCode = CALCULATOR_ORB::INVALID_FIELD;
@@ -196,7 +196,7 @@ CORBA::Double CALCULATOR::normL1(SALOME_MED::MEDCouplingFieldDoubleCorbaInterfac
 SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1,CORBA::Double a,CORBA::Double b)
 {
   beginService( "CALCULATOR::applyLin");
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  _errorCode = CALCULATOR_ORB::RES_OK;
     
   if(CORBA::is_nil(field1))
     {
@@ -234,7 +234,7 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin(SALOME
 SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::add(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1, SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field2) 
 {
   beginService( "CALCULATOR::add");
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  _errorCode = CALCULATOR_ORB::RES_OK;
   //const char* LOC = "CALCULATOR::add(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1, SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field2)";
 
   if(CORBA::is_nil(field1) || CORBA::is_nil(field2))
@@ -272,7 +272,7 @@ void CALCULATOR::cloneField(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr
 			    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone3, SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone4)
 {
   beginService( "CALCULATOR::cloneField");
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  _errorCode = CALCULATOR_ORB::RES_OK;
 
   if(CORBA::is_nil(field))
     {
@@ -309,7 +309,7 @@ void CALCULATOR::cloneField(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr
 void CALCULATOR::printField(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field)
 {
   beginService( "CALCULATOR::printField");
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  _errorCode = CALCULATOR_ORB::RES_OK;
 
   if(CORBA::is_nil(field))
     {
@@ -335,7 +335,7 @@ void CALCULATOR::printField(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr
 CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field)
 {
   beginService( "CALCULATOR::convergenceCriteria");
-  _errorCode = CALCULATOR_ORB::NO_ERROR;
+  _errorCode = CALCULATOR_ORB::RES_OK;
 
   if(CORBA::is_nil(field))
     {
@@ -379,7 +379,7 @@ CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::MEDCouplingFieldDouble
 
 CORBA::Boolean CALCULATOR::isDone()
 {
-  return (_errorCode == CALCULATOR_ORB::NO_ERROR);                
+  return (_errorCode == CALCULATOR_ORB::RES_OK);                
 }
 
 CALCULATOR_ORB::ErrorCode CALCULATOR::getErrorCode()

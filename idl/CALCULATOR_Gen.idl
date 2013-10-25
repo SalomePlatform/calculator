@@ -42,7 +42,7 @@ module CALCULATOR_ORB
 	Enumeration ErrorCode contains a code of the error
    */
    typedef long ErrorCode;
-   const ErrorCode NO_ERROR = 0;
+   const ErrorCode RES_OK = 0;
    const ErrorCode NOT_COMPATIBLE = 1;
    const ErrorCode EXCEPTION_RAISED = 2;
    const ErrorCode INVALID_FIELD = 3;
