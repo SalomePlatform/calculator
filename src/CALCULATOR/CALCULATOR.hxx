@@ -23,12 +23,22 @@
 #ifndef _CALCULATOR_HXX_
 #define _CALCULATOR_HXX_
 
+#ifdef WIN32
+#  if defined CALCULATOREngine_EXPORTS
+#    define CALCULATORENGINE_EXPORT __declspec( dllexport )
+#  else
+#    define CALCULATORENGINE_EXPORT __declspec( dllimport )
+#  endif
+#else
+#  define CALCULATORENGINE_EXPORT
+#endif
+
 #include <SALOMEconfig.h>
 #include CORBA_SERVER_HEADER(CALCULATOR_Gen)
 #include CORBA_CLIENT_HEADER(MEDCouplingCorbaServant)
 #include "SALOME_Component_i.hxx"
 
-class CALCULATOR:
+class CALCULATORENGINE_EXPORT CALCULATOR:
   public POA_CALCULATOR_ORB::CALCULATOR_Gen,
   public Engines_Component_i 
 {

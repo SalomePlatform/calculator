@@ -49,13 +49,6 @@ IF(SALOME_LIGHT_ONLY)
   MESSAGE(FATAL_ERROR "CALCULATOR module can't be built in Light mode (without CORBA)")
 ENDIF()
 
-##
-## From KERNEL:
-##
-FIND_PACKAGE(SalomePython REQUIRED)
-FIND_PACKAGE(SalomeOmniORB REQUIRED)
-FIND_PACKAGE(SalomeOmniORBPy REQUIRED)
-
 # Platform setup
 # ==============
 INCLUDE(SalomeSetupPlatform)   # From KERNEL
@@ -63,6 +56,13 @@ INCLUDE(SalomeSetupPlatform)   # From KERNEL
 SET(BUILD_SHARED_LIBS TRUE)
 # Local macros:
 LIST(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/adm_local/cmake_files")
+
+##
+## From KERNEL:
+##
+FIND_PACKAGE(SalomePython REQUIRED)
+FIND_PACKAGE(SalomeOmniORB REQUIRED)
+FIND_PACKAGE(SalomeOmniORBPy REQUIRED)
 
 # User options
 # (some options have already been defined in KERNEL) 

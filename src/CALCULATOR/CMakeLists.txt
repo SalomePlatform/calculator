@@ -30,7 +30,12 @@ INCLUDE_DIRECTORIES(
 # additional preprocessor / compiler flags
 ADD_DEFINITIONS(
   ${QT_DEFINITIONS}
+  ${OMNIORB_DEFINITIONS}
 )
+
+IF(WIN32)
+ ADD_DEFINITIONS(-DNOMINMAX)
+ENDIF(WIN32)
 
 # libraries to link to
 SET(_link_LIBRARIES
