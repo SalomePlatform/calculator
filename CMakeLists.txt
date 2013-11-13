@@ -64,11 +64,14 @@ FIND_PACKAGE(SalomePython REQUIRED)
 FIND_PACKAGE(SalomeOmniORB REQUIRED)
 FIND_PACKAGE(SalomeOmniORBPy REQUIRED)
 
-# User options
-# (some options have already been defined in KERNEL) 
+# User options 
 # ============
-# OPTION(SALOME_BUILD_TESTS "Build SALOME tests" ON) #for use in the future
+OPTION(SALOME_BUILD_TESTS "Build SALOME tests" ON)
 OPTION(SALOME_BUILD_DOC "Generate SALOME CALCULATOR documentation" ON)
+
+IF(SALOME_BUILD_TESTS)
+  ENABLE_TESTING()
+ENDIF()
 
 # Find MED
 # ===========
