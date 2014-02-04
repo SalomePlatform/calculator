@@ -407,6 +407,7 @@ char* CALCULATOR::getVersion()
 
 extern "C"
 {
+  CALCULATORENGINE_EXPORT
   PortableServer::ObjectId * CALCULATOREngine_factory (CORBA::ORB_ptr orb,
                                                        PortableServer::POA_ptr poa,
                                                        PortableServer::ObjectId * contId,
