@@ -62,4 +62,4 @@ searchFreePort() {
 searchFreePort
 
 
-${KERNEL_ROOT_DIR}/bin/salome/envSalome.py python -i $CALCULATOR_ROOT_DIR/bin/salome/myrunSalome.py --modules=CALCULATOR --killall
+${KERNEL_ROOT_DIR}/bin/salome/envSalome.py python -i $CALCULATOR_ROOT_DIR/bin/salome/runCALCULATOR.py --modules=CALCULATOR --killall
