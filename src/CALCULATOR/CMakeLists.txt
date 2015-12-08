@@ -29,7 +29,6 @@ INCLUDE_DIRECTORIES(
 
 # additional preprocessor / compiler flags
 ADD_DEFINITIONS(
-  ${QT_DEFINITIONS}
   ${OMNIORB_DEFINITIONS}
 )
 
