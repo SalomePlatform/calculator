@@ -22,7 +22,7 @@
 INCLUDE_DIRECTORIES(
   ${OMNIORB_INCLUDE_DIR}
   ${KERNEL_INCLUDE_DIRS}
-  ${MED_INCLUDE_DIRS}
+  ${MEDCOUPLING_INCLUDE_DIRS}
   ${PROJECT_BINARY_DIR}
   ${PROJECT_BINARY_DIR}/idl
 )
@@ -41,8 +41,8 @@ SET(_link_LIBRARIES
   ${KERNEL_SalomeContainer}
   ${KERNEL_OpUtil}
   ${KERNEL_SalomeIDLKERNEL}
-  ${MED_medcouplingclient}
-  ${MED_medcouplingcorba}
+  ${MEDCoupling_medcouplingclient}
+  ${MEDCoupling_medcouplingcorba}
   ${MED_SalomeIDLMED}
   SalomeIDLCALCULATOR
 )
