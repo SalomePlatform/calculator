@@ -41,8 +41,8 @@ SET(_link_LIBRARIES
   ${KERNEL_SalomeContainer}
   ${KERNEL_OpUtil}
   ${KERNEL_SalomeIDLKERNEL}
-  ${MEDCoupling_medcouplingclient}
-  ${MEDCoupling_medcouplingcorba}
+  ${MED_medcouplingclient}
+  ${MED_medcouplingcorba}
   ${MED_SalomeIDLMED}
   SalomeIDLCALCULATOR
 )
