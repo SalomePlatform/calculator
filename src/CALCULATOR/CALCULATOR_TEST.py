@@ -41,8 +41,10 @@ orb, lcc, naming_service, contmgr = salome.salome_kernel.salome_kernel_init()
 #
 # This test program is based on the field named fieldcelldoublevector in 
 # med file $MED_ROOT_DIR/share/salome/resources/pointe.med
-filePath=os.environ["MED_ROOT_DIR"]
-filePath=filePath+"/share/salome/resources/med/"
+#filePath=os.environ["MED_ROOT_DIR"]
+filePath=os.environ["DATA_DIR"]
+#filePath=filePath+"/share/salome/resources/med/"
+filePath=filePath+"/MedFiles/"
 medFile=filePath+"pointe.med"
 fieldname = "fieldcelldoublevector"
 meshname = "maa1"
