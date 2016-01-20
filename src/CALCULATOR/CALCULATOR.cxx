@@ -74,8 +74,8 @@ CORBA::Double CALCULATOR::norm2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface
   CORBA::Double norme = 0.0;
   // Create a local field from corba field, apply method normMax on it.
   // When exiting the function, f1 is deleted, and with it the remote corba field.
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field1);
-  /*ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::DataArrayDouble> d=ParaMEDMEM::DataArrayDouble::Multiply(f1->getArray(),f1->getArray());
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> f1=MEDCoupling::MEDCouplingFieldDoubleClient::New(field1);
+  /*MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::DataArrayDouble> d=MEDCoupling::DataArrayDouble::Multiply(f1->getArray(),f1->getArray());
   d->rearrange(1);
   try {
     norme = d->accumulate(0);
@@ -110,9 +110,9 @@ CORBA::Double CALCULATOR::normL2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterfac
     }
 
   //Check that the Field is not on the Nodes (a limitation of normL2)
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field1);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> f1=MEDCoupling::MEDCouplingFieldDoubleClient::New(field1);
   
-  if(f1->getTypeOfField()==ParaMEDMEM::ON_NODES)
+  if(f1->getTypeOfField()==MEDCoupling::ON_NODES)
     {
       _errorCode = CALCULATOR_ORB::NOT_COMPATIBLE;
       return 0.0;
@@ -149,7 +149,7 @@ CORBA::Double CALCULATOR::normMax(SALOME_MED::MEDCouplingFieldDoubleCorbaInterfa
     }
 
   CORBA::Double norme = 0.0;
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field1);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> f1=MEDCoupling::MEDCouplingFieldDoubleClient::New(field1);
   try
     {
       norme = f1->normMax();
@@ -175,8 +175,8 @@ CORBA::Double CALCULATOR::normL1(SALOME_MED::MEDCouplingFieldDoubleCorbaInterfac
   }
 
   //Check that the Field is not on the Nodes (a limitation of normL1)
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field1);
-  if (f1->getTypeOfField()==ParaMEDMEM::ON_NODES) {
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> f1=MEDCoupling::MEDCouplingFieldDoubleClient::New(field1);
+  if (f1->getTypeOfField()==MEDCoupling::ON_NODES) {
     _errorCode = CALCULATOR_ORB::NOT_COMPATIBLE;
     return 0.0;
   }       
@@ -205,10 +205,10 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin(SALOME
     }
 
   // create a local field on the heap, because it has to remain after exiting the function
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field1);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> f1=MEDCoupling::MEDCouplingFieldDoubleClient::New(field1);
   int nbOfCompo=f1->getArray()->getNumberOfComponents();
   f1->getArray()->rearrange(1);
-  ParaMEDMEM::MEDCouplingFieldDoubleServant *NewField=NULL;
+  MEDCoupling::MEDCouplingFieldDoubleServant *NewField=NULL;
   SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr myFieldIOR = NULL;
 
   try
@@ -218,7 +218,7 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin(SALOME
       // create servant from f1, give it the property of c++ field (parameter true).
       // This imply that when the client will release it's field, it will delete NewField,
       // and f1.
-      NewField = new ParaMEDMEM::MEDCouplingFieldDoubleServant(f1);
+      NewField = new MEDCoupling::MEDCouplingFieldDoubleServant(f1);
       // activate object
       myFieldIOR = NewField->_this() ;
     }
@@ -244,11 +244,11 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::add(SALOME_MED:
     }
 
   // Create local fields from corba field
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field1);
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f2=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field2);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> f1=MEDCoupling::MEDCouplingFieldDoubleClient::New(field1);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> f2=MEDCoupling::MEDCouplingFieldDoubleClient::New(field2);
     
   // catch exception for non compatible fields
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble>  fres;
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble>  fres;
   try
     {
       f2->changeUnderlyingMesh(f1->getMesh(),0,1e-12);
@@ -261,7 +261,7 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::add(SALOME_MED:
     }
 
   // create CORBA field from c++ toField. give property to servant (true)
-  ParaMEDMEM::MEDCouplingFieldDoubleServant *myFieldDoubleI=new ParaMEDMEM::MEDCouplingFieldDoubleServant(fres);
+  MEDCoupling::MEDCouplingFieldDoubleServant *myFieldDoubleI=new MEDCoupling::MEDCouplingFieldDoubleServant(fres);
   SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr myFieldIOR = myFieldDoubleI->_this();
   endService( "CALCULATOR::add");
   return myFieldIOR;
@@ -281,23 +281,23 @@ void CALCULATOR::cloneField(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr
     }
   
   // load local field, using MED ressource file pointe.med
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> f=MEDCoupling::MEDCouplingFieldDoubleClient::New(field);
 
   // create three c++ field on the heap by copying myField_
   // All this fields share with f the same SUPPORT and MESH client.
   // Both SUPPORT and MESH client are connected to a reference count, and will 
   // be deleted after release of all the fields.
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> fc1=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field);
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> fc2=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field);
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> fc3=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field);
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> fc4=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> fc1=MEDCoupling::MEDCouplingFieldDoubleClient::New(field);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> fc2=MEDCoupling::MEDCouplingFieldDoubleClient::New(field);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> fc3=MEDCoupling::MEDCouplingFieldDoubleClient::New(field);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> fc4=MEDCoupling::MEDCouplingFieldDoubleClient::New(field);
     
   // Initialize out references : 
   // Create three CORBA clones with cloned c++ fields - give property of c++ fields to servant (true)
-  ParaMEDMEM::MEDCouplingFieldDoubleServant * myClone1 = new ParaMEDMEM::MEDCouplingFieldDoubleServant(fc1);
-  ParaMEDMEM::MEDCouplingFieldDoubleServant * myClone2 = new ParaMEDMEM::MEDCouplingFieldDoubleServant(fc2);
-  ParaMEDMEM::MEDCouplingFieldDoubleServant * myClone3 = new ParaMEDMEM::MEDCouplingFieldDoubleServant(fc3);
-  ParaMEDMEM::MEDCouplingFieldDoubleServant * myClone4 = new ParaMEDMEM::MEDCouplingFieldDoubleServant(fc4);
+  MEDCoupling::MEDCouplingFieldDoubleServant * myClone1 = new MEDCoupling::MEDCouplingFieldDoubleServant(fc1);
+  MEDCoupling::MEDCouplingFieldDoubleServant * myClone2 = new MEDCoupling::MEDCouplingFieldDoubleServant(fc2);
+  MEDCoupling::MEDCouplingFieldDoubleServant * myClone3 = new MEDCoupling::MEDCouplingFieldDoubleServant(fc3);
+  MEDCoupling::MEDCouplingFieldDoubleServant * myClone4 = new MEDCoupling::MEDCouplingFieldDoubleServant(fc4);
   clone1 = myClone1->_this();
   clone2 = myClone2->_this();
   clone3 = myClone3->_this();
@@ -320,7 +320,7 @@ void CALCULATOR::printField(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr
   // Create a local field from corba field.
   // Use auto_ptr to perform automatic deletion after usage.
   // The deletion of the FIELDClient will delete the remote Corba object.
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> myField=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> myField=MEDCoupling::MEDCouplingFieldDoubleClient::New(field);
   cout << myField->advancedRepr() ; 
 
   cout << endl;
@@ -344,18 +344,18 @@ CORBA::Double CALCULATOR::convergenceCriteria(SALOME_MED::MEDCouplingFieldDouble
     }
 
   double criteria=1;
-  static ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> fold(0);
-  ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> fnew=ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field);
+  static MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> fold(0);
+  MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble> fnew=MEDCoupling::MEDCouplingFieldDoubleClient::New(field);
 
   try
     {
-      if ((ParaMEDMEM::MEDCouplingFieldDouble*)fold == NULL) // if old field is not set, set it and return 1
+      if ((MEDCoupling::MEDCouplingFieldDouble*)fold == NULL) // if old field is not set, set it and return 1
           fold=fnew;
       else
 	   {
     	  // if size of fields are not equal, return 1
 	      // catch exception for non compatible fields
-	      ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble>  fres;
+	      MEDCoupling::MEDCouplingAutoRefCountObjectPtr<MEDCoupling::MEDCouplingFieldDouble>  fres;
 	      try
 	        {
 	           fnew->changeUnderlyingMesh(fold->getMesh(),0,1e-12);
