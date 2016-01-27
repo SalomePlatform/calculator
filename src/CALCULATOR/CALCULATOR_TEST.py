@@ -20,101 +20,94 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-#CALCULATOR_TEST_WITHOUTIHM.py
-#
-from omniORB import CORBA
+import os
+
+import MED_ORB
+import CALCULATOR_ORB
 
 import salome
-import SALOME
-import SALOME_MED
-import SALOMEDS
 
-from MEDCouplingCorba import *
 from MEDCoupling import *
 from MEDLoader import *
+from MEDCouplingCorba import *
+from MEDCouplingClient import *
 
-import os
-host = os.getenv( 'HOST' )
-orb, lcc, naming_service, contmgr = salome.salome_kernel.salome_kernel_init()
-
-################   GET A MED FIELD FROM FILE pointe.med   ###################
-#
 # This test program is based on the field named fieldcelldoublevector in 
-# med file $MED_ROOT_DIR/share/salome/resources/pointe.med
-#filePath=os.environ["MED_ROOT_DIR"]
-filePath=os.environ["DATA_DIR"]
-#filePath=filePath+"/share/salome/resources/med/"
-filePath=filePath+"/MedFiles/"
-medFile=filePath+"pointe.med"
-fieldname = "fieldcelldoublevector"
-meshname = "maa1"
+# med file ${DATA_DIR}/MedFiles/pointe.med
+medFile = os.path.join(os.environ["DATA_DIR"], "MedFiles", "pointe.med")
+meshName = "maa1"
+fieldName = "fieldcelldoublevector"
 
-# Launch the Med Component and use it to load into memory the test field 
-print "Launch the Med Component: "
-med_comp = lcc.FindOrLoadComponent("FactoryServer", "MED")
+# init SALOME session
+salome.salome_init()
 
-# Get a Corba field proxy on the distant field (located in the med_comp server).
-try:
-    #TODO
-    #Manager = obj._narrow(SALOMEDS.StudyManager)
-    #print "studyManager found"
-    #myStudy = myStudyManager.NewStudy('CALCULATOR_TEST')
-    #studynameId = myStudy._get_StudyId()
-    #studyname = myStudy._get_Name()
-    #print "We are working in the study ",studyname," with the ID ",studynameId
-    print "Read field ",fieldname
-    
-    f = MEDLoader.ReadFieldCell(medFile,meshname,0,fieldname,-1,-1)
-    fieldcelldouble=MEDCouplingFieldDoubleServant._this(f)
-except SALOME.SALOME_Exception, ex:
-    print ex.details
-    print ex.details.type
-    print ex.details.text
-    print ex.details.sourceFile
-    print ex.details.lineNumber
-    raise
+# Get MED component
+print "[CALC] Get reference to MED component ..."
+med = salome.lcc.FindOrLoadComponent("FactoryServer", "MED")
+print "[CALC] ---"
 
-print "Description of Field : "
+# Get CALCULATOR component
+print "[CALC] Get reference to CALCULATOR component ..."
+calculator = salome.lcc.FindOrLoadComponent("FactoryServer", "CALCULATOR")
+print "[CALC] ---"
+
+# Get a CORBA field proxy on the distant field (located in the med server)
+print "[CALC] Read field %s ..." % fieldName
+f = ReadFieldCell(medFile, meshName, 0, fieldName, -1, -1)
+fieldcelldouble = MEDCouplingFieldDoubleServant._this(f)
+
+print "[CALC] -> fieldcelldouble is:"
 print f
 print f.getName()
 print f.getDescription()
 print f.getNumberOfComponents()
+print "[CALC] ---"
 
-#
-#
-##############  Load Calculator Component ###################
-# Calculator Component must be in the Container of MED
-#
-print "Load Calculator Component "
-# we need to import CALCULATOR_ORB to get a typed object (to perform narrowing)
-import CALCULATOR_ORB
-calculator = lcc.FindOrLoadComponent("FactoryServer", "CALCULATOR")
-
-#
-#
-##############  Test Calculator Component ###################
-#
-#
-print "Appel cloneField : fieldcelldoublevector -> f1,f2,f3,f4"
-(f1,f2,f3,f4)=calculator.cloneField(fieldcelldouble)  # fieldcelldouble is consumed
-#
-f1.Register()
+print "[CALC] Clone field: fieldcelldoublevector -> f1,f2,f3,f4 ..."
+(f1,f2,f3,f4) = calculator.cloneField(fieldcelldouble)
+print "[CALC] -> f1 is:"
 calculator.printField(f1)
-print "Add fields f2+f3"
-f_add=calculator.add(f2, f3)
-f_add.Register()
-calculator.printField( f_add ) # f_add is consumed
+print "[CALC] ---"
 
-#
-print "Apply linear function"
-f_lin=calculator.applyLin(f4,2.0,1.0)
-f_lin.Register()
-calculator.printField( f_lin ) # f_lin is consumed
-#
-print "Appel Norme Max "
-f_lin.Register()
-norme=calculator.normMax(f_lin) # f_lin is consumed
-print " -> norme = ",norme
-#
+print "[CALC] Add fields f2+f3 ..."
+f_add = calculator.add(f2, f3)
+print "[CALC] -> f_add is:"
+calculator.printField(f_add)
+print "[CALC] ---"
 
-print "End of Calculator Test!"
+print "[CALC] Apply linear function to f4 ..."
+f_lin = calculator.applyLin(f4, 2.0, 1.0)
+print "[CALC] -> f_add is:"
+calculator.printField(f_lin)
+print "[CALC] ---"
+
+print "[CALC] Apply Norm Max to f_lin ..."
+norm = calculator.normMax(f_lin)
+print "[CALC] -> norm is ", norm
+print "[CALC] ---"
+
+print "[CALC] Clone fields created by Calculator via client classes ..."
+f_addLocal = MEDCouplingFieldDoubleClient.New(f_add)
+f_addLocal.setName(f_addLocal.getName() + "add")
+f_linLocal = MEDCouplingFieldDoubleClient.New(f_lin)
+f_linLocal.setName(f_linLocal.getName() + "lin")
+print "[CALC] -> f_addLocal is ", f_addLocal
+print "[CALC] -> f_linLocal is ", f_linLocal
+print "[CALC] ---"
+
+print "[CALC] Get information from the local copy of the distant mesh"
+meshLocal = f_addLocal.getMesh()
+print "[CALC] -> meshLocal is", meshLocal
+print "[CALC] ---"
+
+print "[CALC] Write mesh and fields to MED file ..."
+import tempfile
+outfile = tempfile.NamedTemporaryFile(prefix="Calculator_pointe_", suffix=".med")
+outfile.close()
+WriteUMesh(outfile.name, meshLocal, True)
+WriteFieldUsingAlreadyWrittenMesh(outfile.name, f_addLocal)
+WriteFieldUsingAlreadyWrittenMesh(outfile.name, f_linLocal)
+os.remove(outfile.name)
+print "[CALC] ---"
+
+print "[CALC] End of Calculator Test!"
