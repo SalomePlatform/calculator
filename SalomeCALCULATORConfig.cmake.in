@@ -106,7 +106,7 @@ SET(SALOME_INSTALL_DOC "@SALOME_INSTALL_DOC@")
 SET(SALOME_INSTALL_AMCONFIG_LOCAL "@SALOME_INSTALL_AMCONFIG_LOCAL@")
 
 # Include MED targets if they were not already loaded:
-IF(NOT (TARGET medcoupling)) 
+IF(NOT (TARGET medcalculator)) 
   INCLUDE("${MED_ROOT_DIR_EXP}/${SALOME_INSTALL_CMAKE}/SalomeMEDTargets.cmake")
 ENDIF()
 
