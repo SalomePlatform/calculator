@@ -25,7 +25,6 @@
   <section name="CALCULATOR">
     <!-- Major module parameters -->
     <parameter name="name" value="Calculator"/>
-    <parameter name="icon" value="CALCULATOR.png"/>
     <parameter name="version" value="@SALOMECALCULATOR_VERSION@"/>
   </section>
   <section name="resources">

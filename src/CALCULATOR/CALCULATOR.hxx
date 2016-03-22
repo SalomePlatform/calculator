@@ -20,8 +20,8 @@
 // See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 //
 
-#ifndef _CALCULATOR_HXX_
-#define _CALCULATOR_HXX_
+#ifndef CALCULATOR_HXX
+#define CALCULATOR_HXX
 
 #ifdef WIN32
 #  if defined CALCULATOREngine_EXPORTS
@@ -36,33 +36,36 @@
 #include <SALOMEconfig.h>
 #include CORBA_SERVER_HEADER(CALCULATOR_Gen)
 #include CORBA_CLIENT_HEADER(MEDCouplingCorbaServant)
-#include "SALOME_Component_i.hxx"
+#include <SALOME_Component_i.hxx>
 
 class CALCULATORENGINE_EXPORT CALCULATOR:
   public POA_CALCULATOR_ORB::CALCULATOR_Gen,
   public Engines_Component_i 
 {
-
 public:
-    CALCULATOR(CORBA::ORB_ptr orb,
-               PortableServer::POA_ptr poa,
-               PortableServer::ObjectId * contId, 
-               const char *instanceName, 
-               const char *interfaceName);
+  CALCULATOR( CORBA::ORB_ptr,
+              PortableServer::POA_ptr,
+              PortableServer::ObjectId*, 
+              const char*, 
+              const char* );
     virtual ~CALCULATOR();
     virtual char* getVersion();
 
-    CORBA::Double convergenceCriteria(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field);
-    CORBA::Double normMax(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1);
-    CORBA::Double normL2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1);
-    CORBA::Double norm2(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1);
-    CORBA::Double normL1(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1);
-    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr applyLin(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1,CORBA::Double a,CORBA::Double b);
-    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr add(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1, SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field2);
-    void printField(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field);
-    void cloneField(SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field,
-                    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone1, SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone2,
-	            SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone3, SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone4);
+    CORBA::Double convergenceCriteria( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr );
+    CORBA::Double normMax( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr );
+    CORBA::Double normL2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr );
+    CORBA::Double norm2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr );
+    CORBA::Double normL1( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr );
+    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr applyLin( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr,
+                                                                   CORBA::Double, CORBA::Double );
+    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr add( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr,
+                                                              SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr );
+    void printField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr );
+    void cloneField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr,
+                     SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out,
+                     SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out,
+                     SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out,
+                     SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out );
     CORBA::Boolean isDone();
     CALCULATOR_ORB::ErrorCode getErrorCode();
 
@@ -70,12 +73,4 @@ protected:
     CALCULATOR_ORB::ErrorCode _errorCode;
 };
 
-//extern "C"
-//    PortableServer::ObjectId * CALCULATOREngine_factory(
-//	    CORBA::ORB_ptr orb,
-//	    PortableServer::POA_ptr poa,
-//	    PortableServer::ObjectId * contId,
-//	    const char *instanceName,
-//	    const char *interfaceName);
-
-#endif
+#endif // CALCULATOR_HXX
