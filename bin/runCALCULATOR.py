@@ -21,34 +21,39 @@
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
 
-def test(clt):
-   """
-        Test function that creates an instance of CALCULATOR component
-        usage : hello=test(clt)
-   """
-   # create an LifeCycleCORBA instance
-   import LifeCycleCORBA
-   lcc = LifeCycleCORBA.LifeCycleCORBA(clt.orb)
-   import CALCULATOR_ORB
-   hello = lcc.FindOrLoadComponent("FactoryServer", "CALCULATOR")
-   return hello
+# CORBA ORB reference
+__orb = None
 
-#
+# get ORB
+def __getORB():
+   global __orb
+   return __orb
+
+def calculator():
+   """
+   Test function that creates an instance of CALCULATOR component
+   usage : hello=test(clt)
+   """
+   import LifeCycleCORBA
+   lcc = LifeCycleCORBA.LifeCycleCORBA(__getORB())
+   import CALCULATOR_ORB
+   return lcc.FindOrLoadComponent("FactoryServer", "CALCULATOR")
 
 if __name__ == "__main__":
-   import user
    from runSalome import *
-   clt,args = main()
-   
-   #
-   #  Impression arborescence Naming Service
-   #
-   
-   if clt != None:
+   clt, args = main()
+   if clt:
+     from salome_utils import getShortHostName
+     clt.waitNS("/Containers/" + getShortHostName() + "/FactoryServer")
+     __orb = clt.orb
+
      print
-     print " --- registered objects tree in Naming Service ---"
-     clt.showNS()
-     session=clt.waitNS("/Kernel/Session")
-     catalog=clt.waitNS("/Kernel/ModulCatalog")
-     import socket
-     container =  clt.waitNS("/Containers/" + socket.gethostname().split('.')[0] + "/FactoryServer")
+     print "Use calculator() function to get access to the CALCULATOR component."
+     print "Example: calc = calculator()"
+     print "..."
+     print
+     pass
+   else:
+      print "ERROR: SALOME is not initialized"
+      pass
+   pass

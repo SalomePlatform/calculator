@@ -32,6 +32,14 @@
 
 #include <iostream>
 
+/*!
+  \brief Constructor
+  \param orb Reference to CORBA ORB 
+  \param poa Reference to Root POA
+  \param contId Parent SALOME container ID
+  \param instanceName Instance name of this engine
+  \param interfaceName Interface name of this engine
+*/
 CALCULATOR::CALCULATOR( CORBA::ORB_ptr orb,
                         PortableServer::POA_ptr poa,
                         PortableServer::ObjectId* contId, 
@@ -44,23 +52,31 @@ CALCULATOR::CALCULATOR( CORBA::ORB_ptr orb,
   _id = _poa->activate_object( _thisObj );
 }
 
+/*!
+  \brief Destructor
+*/
 CALCULATOR::~CALCULATOR()
 {
 }
 
-CORBA::Double CALCULATOR::norm2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1 )
+/*!
+  \brief Get Euclidian norm of field
+  \param field Input field
+  \return Euclidian norm value
+*/
+CORBA::Double CALCULATOR::norm2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
   beginService( "CALCULATOR::norm2" );
   _errorCode = CALCULATOR_ORB::RES_OK;
         
-  if ( CORBA::is_nil( field1 ) )
+  if ( CORBA::is_nil( field ) )
   {
     _errorCode = CALCULATOR_ORB::INVALID_FIELD;
     return 0.0;
   }
 
   ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1 =
-    ParaMEDMEM::MEDCouplingFieldDoubleClient::New( field1 );
+    ParaMEDMEM::MEDCouplingFieldDoubleClient::New( field );
 
   CORBA::Double norme = 0.0;
 
@@ -77,19 +93,24 @@ CORBA::Double CALCULATOR::norm2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterfac
   return norme;
 }
 
-CORBA::Double CALCULATOR::normL2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1 )
+/*!
+  \brief Get L2 norm of field
+  \param field Input field
+  \return L2 norm value
+*/
+CORBA::Double CALCULATOR::normL2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
   beginService( "CALCULATOR::normL2" );
   _errorCode = CALCULATOR_ORB::RES_OK;
 
-  if ( CORBA::is_nil( field1 ) )
+  if ( CORBA::is_nil( field ) )
   {
     _errorCode = CALCULATOR_ORB::INVALID_FIELD;
     return 0.0;
   }
 
   ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1 =
-    ParaMEDMEM::MEDCouplingFieldDoubleClient::New( field1 );
+    ParaMEDMEM::MEDCouplingFieldDoubleClient::New( field );
   
   // Check that the source field is not on the nodes (a limitation of normL2)
   if ( f1->getTypeOfField() == ParaMEDMEM::ON_NODES)
@@ -113,19 +134,24 @@ CORBA::Double CALCULATOR::normL2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterfa
   return norme;
 }
 
-CORBA::Double CALCULATOR::normMax( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1 )
+/*!
+  \brief Get max norm of field
+  \param field Input field
+  \return Max norm value
+*/
+CORBA::Double CALCULATOR::normMax( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
   beginService( "CALCULATOR::normMax" );
   _errorCode = CALCULATOR_ORB::RES_OK;
          
-  if ( CORBA::is_nil( field1 ) )
+  if ( CORBA::is_nil( field ) )
   {
     _errorCode = CALCULATOR_ORB::INVALID_FIELD;
     return 0.0;
   }
   
   ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1 =
-    ParaMEDMEM::MEDCouplingFieldDoubleClient::New( field1 );
+    ParaMEDMEM::MEDCouplingFieldDoubleClient::New( field );
 
   CORBA::Double norme = 0.0;
 
@@ -142,19 +168,24 @@ CORBA::Double CALCULATOR::normMax( SALOME_MED::MEDCouplingFieldDoubleCorbaInterf
   return norme;
 }
 
-CORBA::Double CALCULATOR::normL1( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1 )
+/*!
+  \brief Get L1 norm of field
+  \param field Input field
+  \return L1 norm value
+*/
+CORBA::Double CALCULATOR::normL1( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
   beginService( "CALCULATOR::normL1" );
   _errorCode = CALCULATOR_ORB::RES_OK;
 
-  if ( CORBA::is_nil( field1 ) )
+  if ( CORBA::is_nil( field ) )
   {
     _errorCode = CALCULATOR_ORB::INVALID_FIELD;
     return 0.0;
   }
 
   ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1 =
-    ParaMEDMEM::MEDCouplingFieldDoubleClient::New(field1);
+    ParaMEDMEM::MEDCouplingFieldDoubleClient::New( field );
 
   // Check that the source field is not on the nodes (a limitation of normL1)
   if ( f1->getTypeOfField() == ParaMEDMEM::ON_NODES ) {
@@ -176,13 +207,20 @@ CORBA::Double CALCULATOR::normL1( SALOME_MED::MEDCouplingFieldDoubleCorbaInterfa
   return norme;
 }
 
-SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1,
+/*!
+  \brief Apply to each (scalar) field component the linear function x -> ax+b
+  \param field Input field
+  \param a First coefficient of linear function
+  \param b Second coefficient of linear function
+  \return Resulting field
+*/
+SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field,
                                                                            CORBA::Double a, CORBA::Double b )
 {
   beginService( "CALCULATOR::applyLin" );
   _errorCode = CALCULATOR_ORB::RES_OK;
     
-  if ( CORBA::is_nil( field1 ) )
+  if ( CORBA::is_nil( field ) )
   {
     _errorCode = CALCULATOR_ORB::INVALID_FIELD;
     return NULL;
@@ -190,7 +228,7 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin( SALOM
 
   // Create a local field on the heap, because it has to remain after exiting the function
   ParaMEDMEM::MEDCouplingAutoRefCountObjectPtr<ParaMEDMEM::MEDCouplingFieldDouble> f1 =
-    ParaMEDMEM::MEDCouplingFieldDoubleClient::New( field1 );
+    ParaMEDMEM::MEDCouplingFieldDoubleClient::New( field );
 
   int nbOfCompo = f1->getArray()->getNumberOfComponents();
   f1->getArray()->rearrange(1);
@@ -217,6 +255,12 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin( SALOM
   return myFieldIOR;
 }
 
+/*!
+  \brief Sum two fields
+  \param field1 First input field
+  \param field2 Second input field
+  \return Resulting field
+*/
 SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::add( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1,
                                                                       SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field2 )
 {
@@ -257,6 +301,14 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::add( SALOME_MED
   return myFieldIOR;
 }
 
+/*!
+  \brief Clone source field into four copies
+  \param field Input field
+  \param clone1 First resulting clone field
+  \param clone2 Second resulting clone field
+  \param clone3 Third resulting clone field
+  \param clone4 Fourth resulting clone field
+*/
 void CALCULATOR::cloneField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field,
                              SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone1,
                              SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone2,
@@ -300,6 +352,10 @@ void CALCULATOR::cloneField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_pt
   endService( "CALCULATOR::cloneField" );
 }
 
+/*!
+  \brief Print out the coordinates and field values to standard output
+  \param field Input field
+*/
 void CALCULATOR::printField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
   beginService( "CALCULATOR::printField" );
@@ -326,6 +382,11 @@ void CALCULATOR::printField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_pt
   endService( "CALCULATOR::printField" );
 }
 
+/*!
+  \brief Calculate maximum relative difference of field with the previous one
+  \param field Input field
+  \return Convergence criterion value
+*/
 CORBA::Double CALCULATOR::convergenceCriteria( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
   beginService( "CALCULATOR::convergenceCriteria" );
@@ -375,17 +436,28 @@ CORBA::Double CALCULATOR::convergenceCriteria( SALOME_MED::MEDCouplingFieldDoubl
   return criteria;
 }
 
+/*!
+  \brief Get last operation status
+  \return Last operation status: \c true if last operation succeded or \c false otherwise
+*/
 CORBA::Boolean CALCULATOR::isDone()
 {
   return (_errorCode == CALCULATOR_ORB::RES_OK );
 }
 
+/*!
+  \brief Get last operation status
+  \return Last error code
+*/
 CALCULATOR_ORB::ErrorCode CALCULATOR::getErrorCode()
 {
   return _errorCode;
 }
 
-// Version information
+/*!
+  \brief Get version information
+  \return Version of CALCULATOR engine
+*/
 char* CALCULATOR::getVersion()
 {
 #if defined(CALCULATOR_DEVELOPMENT)

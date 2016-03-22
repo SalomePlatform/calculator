@@ -63,7 +63,7 @@ module CALCULATOR_ORB
       \brief Apply to each (scalar) field component the linear function x -> ax+b.
       Release field1 after use.
     */
-    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface applyLin(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field1,
+    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface applyLin(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field,
 							      in double a, in double b);
 
     /*!
@@ -104,7 +104,7 @@ module CALCULATOR_ORB
     void printField(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
     
     /*!
-      \brief Clones source field into four copies.
+      \brief Clone source field into four copies.
       Release field after use.
     */
     void cloneField(in  SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field,

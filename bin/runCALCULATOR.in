@@ -22,34 +22,34 @@
 #
 
 if [ -z "${KERNEL_ROOT_DIR}" ] ; then 
-export KERNEL_ROOT_DIR=@KERNEL_ROOT_DIR@
+    export KERNEL_ROOT_DIR=@KERNEL_ROOT_DIR@
 fi
 if [ -z "${CALCULATOR_ROOT_DIR}" ] ; then 
-export CALCULATOR_ROOT_DIR=@CMAKE_INSTALL_PREFIX@
+    export CALCULATOR_ROOT_DIR=@CMAKE_INSTALL_PREFIX@
 fi
 
 searchFreePort() {
     echo -n "Searching for a free port for naming service: "
     export NSPORT=2810
-    local limit=$NSPORT
+    local limit=${NSPORT}
     let limit=limit+100
     while [ 1 ]
     do
         aRes=`netstat -ltn | grep -E :${NSPORT}`
-        if [ -z "$aRes" ]; then
+        if [ -z "${aRes}" ]; then
             echo ${NSPORT} - Ok
             local myhost=`hostname`
             export OMNIORB_CONFIG=${HOME}/.omniORB_${myhost}_${NSPORT}.cfg
             local initref="NameService=corbaname::"`hostname`":$NSPORT"
             if [[ `python -c "import CORBA; print CORBA.ORB_ID"` = "omniORB4" ]]; then
-                echo "InitRef = $initref" > $OMNIORB_CONFIG
+                echo "InitRef = $initref" > ${OMNIORB_CONFIG}
             else
-                echo "ORBInitRef $initref" > $OMNIORB_CONFIG
+                echo "ORBInitRef $initref" > ${OMNIORB_CONFIG}
             fi
             break
         fi
         echo -n "${NSPORT} "
-        if [[ $NSPORT -eq $limit ]] ; then
+        if [[ ${NSPORT} -eq ${limit} ]] ; then
             echo
             echo "Can't find a free port to launch omniNames"
             echo "Try to kill the running servers and then launch SALOME again."
@@ -61,5 +61,4 @@ searchFreePort() {
 
 searchFreePort
 
-
-${KERNEL_ROOT_DIR}/bin/salome/envSalome.py python -i $CALCULATOR_ROOT_DIR/bin/salome/runCALCULATOR.py --modules=CALCULATOR --killall
+${KERNEL_ROOT_DIR}/bin/salome/envSalome.py python -i ${CALCULATOR_ROOT_DIR}/bin/salome/runCALCULATOR.py --modules=CALCULATOR,MED --killall --terminal
