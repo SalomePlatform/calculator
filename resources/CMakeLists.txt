@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2015  CEA/DEN, EDF R&D, OPEN CASCADE
+# Copyright (C) 2013-2016  CEA/DEN, EDF R&D, OPEN CASCADE
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,16 +16,6 @@
 #
 # See http://www.salome-platform.org/ or email : webmaster.salome@opencascade.com
 #
-
-SET(CALCULATOR_RESOURCES_FILES
-  CALCULATOR_en.ps
-  CALCULATOR_en.xml
-  CALCULATOR_fr.xml
-  CALCULATOR.png
-  ExecCALCULATOR.png
-)
-
-INSTALL(FILES ${CALCULATOR_RESOURCES_FILES} DESTINATION ${SALOME_CALCULATOR_INSTALL_RES_DATA})
 
 SALOME_CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/SalomeApp.xml.in ${CMAKE_CURRENT_BINARY_DIR}/SalomeApp.xml INSTALL ${SALOME_CALCULATOR_INSTALL_RES_DATA})
 SALOME_CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/CALCULATORCatalog.xml.in ${CMAKE_CURRENT_BINARY_DIR}/CALCULATORCatalog.xml INSTALL ${SALOME_CALCULATOR_INSTALL_RES_DATA})

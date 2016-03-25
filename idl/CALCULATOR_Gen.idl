@@ -1,4 +1,4 @@
-// Copyright (C) 2007-2015  CEA/DEN, EDF R&D, OPEN CASCADE
+// Copyright (C) 2007-2016  CEA/DEN, EDF R&D, OPEN CASCADE
 //
 // Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
 // CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
@@ -22,101 +22,107 @@
 
 #ifndef __CALCULATOR_GEN__
 #define __CALCULATOR_GEN__
+
 /*!
- \defgroup EXAMPLES SALOME EXAMPLES components
- */
+  \defgroup EXAMPLES SALOME EXAMPLES components
+*/
 
 #include "SALOME_Component.idl"
 #include "SALOME_Exception.idl"
 #include "MEDCouplingCorbaServant.idl"
 
-
-/*!  \ingroup EXAMPLES
-
-This package contains the interface CALCULATOR_ORB used 
-for  %CALCULATOR component as an example in %SALOME application.
+/*!
+  \ingroup EXAMPLES
+  This package contains the interface CALCULATOR_ORB used 
+  for %CALCULATOR component as an example in %SALOME application.
 */
+
 module CALCULATOR_ORB
 {
   /*!
-	Enumeration ErrorCode contains a code of the error
-   */
-   typedef long ErrorCode;
-   const ErrorCode RES_OK = 0;
-   const ErrorCode NOT_COMPATIBLE = 1;
-   const ErrorCode EXCEPTION_RAISED = 2;
-   const ErrorCode INVALID_FIELD = 3;
-
+    \brief Enumeration ErrorCode contains a code of the error
+  */
+  typedef long ErrorCode;
+  const ErrorCode RES_OK = 0;
+  const ErrorCode NOT_COMPATIBLE = 1;
+  const ErrorCode EXCEPTION_RAISED = 2;
+  const ErrorCode INVALID_FIELD = 3;
 	
-  /*! \brief Interface of the %CALCULATOR component
-   */
+  /*!
+    \brief Interface of the %CALCULATOR component
+  */
   interface CALCULATOR_Gen : Engines::EngineComponent
   {
-     /*!
-         Calculate the maximum relative difference of field with the previous one.
-         At first call, store passed field and return 1.
-      */
-     double convergenceCriteria(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
-     /*!
-         Apply to each (scalar) field component the linear function x -> ax+b.
-         Release field1 after use.
-      */
-     SALOME_MED::MEDCouplingFieldDoubleCorbaInterface applyLin(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field1, in double a1, in double a2);
+    /*!
+      \brief Calculate maximum relative difference of field with the previous one.
+      At first call store passed field and return 1.
+    */
+    double convergenceCriteria(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
 
+    /*!
+      \brief Apply to each (scalar) field component the linear function x -> ax+b.
+      Release field1 after use.
+    */
+    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface applyLin(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field,
+							      in double a, in double b);
+
+    /*!
+      \brief Sum two fields. 
+      Release field1 and field2 after use.
+    */
+    SALOME_MED::MEDCouplingFieldDoubleCorbaInterface add(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field1,
+							 in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field2);
+
+    /*!
+      \brief Get Euclidian norm of field
+      Release field after use.
+    */
+    double norm2(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
+
+    /*!
+      \brief Get L2 norm of field
+      Release field after use.
+    */
+    double normL2(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
+    
      /*!
-         Addition of fields. 
-         Release field1 and field2 after use.
+       \brief Get L1 norm of field
+       Release field after use.
      */
-     SALOME_MED::MEDCouplingFieldDoubleCorbaInterface add(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field1, in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field2);
-
-     /*!
-     	 return euclidian norm of field
-         Release field after use.
-      */
-     double norm2(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
-
-     /*!
-     	 return L2 norm of field
-         Release field after use.
-      */
-     double normL2(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
-
-     /*!
-     	 return L1 norm of field
-         Release field after use.
-      */
-     double normL1(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
-
-     /*!
-     	 return max norm of field
-         Release field after use.
-      */
-     double normMax(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
-
-     /*!
-         This utility method print in standard output the coordinates & field values
-         Release field after use.
-      */
-     void printField(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
-
-     /*!
-         This method clones field in four examples.
-         Release field after use.
-      */
-     void cloneField(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field, out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone1, 
-                     out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone2, out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone3,
-		     out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone4 );
-
-     /*!
-         This method returns True if the operation succeded.
-         Otherwise returns False.
-      */
-	 boolean isDone();
-
-	 /*!
-         This method return an error code
-      */
-	 ErrorCode getErrorCode();
+    double normL1(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
+    
+    /*!
+      \brief Get max norm of field
+      Release field after use.
+    */
+    double normMax(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
+    
+    /*!
+      \brief Print out the coordinates and field values to standard output
+      Release field after use.
+    */
+    void printField(in SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field);
+    
+    /*!
+      \brief Clone source field into four copies.
+      Release field after use.
+    */
+    void cloneField(in  SALOME_MED::MEDCouplingFieldDoubleCorbaInterface field,
+		    out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone1, 
+		    out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone2,
+		    out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone3,
+		    out SALOME_MED::MEDCouplingFieldDoubleCorbaInterface clone4);
+    
+    /*!
+      \brief Get last operation status; returns \c True if last operation succeded,
+      otherwise returns \c False.
+    */
+    boolean isDone();
+    
+    /*!
+      \brief Get last error code
+    */
+    ErrorCode getErrorCode();
   };
 };
 
