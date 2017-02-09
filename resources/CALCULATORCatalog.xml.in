@@ -37,7 +37,6 @@
       <component-author>SALOME team</component-author>
       <component-version>@SALOMECALCULATOR_VERSION@</component-version>
       <component-comment></component-comment>
-      <component-multistudy>1</component-multistudy>
       <component-icone></component-icone>
       <constraint>'linux' ~ OS</constraint>
       <component-interface-list>
