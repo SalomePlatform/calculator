@@ -47,13 +47,13 @@ if __name__ == "__main__":
      clt.waitNS("/Containers/" + getShortHostName() + "/FactoryServer")
      __orb = clt.orb
 
-     print
-     print "Use calculator() function to get access to the CALCULATOR component."
-     print "Example: calc = calculator()"
-     print "..."
-     print
+     print()
+     print("Use calculator() function to get access to the CALCULATOR component.")
+     print("Example: calc = calculator()")
+     print("...")
+     print()
      pass
    else:
-      print "ERROR: SALOME is not initialized"
+      print("ERROR: SALOME is not initialized")
       pass
    pass

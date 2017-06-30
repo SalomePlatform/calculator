@@ -42,65 +42,65 @@ fieldName = "fieldcelldoublevector"
 salome.salome_init()
 
 # Get MED component
-print "[CALC] Get reference to MED component ..."
+print("[CALC] Get reference to MED component ...")
 med = salome.lcc.FindOrLoadComponent("FactoryServer", "MED")
-print "[CALC] ---"
+print("[CALC] ---")
 
 # Get CALCULATOR component
-print "[CALC] Get reference to CALCULATOR component ..."
+print("[CALC] Get reference to CALCULATOR component ...")
 calculator = salome.lcc.FindOrLoadComponent("FactoryServer", "CALCULATOR")
-print "[CALC] ---"
+print("[CALC] ---")
 
 # Get a CORBA field proxy on the distant field (located in the med server)
-print "[CALC] Read field %s ..." % fieldName
+print("[CALC] Read field %s ..." % fieldName)
 f = ReadFieldCell(medFile, meshName, 0, fieldName, -1, -1)
 fieldcelldouble = MEDCouplingFieldDoubleServant._this(f)
 
-print "[CALC] -> fieldcelldouble is:"
-print f
-print f.getName()
-print f.getDescription()
-print f.getNumberOfComponents()
-print "[CALC] ---"
+print("[CALC] -> fieldcelldouble is:")
+print(f)
+print(f.getName())
+print(f.getDescription())
+print(f.getNumberOfComponents())
+print("[CALC] ---")
 
-print "[CALC] Clone field: fieldcelldoublevector -> f1,f2,f3,f4 ..."
+print("[CALC] Clone field: fieldcelldoublevector -> f1,f2,f3,f4 ...")
 (f1,f2,f3,f4) = calculator.cloneField(fieldcelldouble)
-print "[CALC] -> f1 is:"
+print("[CALC] -> f1 is:")
 calculator.printField(f1)
-print "[CALC] ---"
+print("[CALC] ---")
 
-print "[CALC] Add fields f2+f3 ..."
+print("[CALC] Add fields f2+f3 ...")
 f_add = calculator.add(f2, f3)
-print "[CALC] -> f_add is:"
+print("[CALC] -> f_add is:")
 calculator.printField(f_add)
-print "[CALC] ---"
+print("[CALC] ---")
 
-print "[CALC] Apply linear function to f4 ..."
+print("[CALC] Apply linear function to f4 ...")
 f_lin = calculator.applyLin(f4, 2.0, 1.0)
-print "[CALC] -> f_add is:"
+print("[CALC] -> f_add is:")
 calculator.printField(f_lin)
-print "[CALC] ---"
+print("[CALC] ---")
 
-print "[CALC] Apply Norm Max to f_lin ..."
+print("[CALC] Apply Norm Max to f_lin ...")
 norm = calculator.normMax(f_lin)
-print "[CALC] -> norm is ", norm
-print "[CALC] ---"
+print("[CALC] -> norm is ", norm)
+print("[CALC] ---")
 
-print "[CALC] Clone fields created by Calculator via client classes ..."
+print("[CALC] Clone fields created by Calculator via client classes ...")
 f_addLocal = MEDCouplingFieldDoubleClient.New(f_add)
 f_addLocal.setName(f_addLocal.getName() + "add")
 f_linLocal = MEDCouplingFieldDoubleClient.New(f_lin)
 f_linLocal.setName(f_linLocal.getName() + "lin")
-print "[CALC] -> f_addLocal is ", f_addLocal
-print "[CALC] -> f_linLocal is ", f_linLocal
-print "[CALC] ---"
+print("[CALC] -> f_addLocal is ", f_addLocal)
+print("[CALC] -> f_linLocal is ", f_linLocal)
+print("[CALC] ---")
 
-print "[CALC] Get information from the local copy of the distant mesh"
+print("[CALC] Get information from the local copy of the distant mesh")
 meshLocal = f_addLocal.getMesh()
-print "[CALC] -> meshLocal is", meshLocal
-print "[CALC] ---"
+print("[CALC] -> meshLocal is", meshLocal)
+print("[CALC] ---")
 
-print "[CALC] Write mesh and fields to MED file ..."
+print("[CALC] Write mesh and fields to MED file ...")
 import tempfile
 outfile = tempfile.NamedTemporaryFile(prefix="Calculator_pointe_", suffix=".med")
 outfile.close()
@@ -108,6 +108,6 @@ WriteUMesh(outfile.name, meshLocal, True)
 WriteFieldUsingAlreadyWrittenMesh(outfile.name, f_addLocal)
 WriteFieldUsingAlreadyWrittenMesh(outfile.name, f_linLocal)
 os.remove(outfile.name)
-print "[CALC] ---"
+print("[CALC] ---")
 
-print "[CALC] End of Calculator Test!"
+print("[CALC] End of Calculator Test!")
