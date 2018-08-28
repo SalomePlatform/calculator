@@ -157,7 +157,7 @@ CORBA::Double CALCULATOR::normMax( SALOME_MED::MEDCouplingFieldDoubleCorbaInterf
 
   try
   {
-    norme = f1->normMax();
+    norme = f1->normMax( 0 );
   }
   catch (...)
   {
@@ -376,7 +376,7 @@ void CALCULATOR::printField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_pt
   std::cout << myField->advancedRepr(); 
   std::cout << std::endl;
   std::cout << "Euclidian norm: " << myField->norm2() << std::endl;
-  std::cout << "Max norm:       " << myField->normMax() << std::endl;
+  std::cout << "Max norm:       " << myField->normMax( 0 ) << std::endl;
   std::cout << "------------------------------------------------------------------------" << std::endl << std::endl;
 
   endService( "CALCULATOR::printField" );
@@ -419,7 +419,7 @@ CORBA::Double CALCULATOR::convergenceCriteria( SALOME_MED::MEDCouplingFieldDoubl
       {
         fnew->changeUnderlyingMesh( fold->getMesh(), 0, 1e-12 );
         fres = (*fnew) - (*fold);
-        criteria = fres->normMax();
+        criteria = fres->normMax( 0 );
       }
       catch ( INTERP_KERNEL::Exception )
       {
