@@ -22,7 +22,7 @@ INCLUDE(UseOmniORB)  # Provided by KERNEL
 INCLUDE_DIRECTORIES(
   ${OMNIORB_INCLUDE_DIR}
   ${KERNEL_INCLUDE_DIRS}
-  ${MED_INCLUDE_DIRS}
+  ${FIELDS_INCLUDE_DIRS}
   ${PROJECT_BINARY_DIR}/idl
 )
 
@@ -32,12 +32,12 @@ SET(SalomeIDLCALCULATOR_IDLSOURCES
 
 SET(_idl_include_dirs
   ${KERNEL_ROOT_DIR}/idl/salome
-  ${MED_ROOT_DIR}/idl/salome
+  ${FIELDS_ROOT_DIR}/idl/salome
 )
 
 SET(_idl_link_flags
   ${KERNEL_SalomeIDLKernel}
-  ${MED_SalomeIDLMED}
+  ${FIELDS_SalomeIDLMED}
 )
 
 OMNIORB_ADD_MODULE(SalomeIDLCALCULATOR "${SalomeIDLCALCULATOR_IDLSOURCES}" "${_idl_include_dirs}" "${_idl_link_flags}")

@@ -40,9 +40,9 @@ SET(_link_LIBRARIES
   ${KERNEL_SalomeContainer}
   ${KERNEL_OpUtil}
   ${KERNEL_SalomeIDLKERNEL}
-  ${MED_medcouplingclient}
-  ${MED_medcouplingcorba}
-  ${MED_SalomeIDLMED}
+  ${FIELDS_medcouplingclient}
+  ${FIELDS_medcouplingcorba}
+  ${FIELDS_SalomeIDLMED}
   SalomeIDLCALCULATOR
 )
 # --- headers ---
