@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2016  CEA/DEN, EDF R&D, OPEN CASCADE
+# Copyright (C) 2013-2019  CEA/DEN, EDF R&D, OPEN CASCADE
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,9 +18,7 @@
 #
 
 SALOME_CONFIGURE_FILE(VERSION.in VERSION INSTALL ${SALOME_INSTALL_BINS})
-
-CONFIGURE_FILE(runCALCULATOR.in runCALCULATOR @ONLY)
-SALOME_INSTALL_SCRIPTS(${CMAKE_CURRENT_BINARY_DIR}/runCALCULATOR ${SALOME_INSTALL_BINS})
+SALOME_CONFIGURE_FILE(runCALCULATOR.in runCALCULATOR @ONLY INSTALL ${SALOME_INSTALL_BINS} EXEC_PERMS)
 
 # ===============================================================
 # Files to be installed
