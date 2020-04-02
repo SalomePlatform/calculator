@@ -3,7 +3,6 @@
   <path-prefix-list></path-prefix-list>
   <type-list>
     <type name="ErrorCode" kind="int"/>
-    <objref name="SALOME_MED/MEDCouplingFieldDoubleCorbaInterface" id="IDL:SALOME_MED/MEDCouplingFieldDoubleCorbaInterface:1.0"/>
   </type-list>
   <component-list>
     <component>
