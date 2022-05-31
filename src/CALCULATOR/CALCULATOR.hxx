@@ -1,4 +1,4 @@
-// Copyright (C) 2007-2021  CEA/DEN, EDF R&D, OPEN CASCADE
+// Copyright (C) 2007-2022  CEA/DEN, EDF R&D, OPEN CASCADE
 //
 // Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
 // CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
@@ -38,17 +38,18 @@
 #include CORBA_CLIENT_HEADER(MEDCouplingCorbaServant)
 #include <SALOME_Component_i.hxx>
 
-class CALCULATORENGINE_EXPORT CALCULATOR:
+class CALCULATORENGINE_EXPORT CALCULATOR_Abstract:
   public POA_CALCULATOR_ORB::CALCULATOR_Gen,
   public Engines_Component_i 
 {
 public:
-  CALCULATOR( CORBA::ORB_ptr,
-              PortableServer::POA_ptr,
-              PortableServer::ObjectId*, 
-              const char*, 
-              const char* );
-    virtual ~CALCULATOR();
+  CALCULATOR_Abstract( CORBA::ORB_ptr,
+		       PortableServer::POA_ptr,
+		       PortableServer::ObjectId*, 
+		       const char*, 
+		       const char*,
+		       bool withRegistry = true );
+    virtual ~CALCULATOR_Abstract();
     virtual char* getVersion();
 
     CORBA::Double convergenceCriteria( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr );
@@ -72,5 +73,28 @@ public:
 protected:
     CALCULATOR_ORB::ErrorCode _errorCode;
 };
+
+class CALCULATORENGINE_EXPORT CALCULATOR_Session : public CALCULATOR_Abstract
+{
+public:
+  CALCULATOR_Session( CORBA::ORB_ptr orb,
+		      PortableServer::POA_ptr poa,
+		      PortableServer::ObjectId* contId, 
+		      const char* instanceName, 
+		      const char* interfaceName)
+    : CALCULATOR_Abstract(orb, poa, contId, instanceName, interfaceName, true) {}
+};
+
+class CALCULATORENGINE_EXPORT CALCULATOR_No_Session : public CALCULATOR_Abstract
+{
+public:
+  CALCULATOR_No_Session( CORBA::ORB_ptr orb,
+			 PortableServer::POA_ptr poa,
+			 PortableServer::ObjectId* contId, 
+			 const char* instanceName, 
+			 const char* interfaceName)
+    : CALCULATOR_Abstract(orb, poa, contId, instanceName, interfaceName, false) { }
+};
+
 
 #endif // CALCULATOR_HXX

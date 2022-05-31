@@ -1,4 +1,4 @@
-// Copyright (C) 2007-2021  CEA/DEN, EDF R&D, OPEN CASCADE
+// Copyright (C) 2007-2022  CEA/DEN, EDF R&D, OPEN CASCADE
 //
 // Copyright (C) 2003-2007  OPEN CASCADE, EADS/CCR, LIP6, CEA/DEN,
 // CEDRAT, EDF R&D, LEG, PRINCIPIA R&D, BUREAU VERITAS
@@ -40,12 +40,13 @@
   \param instanceName Instance name of this engine
   \param interfaceName Interface name of this engine
 */
-CALCULATOR::CALCULATOR( CORBA::ORB_ptr orb,
-                        PortableServer::POA_ptr poa,
-                        PortableServer::ObjectId* contId, 
-                        const char* instanceName, 
-                        const char* interfaceName )
-  : Engines_Component_i( orb, poa, contId, instanceName, interfaceName, true ),
+CALCULATOR_Abstract::CALCULATOR_Abstract( CORBA::ORB_ptr orb,
+					  PortableServer::POA_ptr poa,
+					  PortableServer::ObjectId* contId, 
+					  const char* instanceName, 
+					  const char* interfaceName,
+					  bool withRegistry )
+  : Engines_Component_i( orb, poa, contId, instanceName, interfaceName, true, withRegistry ),
     _errorCode( CALCULATOR_ORB::RES_OK )
 {
   _thisObj = this;
@@ -55,7 +56,7 @@ CALCULATOR::CALCULATOR( CORBA::ORB_ptr orb,
 /*!
   \brief Destructor
 */
-CALCULATOR::~CALCULATOR()
+CALCULATOR_Abstract::~CALCULATOR_Abstract()
 {
 }
 
@@ -64,9 +65,9 @@ CALCULATOR::~CALCULATOR()
   \param field Input field
   \return Euclidian norm value
 */
-CORBA::Double CALCULATOR::norm2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
+CORBA::Double CALCULATOR_Abstract::norm2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
-  beginService( "CALCULATOR::norm2" );
+  beginService( "CALCULATOR_Abstract::norm2" );
   _errorCode = CALCULATOR_ORB::RES_OK;
         
   if ( CORBA::is_nil( field ) )
@@ -89,7 +90,7 @@ CORBA::Double CALCULATOR::norm2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterfac
     _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
   }
   
-  endService( "CALCULATOR::norm2" );
+  endService( "CALCULATOR_Abstract::norm2" );
   return norme;
 }
 
@@ -98,9 +99,9 @@ CORBA::Double CALCULATOR::norm2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterfac
   \param field Input field
   \return L2 norm value
 */
-CORBA::Double CALCULATOR::normL2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
+CORBA::Double CALCULATOR_Abstract::normL2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
-  beginService( "CALCULATOR::normL2" );
+  beginService( "CALCULATOR_Abstract::normL2" );
   _errorCode = CALCULATOR_ORB::RES_OK;
 
   if ( CORBA::is_nil( field ) )
@@ -130,7 +131,7 @@ CORBA::Double CALCULATOR::normL2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterfa
     _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
   }
   
-  endService( "CALCULATOR::normL2" );
+  endService( "CALCULATOR_Abstract::normL2" );
   return norme;
 }
 
@@ -139,9 +140,9 @@ CORBA::Double CALCULATOR::normL2( SALOME_MED::MEDCouplingFieldDoubleCorbaInterfa
   \param field Input field
   \return Max norm value
 */
-CORBA::Double CALCULATOR::normMax( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
+CORBA::Double CALCULATOR_Abstract::normMax( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
-  beginService( "CALCULATOR::normMax" );
+  beginService( "CALCULATOR_Abstract::normMax" );
   _errorCode = CALCULATOR_ORB::RES_OK;
          
   if ( CORBA::is_nil( field ) )
@@ -164,7 +165,7 @@ CORBA::Double CALCULATOR::normMax( SALOME_MED::MEDCouplingFieldDoubleCorbaInterf
     _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
   }
  
-  endService( "CALCULATOR::normMax" );
+  endService( "CALCULATOR_Abstract::normMax" );
   return norme;
 }
 
@@ -173,9 +174,9 @@ CORBA::Double CALCULATOR::normMax( SALOME_MED::MEDCouplingFieldDoubleCorbaInterf
   \param field Input field
   \return L1 norm value
 */
-CORBA::Double CALCULATOR::normL1( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
+CORBA::Double CALCULATOR_Abstract::normL1( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
-  beginService( "CALCULATOR::normL1" );
+  beginService( "CALCULATOR_Abstract::normL1" );
   _errorCode = CALCULATOR_ORB::RES_OK;
 
   if ( CORBA::is_nil( field ) )
@@ -203,7 +204,7 @@ CORBA::Double CALCULATOR::normL1( SALOME_MED::MEDCouplingFieldDoubleCorbaInterfa
     _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
   }
 
-  endService( "CALCULATOR::normL1" );
+  endService( "CALCULATOR_Abstract::normL1" );
   return norme;
 }
 
@@ -214,10 +215,11 @@ CORBA::Double CALCULATOR::normL1( SALOME_MED::MEDCouplingFieldDoubleCorbaInterfa
   \param b Second coefficient of linear function
   \return Resulting field
 */
-SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field,
-                                                                           CORBA::Double a, CORBA::Double b )
+SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr
+CALCULATOR_Abstract::applyLin( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field,
+			       CORBA::Double a, CORBA::Double b )
 {
-  beginService( "CALCULATOR::applyLin" );
+  beginService( "CALCULATOR_Abstract::applyLin" );
   _errorCode = CALCULATOR_ORB::RES_OK;
     
   if ( CORBA::is_nil( field ) )
@@ -251,7 +253,7 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin( SALOM
     _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
   }
   
-  endService( "CALCULATOR::applyLin" );
+  endService( "CALCULATOR_Abstract::applyLin" );
   return myFieldIOR;
 }
 
@@ -261,10 +263,11 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::applyLin( SALOM
   \param field2 Second input field
   \return Resulting field
 */
-SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::add( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1,
-                                                                      SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field2 )
+SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr
+CALCULATOR_Abstract::add( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field1,
+			  SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field2 )
 {
-  beginService( "CALCULATOR::add" );
+  beginService( "CALCULATOR_Abstract::add" );
   _errorCode = CALCULATOR_ORB::RES_OK;
 
   if ( CORBA::is_nil( field1 ) || CORBA::is_nil( field2 ) )
@@ -297,7 +300,7 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::add( SALOME_MED
   // Activate servant
   SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr myFieldIOR = myFieldDoubleI->_this();
 
-  endService( "CALCULATOR::add" );
+  endService( "CALCULATOR_Abstract::add" );
   return myFieldIOR;
 }
 
@@ -309,13 +312,13 @@ SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr CALCULATOR::add( SALOME_MED
   \param clone3 Third resulting clone field
   \param clone4 Fourth resulting clone field
 */
-void CALCULATOR::cloneField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field,
-                             SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone1,
-                             SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone2,
-                             SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone3,
-                             SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone4 )
+void CALCULATOR_Abstract::cloneField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field,
+				      SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone1,
+				      SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone2,
+				      SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone3,
+				      SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_out clone4 )
 {
-  beginService( "CALCULATOR::cloneField" );
+  beginService( "CALCULATOR_Abstract::cloneField" );
   _errorCode = CALCULATOR_ORB::RES_OK;
 
   if ( CORBA::is_nil( field ) )
@@ -349,16 +352,16 @@ void CALCULATOR::cloneField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_pt
   clone3 = myClone3->_this();
   clone4 = myClone4->_this();
 
-  endService( "CALCULATOR::cloneField" );
+  endService( "CALCULATOR_Abstract::cloneField" );
 }
 
 /*!
   \brief Print out the coordinates and field values to standard output
   \param field Input field
 */
-void CALCULATOR::printField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
+void CALCULATOR_Abstract::printField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
-  beginService( "CALCULATOR::printField" );
+  beginService( "CALCULATOR_Abstract::printField" );
   _errorCode = CALCULATOR_ORB::RES_OK;
 
   if ( CORBA::is_nil( field ) )
@@ -379,7 +382,7 @@ void CALCULATOR::printField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_pt
   std::cout << "Max norm:       " << myField->normMax( 0 ) << std::endl;
   std::cout << "------------------------------------------------------------------------" << std::endl << std::endl;
 
-  endService( "CALCULATOR::printField" );
+  endService( "CALCULATOR_Abstract::printField" );
 }
 
 /*!
@@ -387,9 +390,9 @@ void CALCULATOR::printField( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_pt
   \param field Input field
   \return Convergence criterion value
 */
-CORBA::Double CALCULATOR::convergenceCriteria( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
+CORBA::Double CALCULATOR_Abstract::convergenceCriteria( SALOME_MED::MEDCouplingFieldDoubleCorbaInterface_ptr field )
 {
-  beginService( "CALCULATOR::convergenceCriteria" );
+  beginService( "CALCULATOR_Abstract::convergenceCriteria" );
   _errorCode = CALCULATOR_ORB::RES_OK;
 
   if ( CORBA::is_nil( field ) )
@@ -432,7 +435,7 @@ CORBA::Double CALCULATOR::convergenceCriteria( SALOME_MED::MEDCouplingFieldDoubl
     _errorCode = CALCULATOR_ORB::EXCEPTION_RAISED;
   }
   
-  endService( "CALCULATOR::convergenceCriteria" );
+  endService( "CALCULATOR_Abstract::convergenceCriteria" );
   return criteria;
 }
 
@@ -440,7 +443,7 @@ CORBA::Double CALCULATOR::convergenceCriteria( SALOME_MED::MEDCouplingFieldDoubl
   \brief Get last operation status
   \return Last operation status: \c true if last operation succeded or \c false otherwise
 */
-CORBA::Boolean CALCULATOR::isDone()
+CORBA::Boolean CALCULATOR_Abstract::isDone()
 {
   return (_errorCode == CALCULATOR_ORB::RES_OK );
 }
@@ -449,7 +452,7 @@ CORBA::Boolean CALCULATOR::isDone()
   \brief Get last operation status
   \return Last error code
 */
-CALCULATOR_ORB::ErrorCode CALCULATOR::getErrorCode()
+CALCULATOR_ORB::ErrorCode CALCULATOR_Abstract::getErrorCode()
 {
   return _errorCode;
 }
@@ -458,7 +461,7 @@ CALCULATOR_ORB::ErrorCode CALCULATOR::getErrorCode()
   \brief Get version information
   \return Version of CALCULATOR engine
 */
-char* CALCULATOR::getVersion()
+char* CALCULATOR_Abstract::getVersion()
 {
 #if defined(CALCULATOR_DEVELOPMENT)
   return CORBA::string_dup( CALCULATOR_VERSION_STR"dev" );
@@ -476,8 +479,17 @@ extern "C"
                                                       const char* instanceName,
                                                       const char* interfaceName )
   {
-    CALCULATOR* myCALCULATOR = new CALCULATOR( orb, poa, contId, instanceName, interfaceName );
-    return myCALCULATOR->getId();
+    CORBA::Object_var o = poa->id_to_reference(*contId);
+    Engines::Container_var cont = Engines::Container::_narrow(o);
+    if (cont->is_SSL_mode())
+    {
+      CALCULATOR_No_Session* calc = new CALCULATOR_No_Session(orb, poa, contId, instanceName, interfaceName);
+      return calc->getId();
+    }
+    else
+    {
+      CALCULATOR_Session* calc = new CALCULATOR_Session( orb, poa, contId, instanceName, interfaceName );
+      return calc->getId();
+    }
   }
 }
-
