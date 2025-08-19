@@ -43,7 +43,7 @@ if __name__ == "__main__":
    from runSalome import *
    clt, args = main()
    if clt:
-     from salome_utils import getShortHostName
+     from salome.kernel.salome_utils import getShortHostName
      clt.waitNS("/Containers/" + getShortHostName() + "/FactoryServer")
      __orb = clt.orb
 
